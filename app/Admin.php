@@ -9,4 +9,5 @@ class Admin extends Model
     //
     protected $table='admin';
     protected $primaryKey = 'id';
+    //gwaoi
 }
