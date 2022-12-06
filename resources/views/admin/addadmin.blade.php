@@ -1,6 +1,7 @@
 @extends('layouts/main')
 @section('content_body')
   <div class="container mp-container">
+    <h1>Sample Conflict</h1>
     <div class="row no-gutters mp-mt4 justify-content-center">
       <div class="col-12 col-lg-6 mp-ph2 mp-pv2">
         <div class="mp-pt4 mp-text-fs-large mp-text-c-accent">
