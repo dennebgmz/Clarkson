@@ -1,10 +1,6 @@
 @extends('layouts/main')
 @section('content_body')
     <div class="container mp-container">
-        <h2>Hello World</h2>
-        <h1>Hello World</h1>
-        
-
         <div class="row no-gutters mp-mt4">
             <div class="col mp-ph2 mp-pv2">
                 <div class="mp-card mp-card--plain mp-pv4">
@@ -76,7 +72,7 @@
                         @foreach ($campusmembers as $member)
                             <div class="row mp-mt1">
                                 <div class="col mp-text-c-gray">{{ $member->name }}</div>
-                                <div class="col-sm-auto mp-text-c-gray">{{ $member->count }}</div>
+                                <div class="col-sm-auto mp-text-c-gray">{{ number_format($member->count) }}</div>
                             </div>
                         @endforeach
                     </div>
