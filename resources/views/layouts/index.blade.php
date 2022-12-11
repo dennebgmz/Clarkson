@@ -15,9 +15,11 @@
     <link href="{!! asset('dist/style.css') !!}" rel="stylesheet">
     <link href="{!! asset('dist/font-awesome-4.7.0/css/font-awesome.min.css') !!}" rel="stylesheet">
     <link href="{!! asset('dist/select2-4.0.13/css/select2.min.css') !!}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.css">
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.js"></script>
     <script>
         WebFont.load({
             google: {
@@ -36,7 +38,7 @@
             left: 0;
             position: fixed;
             display: block;
-            opacity: 0.7;
+            /* opacity: 0.7; */
             background-color: #fff;
             z-index: 150;
             text-align: center;
@@ -44,7 +46,8 @@
         }
 
         #loading-image {
-            margin-top: 200px;
+            margin-top: 300px;
+            width: 100px;
         }
 
     </style>
@@ -57,7 +60,7 @@
 
 <body id="uppfi">
     <div id="loading" class="mx-auto" style="display:none;">
-        <img id="loading-image" src="{{ asset('/dist/loading.gif') }}" alt="Loading..." />
+        <img id="loading-image" src="{{ asset('/img/logo_gif_blue.gif') }}" alt="Loading..." />
     </div>
     @section('content')
     @show

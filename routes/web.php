@@ -88,10 +88,12 @@ Route::get('/admin/count', 'AdminController@getTotal');
 Route::get('/admin/count_percampuses', 'AdminController@getTotal_campuses')->name('campuses_id');
 Route::get('/admin/member_soa/{id}', 'AdminController@member_soa');
 Route::get('/admin/members', 'AdminController@members');
+Route::post('/admin/membersData', 'AdminController@memberData')->name('dataProcessing');
 Route::get('/admin/onboarding', 'AdminController@onboarding');
 Route::post('/admin/onboarding', 'AdminController@saveonboarding');
 
 Route::get('/admin/loans', 'AdminController@loansmasterlist');
+Route::post('/admin/loanData', 'AdminController@loanMasterlistData')->name('loanData');
 Route::get('/admin/loan-details/{id}', 'AdminController@loandetails');
 
 Route::get('/admin/member_equity/{id}', 'AdminController@equity');
