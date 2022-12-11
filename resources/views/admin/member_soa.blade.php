@@ -2,8 +2,9 @@
 @section('content_body')
 
     <link href="/css/css-module/admin/member_soa.css" rel="stylesheet">
+    <link href="/css/css-module/global_css/global.css" rel="stylesheet">
 
-    <div class="container-fluid mp-ml5 mp-mr5">
+    <div class="container-fluid ">
         <div class="row no-gutters mp-mt3 ">
             <div class="col-12 mp-ph2 mp-pv2">
                 <a href="{{ url('/admin/members') }}" class="mp-link mp-link--accent">
@@ -83,7 +84,7 @@
                             </div>
                             <div class="mp-overflow-x">
 
-                                <table class="mp-table">
+                                <table class="mp-table table_style">
                                     <thead>
                                         <tr class="custom_table_header">
                                             <th>Date</th>
@@ -116,7 +117,7 @@
                                 Your Loan Transactions History
                             </div>
                             <div class="mp-overflow-x">
-                                <table class="mp-table mp-table--mini">
+                                <table class="mp-table table_style">
                                     <thead>
                                         <tr>
                                             <th>Date</th>

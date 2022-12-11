@@ -32,22 +32,27 @@
     <script src="{{ asset('/dist/select2-4.0.13/js/select2.min.js') }}"></script>
     <style>
         #loading {
+            position: fixed;
             width: 100%;
             height: 100%;
             top: 0;
             left: 0;
-            position: fixed;
             display: block;
             /* opacity: 0.7; */
-            background-color: #fff;
+            background-color: rgba(255, 255, 255, 0.9);
             z-index: 150;
-            text-align: center;
-
         }
 
         #loading-image {
-            margin-top: 300px;
-            width: 100px;
+            position: absolute;
+            margin-right:-50px;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            margin: auto;
+            width: 300px;
+           
         }
 
     </style>
