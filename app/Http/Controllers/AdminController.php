@@ -97,10 +97,6 @@ class AdminController extends Controller
 
   public function getTotal_campuses()
   {
-
-    // $upcontri=DB::table('contribution_transaction')
-    // ->where('account_id', '1') 
-    // ->sum('amount');
     DB::enableQueryLog();
 
     if (isset($_GET['campuses_id']) && $_GET['campuses_id'] != "") {
@@ -122,9 +118,7 @@ class AdminController extends Controller
         ->where('account_id', '1')
         ->sum('amount');
     }
-    // $membercontri=DB::table('contribution_transaction')
-    // ->where('account_id', '2')
-    // ->sum('amount');
+
     if (isset($_GET['campuses_id']) && $_GET['campuses_id'] != "") {
       $membercontri = DB::table('contribution_transaction')->select('amount')
         ->join('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
@@ -139,9 +133,7 @@ class AdminController extends Controller
         ->where('account_id', '2')
         ->sum('amount');
     }
-    // $earningsUP=DB::table('contribution_transaction')
-    // ->where('account_id', '3')
-    // ->sum('amount');
+
     if (isset($_GET['campuses_id']) && $_GET['campuses_id'] != "") {
       $earningsUP = DB::table('contribution_transaction')->select('amount')
         ->join('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
@@ -156,9 +148,7 @@ class AdminController extends Controller
         ->where('account_id', '3')
         ->sum('amount');
     }
-    // $earningsMember=DB::table('contribution_transaction')
-    // ->where('account_id', '4')
-    // ->sum('amount');
+
     if (isset($_GET['campuses_id']) && $_GET['campuses_id'] != "") {
       $earningsMember = DB::table('contribution_transaction')->select('amount')
         ->join('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
@@ -184,9 +174,6 @@ class AdminController extends Controller
         ->count();
     }
 
-    // $totalloansgranted=LoanTransaction::leftjoin('loan','loan_transaction.loan_id','loan.id')
-    //     ->leftjoin('member','loan.member_id','member.id')
-    //     ->sum('amount');
     if (isset($_GET['campuses_id']) && $_GET['campuses_id'] != "") {
       $totalloansgranted = LoanTransaction::leftjoin('loan', 'loan_transaction.loan_id', 'loan.id')
         ->leftjoin('member', 'loan.member_id', 'member.id')
@@ -222,53 +209,116 @@ class AdminController extends Controller
   //List of Member
   public function memberData(Request $request)
   {
-    $totalData = Member::count();
+    ## Read value
+    $draw = $request->get('draw');
+    $start = $request->get("start");
+    $rowperpage = $request->get("length"); // Rows display per page
 
-    $limit = $request->input('length');
-    $start = $request->input('start');
-    $order = $request->input('order.0.column');
-    $dir = $request->input('order.0.dir');
+    $columnIndex_arr = $request->get('order');
+    $columnName_arr = $request->get('columns');
+    $order_arr = $request->get('order');
+    $search_arr = $request->get('search');
 
-    if (empty($request->input('search.value'))) {
-      $posts = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')
-        ->leftjoin('users', 'member.user_id', 'users.id')
-        ->leftjoin('campus', 'member.campus_id', 'campus.id')
-        ->leftjoin('department', 'member.department_id', 'department.id')
-        ->offset($start)
-        ->limit($limit)
-        ->get();
-      $totalFiltered = Member::count();
+    $columnIndex = $columnIndex_arr[0]['column']; // Column index
+    $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+    $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+    $searchValue = $search_arr['value']; // Search value
 
-      //Search Data
-    } else {
-      $search = $request->input('search.value');
-      $posts = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')
-        ->leftjoin('users', 'member.user_id', 'users.id')
-        ->leftjoin('campus', 'member.campus_id', 'campus.id')
-        ->leftjoin('department', 'member.department_id', 'department.id')
-        ->where('last_name', 'like', "%{$search}%")
-        ->orWhere('first_name', 'like', "%{$search}%")
-        ->orWhere('middle_name', 'like', "%{$search}%")
-        ->orWhere('position_id', 'like', "%{$search}%")
-        ->orWhere('campus.name', 'like', "%{$search}%")
-        ->orWhere('department.name', 'like', "%{$search}%")
-        ->offset($start)
-        ->limit($limit)
-        ->get();
+    // Custom search filter 
+    $campus  = $request->get('campus');
+    $department  = $request->get('department');
+    $dt_from  = $request->get('dt_from');
+    $dt_to  = $request->get('dt_to');
 
-      $totalFiltered = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')
-        ->leftjoin('users', 'member.user_id', 'users.id')
-        ->leftjoin('campus', 'member.campus_id', 'campus.id')
-        ->leftjoin('department', 'member.department_id', 'department.id')
-        ->where('last_name', 'like', "%{$search}%")
-        ->orWhere('first_name', 'like', "%{$search}%")
-        ->orWhere('middle_name', 'like', "%{$search}%")
-        ->orWhere('position_id', 'like', "%{$search}%")
-        ->orWhere('campus.name', 'like', "%{$search}%")
-        ->orWhere('department.name', 'like', "%{$search}%")
-        ->count();
+    // Total records
+    // $records = Member::select('count(*) as allcount');
+    $records = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')
+      ->leftjoin('users', 'member.user_id', 'users.id')
+      ->leftjoin('campus', 'member.campus_id', 'campus.id')
+      ->leftjoin('department', 'member.department_id', 'department.id')
+      ->where('last_name', 'like', '%' . $searchValue . '%');
+
+    ## Add custom filter conditions
+    if (!empty($campus)) {
+      $records->where('campus_id', $campus);
+    }
+    if (!empty($department)) {
+      $records->where('department_id', $department);
+    }
+    if (!empty($dt_from) && !empty($dt_to)) {
+      $records->whereBetween(DB::raw('DATE(membership_date)'), array($dt_from, $dt_to));
+    }
+    //Search Box
+    if ($searchValue) {
+      $records->orWhere('first_name', 'like', '%' . $searchValue . '%');
+      $records->orWhere('middle_name', 'like', '%' . $searchValue . '%');
+      $records->orWhere('position_id', 'like', '%' . $searchValue . '%');
+      $records->orWhere('campus.name', 'like', '%' . $searchValue . '%');
+      $records->orWhere('department.name', 'like', '%' . $searchValue . '%');
+      $records->orWhere('member.member_no', 'like', '%' . $searchValue . '%');
+    }
+    $totalRecords = $records->count();
+
+    // Total records with filter
+    $records = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')
+      ->leftjoin('users', 'member.user_id', 'users.id')
+      ->leftjoin('campus', 'member.campus_id', 'campus.id')
+      ->leftjoin('department', 'member.department_id', 'department.id')
+      ->where('last_name', 'like', '%' . $searchValue . '%');
+
+    ## Add custom filter conditions
+    if (!empty($campus)) {
+      $records->where('campus_id', $campus);
+    }
+    if (!empty($department)) {
+      $records->where('department_id', $department);
+    }
+    if (!empty($dt_from) && !empty($dt_to)) {
+      $records->whereBetween(DB::raw('DATE(membership_date)'), array($dt_from, $dt_to));
     }
 
+    //Search Box
+    if ($searchValue) {
+      $records->orWhere('first_name', 'like', '%' . $searchValue . '%');
+      $records->orWhere('middle_name', 'like', '%' . $searchValue . '%');
+      $records->orWhere('position_id', 'like', '%' . $searchValue . '%');
+      $records->orWhere('campus.name', 'like', '%' . $searchValue . '%');
+      $records->orWhere('department.name', 'like', '%' . $searchValue . '%');
+      $records->orWhere('member.member_no', 'like', '%' . $searchValue . '%');
+    }
+    $totalRecordswithFilter = $records->count();
+
+    // Fetch records
+    $records = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')
+      ->leftjoin('users', 'member.user_id', 'users.id')
+      ->leftjoin('campus', 'member.campus_id', 'campus.id')
+      ->leftjoin('department', 'member.department_id', 'department.id')
+      ->where('last_name', 'like', '%' . $searchValue . '%');
+
+    ## Add custom filter conditions
+    if (!empty($campus)) {
+      $records->where('campus_id', $campus);
+    }
+    if (!empty($department)) {
+      $records->where('department_id', $department);
+    }
+    if (!empty($dt_from) && !empty($dt_to)) {
+      $records->whereBetween(DB::raw('DATE(membership_date)'), array($dt_from, $dt_to));
+    }
+
+    //Search Box
+    if ($searchValue) {
+      $records->orWhere('first_name', 'like', '%' . $searchValue . '%');
+      $records->orWhere('middle_name', 'like', '%' . $searchValue . '%');
+      $records->orWhere('position_id', 'like', '%' . $searchValue . '%');
+      $records->orWhere('campus.name', 'like', '%' . $searchValue . '%');
+      $records->orWhere('department.name', 'like', '%' . $searchValue . '%');
+      $records->orWhere('member.member_no', 'like', '%' . $searchValue . '%');
+    }
+
+    $posts = $records->skip($start)
+      ->take($rowperpage)
+      ->get();
     $data = array();
     if ($posts) {
       foreach ($posts as $r) {
@@ -289,9 +339,9 @@ class AdminController extends Controller
       }
     }
     $json_data = array(
-      "draw" => intval($request->input('draw')),
-      "recordsTotal" => intval($totalData),
-      "recordsFiltered" => intval($totalFiltered),
+      "draw" => intval($draw),
+      "recordsTotal" => intval($totalRecords),
+      "recordsFiltered" => intval($totalRecordswithFilter),
       "data" => $data
     );
     echo json_encode($json_data);
@@ -318,7 +368,6 @@ class AdminController extends Controller
         ->limit($limit)
         ->get();
       $totalFiltered = LoanTransaction::count();
-      
     } else {
       $search = $request->input('search.value');
       $loans = LoanTransaction::select('loan.id as id', 'loan_type.name as type', 'member.member_no as memberNo', 'users.first_name as firstname', 'users.middle_name as middlename', 'users.last_name as lastname', DB::raw('MAX(date) as lastTransactionDate'), DB::raw('SUM(amount) AS balance'), DB::raw('MAX(start_amort_date) AS startAmortDate'), DB::raw('MAX(end_amort_date) AS endAmortDate'))
@@ -375,6 +424,64 @@ class AdminController extends Controller
     );
     echo json_encode($json_data);
   }
+
+  public function getMemberData()
+  {
+    $records = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')
+      ->leftjoin('users', 'member.user_id', 'users.id')
+      ->leftjoin('campus', 'member.campus_id', 'campus.id')
+      ->leftjoin('department', 'member.department_id', 'department.id')
+      ->get();
+
+    $memData = "";
+    if (count($records) > 0) {
+      $memData .= '
+      <table>
+        <tr>
+          <th>Member ID</th>
+          <th>Last Name</th>
+          <th>First Name</th>
+          <th>Middle Name</th>
+          <th>Membership Date</th>
+          <th>Campus</th>
+          <th>Class</th>
+          <th>Position</th>
+        </tr>
+      ';
+      foreach ($records as $row) {
+        $memData .= '
+        <tr>
+          <td>' . $row->member_no . '</td>
+          <td>' . $row->last_name . '</td>
+          <td>' . $row->first_name . '</td>
+          <td>' . $row->middle_name . '</td>
+          <td>' . date("D M j, Y", strtotime($row->memdate)) . '</td>
+          <td>' . $row->campus . '</td>
+          <td>' . $row->department . '</td>
+          <td>' . $row->position_id . '</td>
+        </tr>
+        ';
+      }
+      $memData .= '</table>';
+    }
+
+    header('Content-Disposition: attachment; filename=List of member.xls');
+    header('Content-Type: application/xls');
+    header('Content-Transfer-Encoding: binary');
+    header('Cache-Control: must-revalidate');
+    echo $memData;
+  }
+
+  // public function printMemberData()
+  // {
+  //   $records = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')
+  //     ->leftjoin('users', 'member.user_id', 'users.id')
+  //     ->leftjoin('campus', 'member.campus_id', 'campus.id')
+  //     ->leftjoin('department', 'member.department_id', 'department.id')
+  //     ->get();
+  //   $pdf = PDF::loadView('pdf.member',['member'=>$records]);
+  //   return $pdf->stream('members.pdf');
+  // }
   //===============================================Eto na yung End ng bagong code=====================================================================//
 
 
@@ -477,51 +584,56 @@ class AdminController extends Controller
 
   public function members()
   {
-    if (getUserdetails()->role == "SUPER_ADMIN") {
+    // if (getUserdetails()->role == "SUPER_ADMIN") {
 
-      if (isset($_GET['q'])) {
-        $members = Member::select('users.*', 'member.member_no as member_no', 'campus.name as campus', 'department.name as department', 'member.position_id', 'member.membership_date as memdate')
-          ->leftjoin('users', 'member.user_id', 'users.id')
-          ->leftjoin('campus', 'member.campus_id', 'campus.id')
-          ->leftjoin('department', 'member.department_id', 'department.id')
-          ->where('member_no', 'like', '%' . $_GET['q'] . '%')
-          ->orWhere(DB::raw('CONCAT(users.first_name," ",users.last_name)'), 'like', '%' . $_GET['q'] . '%')
-          ->orWhere('users.first_name', 'like', '%' . $_GET['q'] . '%')
-          ->orWhere('users.last_name', 'like', '%' . $_GET['q'] . '%')
-          ->paginate(10);
-      } else {
-        $members = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')
-          ->leftjoin('users', 'member.user_id', 'users.id')
-          ->leftjoin('campus', 'member.campus_id', 'campus.id')
-          ->leftjoin('department', 'member.department_id', 'department.id')
-          ->paginate(10);
-      }
-    } else {
-      if (isset($_GET['q'])) {
-        $members = Member::select('users.*', 'member.member_no as member_no', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate', 'member.position_id')
-          ->leftjoin('users', 'member.user_id', 'users.id')
-          ->leftjoin('campus', 'member.campus_id', 'campus.id')
-          ->leftjoin('department', 'member.department_id', 'department.id')
-          ->where('campus.cluster_id', '=', getUserdetails()->cluster_id)
-          ->where(function ($query) {
-            $query->where('member_no', 'like', '%' . $_GET['q'] . '%')
-              ->orWhere(DB::raw('CONCAT(users.first_name," ",users.last_name)'), 'like', '%' . $_GET['q'] . '%')
-              ->orWhere('users.first_name', 'like', '%' . $_GET['q'] . '%')
-              ->orWhere('users.last_name', 'like', '%' . $_GET['q'] . '%');
-          })
+    //   if (isset($_GET['q'])) {
+    //     $members = Member::select('users.*', 'member.member_no as member_no', 'campus.name as campus', 'department.name as department', 'member.position_id', 'member.membership_date as memdate')
+    //       ->leftjoin('users', 'member.user_id', 'users.id')
+    //       ->leftjoin('campus', 'member.campus_id', 'campus.id')
+    //       ->leftjoin('department', 'member.department_id', 'department.id')
+    //       ->where('member_no', 'like', '%' . $_GET['q'] . '%')
+    //       ->orWhere(DB::raw('CONCAT(users.first_name," ",users.last_name)'), 'like', '%' . $_GET['q'] . '%')
+    //       ->orWhere('users.first_name', 'like', '%' . $_GET['q'] . '%')
+    //       ->orWhere('users.last_name', 'like', '%' . $_GET['q'] . '%')
+    //       ->paginate(10);
+    //   } else {
+    //     $members = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')
+    //       ->leftjoin('users', 'member.user_id', 'users.id')
+    //       ->leftjoin('campus', 'member.campus_id', 'campus.id')
+    //       ->leftjoin('department', 'member.department_id', 'department.id')
+    //       ->paginate(10);
+    //   }
+    // } else {
+    //   if (isset($_GET['q'])) {
+    //     $members = Member::select('users.*', 'member.member_no as member_no', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate', 'member.position_id')
+    //       ->leftjoin('users', 'member.user_id', 'users.id')
+    //       ->leftjoin('campus', 'member.campus_id', 'campus.id')
+    //       ->leftjoin('department', 'member.department_id', 'department.id')
+    //       ->where('campus.cluster_id', '=', getUserdetails()->cluster_id)
+    //       ->where(function ($query) {
+    //         $query->where('member_no', 'like', '%' . $_GET['q'] . '%')
+    //           ->orWhere(DB::raw('CONCAT(users.first_name," ",users.last_name)'), 'like', '%' . $_GET['q'] . '%')
+    //           ->orWhere('users.first_name', 'like', '%' . $_GET['q'] . '%')
+    //           ->orWhere('users.last_name', 'like', '%' . $_GET['q'] . '%');
+    //       })
 
-          ->paginate(10);
-      } else {
-        $members = Member::select('users.*', 'member.member_no as member_no', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate', 'member.position_id')
-          ->leftjoin('users', 'member.user_id', 'users.id')
-          ->leftjoin('campus', 'member.campus_id', 'campus.id')
-          ->leftjoin('department', 'member.department_id', 'department.id')
-          ->where('campus.cluster_id', '=', getUserdetails()->cluster_id)
-          ->paginate(10);
-      }
-    }
+    //       ->paginate(10);
+    //   } else {
+    //     $members = Member::select('users.*', 'member.member_no as member_no', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate', 'member.position_id')
+    //       ->leftjoin('users', 'member.user_id', 'users.id')
+    //       ->leftjoin('campus', 'member.campus_id', 'campus.id')
+    //       ->leftjoin('department', 'member.department_id', 'department.id')
+    //       ->where('campus.cluster_id', '=', getUserdetails()->cluster_id)
+    //       ->paginate(10);
+    //   }
+    // }
 
-    return view('admin.members', array('members' => $members));
+    // return view('admin.members', array('members' => $members));
+    $data['department'] = DB::table('department')
+      ->get();
+
+    $data['campuses'] = Campus::all();
+    return view('admin.members')->with($data);
   }
 
   public function member_soa($id)
