@@ -1,0 +1,12 @@
+.table_style {
+
+
+    color: var(--c-base);
+    padding: 10px;
+}
+
+.table_style th {
+    background-color: var(--c-primary);
+    color: white !important;
+    padding: 10px !important;
+}
