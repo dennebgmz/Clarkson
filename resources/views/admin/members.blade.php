@@ -36,23 +36,23 @@
                                         Report</a>
                                 @endif
                             </div>
-                            
-                            <select name="" class="mp-link mp-link--accent"
-                                style="width: 100%;" id="campuses_select">
+
+                            <select name="" class="mp-link mp-link--accent" style="width: 100%;"
+                                id="campuses_select">
                                 <option value="">Filter By Campus</option>
                                 @foreach ($campuses as $row)
                                     <option value="{{ $row->id }}">{{ $row->name }}</option>
                                 @endforeach
                             </select>
 
-                            <select name="" class="mp-link mp-link--accent"
-                                style="width: 100%;" id="department_select">
+                            <select name="" class="mp-link mp-link--accent" style="width: 100%;"
+                                id="department_select">
                                 <option value="">Filter By Department</option>
                                 @foreach ($department as $row)
                                     <option value="{{ $row->id }}">{{ $row->description }}</option>
                                 @endforeach
                             </select>
-                            
+
                             <a href="{{ url('/admin/exportMember') }}" class="mp-button mp-button--accent">Export Data</a>
                             {{-- <button type="button" class="mp-button mp-button--accent" id="printMember">Print</button> --}}
 
@@ -104,7 +104,7 @@
                 "processing": true,
                 "serverSide": true,
                 "ajax": {
-                    "url": "{{route('dataProcessing')}}",
+                    "url": "{{ route('dataProcessing') }}",
                     "data": function(data) {
                         data.campus = $('#campuses_select').val();
                         data.department = $('#department_select').val();
@@ -136,9 +136,10 @@
 
             $(document).on('click', '#printMember', function() {
                 var url = "{{ URL::to('/admin/printMember') }}"
-                window.open(url, 'targetWindow','resizable=yes,width=1000,height=1000');
+                window.open(url, 'targetWindow', 'resizable=yes,width=1000,height=1000');
             });
-            
+
+
         });
     </script>
 @endsection

@@ -47,6 +47,9 @@
                                     <a href="{{ url('/admin/loans') }}"
                                         class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
                                         View All Loans
+                                    </a>                                   
+                                    <a href="#" id="generate_summary" class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                                        Print Report
                                     </a>
                                 </div>
                             </div>
@@ -204,8 +207,9 @@
                 });
             }
         });
+        var campuses_id;
         $('#campuses_select').on('change', function(e) {
-            var campuses_id = $(this).val();
+             campuses_id = $(this).val();
             $.ajax({
                 url: "/admin/count_percampuses",
                 method: "GET",
@@ -232,5 +236,11 @@
                 }
             });
         });
+        $(document).on('click', '#generate_summary', function(e) {
+                var id = campuses_id;
+                console.log(id);
+                var url = "{{ URL::to('/admin/summaryreports/') }}" + '/' + id; //YOUR CHANGES HERE...
+                window.location.href = url;
+            });
     </script>
 @endsection
