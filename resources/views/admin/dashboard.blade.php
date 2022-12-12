@@ -7,24 +7,24 @@
             <div class="col mp-ph2 mp-pv2">
                 <div class="mp-card mp-card--plain mp-pv4">
                     <div class="row align-items-center">
-                         
+
                         <!-- <div class="col-lg-4">
-                            <div class="row align-items-center">
-                                 <div class ="col-md-5 col-lg-7">
-                                  <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
-                                     style="width: 100%; font-size:20px" id="campuses_select">
-                                         <option value="">All Campuses</option>
-                                        @foreach ($campuses as $row)
-                                            <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                        @endforeach
-                                 </select>
-                            </div> 
-                            <div class ="col-md-7  col-lg-5 ">
-                                 <button class="button_style bypass_padding toggle button " 
-                                 data-target="myPopup">Manage Campus</button>
-                            </div>
-                            </div>
-                        </div> -->
+                                        <div class="row align-items-center">
+                                             <div class ="col-md-5 col-lg-7">
+                                              <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
+                                                 style="width: 100%; font-size:20px" id="campuses_select">
+                                                     <option value="">All Campuses</option>
+                                                    @foreach ($campuses as $row)
+    <option value="{{ $row->id }}">{{ $row->name }}</option>
+    @endforeach
+                                             </select>
+                                        </div>
+                                        <div class ="col-md-7  col-lg-5 ">
+                                             <button class="button_style bypass_padding toggle button "
+                                             data-target="myPopup">Manage Campus</button>
+                                        </div>
+                                        </div>
+                                    </div> -->
 
                         <div class="col-md-6 col-lg-4">
                             <div class="mp-text-c-gray mp-text-fs-small mp-pt3">
@@ -32,17 +32,17 @@
                             </div>
                             <div class="row align-items-center mp-pb3">
                                 <div class="col">
-                                       <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
-                                     style="width: 100%; font-size:20px" id="campuses_select">
-                                         <option value="">All Campuses</option>
+                                    <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
+                                        style="width: 100%; font-size:20px" id="campuses_select">
+                                        <option value="">All Campuses</option>
                                         @foreach ($campuses as $row)
                                             <option value="{{ $row->id }}">{{ $row->name }}</option>
                                         @endforeach
-                                 </select>
+                                    </select>
                                 </div>
                                 <div class="col-auto col-lg-12 col-xl-auto mp-text-right">
-                                     <button class="button_style bypass_padding toggle button " 
-                                         data-target="myPopup">Manage Campus</button>
+                                    <button class="button_style bypass_padding toggle button " data-target="myPopup">Manage
+                                        Campus</button>
                                 </div>
                             </div>
                         </div>
@@ -57,8 +57,7 @@
                                     <span class="mp-text-fs-xlarge" id="totalMember"></span>
                                 </div>
                                 <div class="col-auto col-lg-12 col-xl-auto mp-text-right">
-                                    <a href="{{ url('/admin/members') }}"
-                                        class="button_style bypass_padding">
+                                    <a href="{{ url('/admin/members') }}" class="button_style bypass_padding">
                                         <!-- mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small -->
                                         View All Members
                                     </a>
@@ -78,12 +77,10 @@
                                     </span>
                                 </div>
                                 <div class="col-auto col-lg-12 col-xl-auto mp-text-right">
-                                    <a href="{{ url('/admin/loans') }}"
-                                        class="button_style bypass_padding">
+                                    <a href="{{ url('/admin/loans') }}" class="button_style bypass_padding">
                                         View All Loans
                                     </a>
-                                    <a href="#" id="generate_summary"
-                                        class="button_style bypass_padding">
+                                    <a href="#" id="generate_summary" class="button_style bypass_padding">
                                         Print Report
                                     </a>
                                 </div>
@@ -219,7 +216,8 @@
         <div class="popup-body">
             <div class="container">
                 <form id="addCampus" method="POST">
-                    <input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>"><input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>">
+                    <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>"><input type="hidden"
+                        name="_token" value="<?php echo csrf_token(); ?>">
                     <div>
                         <label>Campus Key</label>
                         <input type="text" name="campus_key" required />
@@ -232,7 +230,7 @@
                         <label>Cluster</label>
                         <select name="cluster" required>
                             <option value="">Select Cluster</option>
-                            @foreach($cluster as $row)
+                            @foreach ($cluster as $row)
                                 <option value="{{ $row->id }}">{{ $row->name }}</option>
                             @endforeach
                         </select>
@@ -349,7 +347,7 @@
         });
         $(document).on('submit', '#addCampus', function(e) {
             e.preventDefault();
-            
+
             $.ajax({
                 url: "/admin/addCampus",
                 method: "POST",
@@ -373,6 +371,46 @@
                 },
                 error: function() {
                     Swal.fire('Error!', 'Something went wrong. Please try again later!', 'error');
+                }
+            })
+        });
+        $(document).on('click', '.delete_campus', function() {
+            var id = $(this).attr('id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/admin/deleteCampus",
+                        method: "GET",
+                        data: {
+                            id: id
+                        },
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data.message != '') {
+                                Swal.fire('Warning!', 'Cannot delete campus. There are records exist', 'warning');
+                            } else {
+                                Swal.fire(
+                                    'Thank you!',
+                                    'Successfully deleted.',
+                                    'success'
+                                );
+                                var table = $('#campusTable').DataTable();
+                                table.draw();
+                            }
+                        },
+                        error: function() {
+                            Swal.fire('Error!', 'Something went wrong. Please try again later!',
+                                'error');
+                        }
+                    });
                 }
             })
         });

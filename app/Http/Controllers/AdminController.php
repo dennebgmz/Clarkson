@@ -399,7 +399,7 @@ class AdminController extends Controller
         $row[] = $r->campus_key;
         $row[] = $r->name;
         $row[] = $r->cluster_id;
-        $row[] = '';
+        $row[] = '<button class="delete_campus" id="'.$r->id.'" title="Delete Campus">Delete</button>';
 
         $data[] = $row;
       }
@@ -701,6 +701,26 @@ class AdminController extends Controller
         'message' => $message,
       );
   
+      echo json_encode($output);
+  }
+
+  public function deleteCampus(Request $request)
+  {
+    $message = '';
+    $campus = DB::table('member')
+      ->where('campus_id', $request->get('id'))
+      ->count();
+
+      if($campus > 0) {
+        $message = 'Data Found';
+      } else {
+        DB::table('campus')
+          ->where('id', $request->get('id'))
+          ->delete();
+      }
+      $output = array(
+        'message' => $message,
+      );
       echo json_encode($output);
   }
 
