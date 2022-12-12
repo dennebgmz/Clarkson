@@ -355,6 +355,68 @@ class AdminController extends Controller
   }
 
   //List of Member
+  public function getAllCampuses(Request $request)
+  {
+    ## Read value
+    $draw = $request->get('draw');
+    $start = $request->get("start");
+    $rowperpage = $request->get("length"); // Rows display per page
+
+    $columnIndex_arr = $request->get('order');
+    $columnName_arr = $request->get('columns');
+    $order_arr = $request->get('order');
+    $search_arr = $request->get('search');
+
+    $columnIndex = $columnIndex_arr[0]['column']; // Column index
+    // $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+    $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+    $searchValue = $search_arr['value']; // Search value
+
+    // Total records
+    // $records = Member::select('count(*) as allcount');
+    $records = DB::table('campus')
+      ->where('campus_key', 'like', '%' . $searchValue . '%')
+      ->orWhere('name', 'like', '%' . $searchValue . '%');
+    $totalRecords = $records->count();
+
+    // Total records with filter
+    $records = DB::table('campus')
+      ->where('campus_key', 'like', '%' . $searchValue . '%')
+      ->orWhere('name', 'like', '%' . $searchValue . '%');
+    $totalRecordswithFilter = $records->count();
+
+    // Fetch records
+    $records = DB::table('campus')
+      ->where('campus_key', 'like', '%' . $searchValue . '%')
+      ->orWhere('name', 'like', '%' . $searchValue . '%');
+
+    $posts = $records->skip($start)
+      ->take($rowperpage)
+      ->get();
+    $data = array();
+    if ($posts) {
+      foreach ($posts as $r) {
+        $start++;
+        $row = array();
+
+        $row[] = $r->campus_key;
+        $row[] = $r->name;
+        $row[] = $r->cluster_id;
+        $row[] = '';
+
+        $data[] = $row;
+      }
+    }
+    $json_data = array(
+      "draw" => intval($draw),
+      "recordsTotal" => intval($totalRecords),
+      "recordsFiltered" => intval($totalRecordswithFilter),
+      "data" => $data
+    );
+    echo json_encode($json_data);
+  }
+
+  //List of Member
   public function memberData(Request $request)
   {
     ## Read value
@@ -368,7 +430,7 @@ class AdminController extends Controller
     $search_arr = $request->get('search');
 
     $columnIndex = $columnIndex_arr[0]['column']; // Column index
-    $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+    // $columnName = $columnName_arr[$columnIndex]['data']; // Column name
     $columnSortOrder = $order_arr[0]['dir']; // asc or desc
     $searchValue = $search_arr['value']; // Search value
 

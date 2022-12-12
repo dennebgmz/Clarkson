@@ -1,6 +1,7 @@
 @extends('layouts/main')
 @section('content_body')
     <div class="container mp-container">
+        <button class="toggle button" data-target="myPopup">Manage Campus</button>
         <div class="row no-gutters mp-mt4">
             <div class="col mp-ph2 mp-pv2">
                 <div class="mp-card mp-card--plain mp-pv4">
@@ -47,8 +48,9 @@
                                     <a href="{{ url('/admin/loans') }}"
                                         class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
                                         View All Loans
-                                    </a>                                   
-                                    <a href="#" id="generate_summary" class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                                    </a>
+                                    <a href="#" id="generate_summary"
+                                        class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
                                         Print Report
                                     </a>
                                 </div>
@@ -173,6 +175,45 @@
             </div>
         </div>
     </div>
+
+
+
+    <div id="myPopup" class="popup hide">
+        <div class="popup-header">
+            Campus Management
+            <span class="close toggle" data-target="myPopup">close</span>
+        </div>
+        <div class="popup-body">
+            <div class="container">
+                <form id="addCampus" method="POST">
+                    <div>
+                        <label>Campus Key</label>
+                        <input type="text" name="campus_key" required />
+                    </div>
+                    <div>
+                        <label>Campus Name</label>
+                        <input type="text" name="campus_key" required />
+                    </div>
+                    <button type="submit">Save Changes</button>
+                </form>
+                <div class="mp-overflow-x">
+                    <table class="mp-table mp-text-fs-small" id="campusTable" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Campus Key</th>
+                                <th>Campus</th>
+                                <th>Cluster</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -180,6 +221,22 @@
 
     <script>
         $(document).ready(function() {
+            var tableMember = $('#campusTable').DataTable({
+                language: {
+                    search: '',
+                    searchPlaceholder: "Search Here...",
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br>Loading...',
+                },
+                "ordering": false,
+                "lengthChange": false,
+                "info": false,
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "{{ route('dataCampuses') }}",
+                },
+            });
+
             load_upcontri();
 
             function load_upcontri() {
@@ -209,7 +266,7 @@
         });
         var campuses_id;
         $('#campuses_select').on('change', function(e) {
-             campuses_id = $(this).val();
+            campuses_id = $(this).val();
             $.ajax({
                 url: "/admin/count_percampuses",
                 method: "GET",
@@ -237,11 +294,6 @@
             });
         });
         $(document).on('click', '#generate_summary', function(e) {
-                var id = campuses_id;
-                console.log(id);
-                var url = "{{ URL::to('/admin/summaryreports/') }}" + '/' + id; //YOUR CHANGES HERE...
-                // window.location.href = url;
-                window.open(url, '_blank');
-            });
+
     </script>
 @endsection
