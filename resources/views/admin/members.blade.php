@@ -121,19 +121,28 @@
                 tableMember.draw();
             });
             $('#from').on('change', function() {
-                if($('#from').val() < $('#to').val())
+                if($('#from').val() > $('#to').val() &&  $('#to').val() != '')
                 {
-                    alert('Invalid date please check date');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Invalid Date Range,Please Check the date. Thank you!',  
+                        });
+                    $('#from').val('');
                 }else{
                     tableMember.draw();
                 }
                 
             });
             $('#to').on('change', function() {
-                if($('#from').val() < $('#to').val())
+                if($('#to').val() < $('#from').val())
                 {
-                    alert('Invalid date please check date');
-                    $('#to').val() = '';
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Invalid Date Range,Please Check the date. Thank you!',                       
+                        });
+                    $('#to').val('');
                 }else{
                     tableMember.draw();
                 }
