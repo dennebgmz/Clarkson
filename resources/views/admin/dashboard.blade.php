@@ -8,9 +8,9 @@
                 <div class="mp-card mp-card--plain mp-pv4">
                     <div class="row align-items-center">
                          
-                        <div class="col-lg-4">
+                        <!-- <div class="col-lg-4">
                             <div class="row align-items-center">
-                                 <div class ="col-md-6 col-lg-7">
+                                 <div class ="col-md-5 col-lg-7">
                                   <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
                                      style="width: 100%; font-size:20px" id="campuses_select">
                                          <option value="">All Campuses</option>
@@ -19,15 +19,34 @@
                                         @endforeach
                                  </select>
                             </div> 
-                            <div class ="col-md-6  col-lg-5 ">
+                            <div class ="col-md-7  col-lg-5 ">
                                  <button class="button_style bypass_padding toggle button " 
                                  data-target="myPopup">Manage Campus</button>
                             </div>
                             </div>
-                           
-                           
-                          
+                        </div> -->
+
+                        <div class="col-md-6 col-lg-4">
+                            <div class="mp-text-c-gray mp-text-fs-small mp-pt3">
+                                Campuses
+                            </div>
+                            <div class="row align-items-center mp-pb3">
+                                <div class="col">
+                                       <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
+                                     style="width: 100%; font-size:20px" id="campuses_select">
+                                         <option value="">All Campuses</option>
+                                        @foreach ($campuses as $row)
+                                            <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                        @endforeach
+                                 </select>
+                                </div>
+                                <div class="col-auto col-lg-12 col-xl-auto mp-text-right">
+                                     <button class="button_style bypass_padding toggle button " 
+                                         data-target="myPopup">Manage Campus</button>
+                                </div>
+                            </div>
                         </div>
+
                         <div class="col-md-6 col-lg-4">
                             <div class="mp-text-c-gray mp-text-fs-small mp-pt3">
                                 Total Members
