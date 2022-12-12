@@ -347,5 +347,34 @@
             var target = $(this).data('target');
             $('#' + target).toggleClass('hide');
         });
+        $(document).on('submit', '#addCampus', function(e) {
+            e.preventDefault();
+            
+            $.ajax({
+                url: "/admin/addCampus",
+                method: "POST",
+                data: new FormData(this),
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    if (data.message != '') {
+                        Swal.fire('Warning!', 'Campus already exist.', 'warning');
+                    } else {
+                        Swal.fire(
+                            'Thank you!',
+                            'Successfully added.',
+                            'success'
+                        );
+                        $('#addCampus').trigger('reset');
+                        var table = $('#campusTable').DataTable();
+                        table.draw();
+                    }
+                },
+                error: function() {
+                    Swal.fire('Error!', 'Something went wrong. Please try again later!', 'error');
+                }
+            })
+        });
     </script>
 @endsection
