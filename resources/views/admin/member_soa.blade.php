@@ -222,11 +222,12 @@
 
 @section('scripts')
     <script type="text/javascript">
-        $(window).load(function() {
-            $('#loading').hide();
-        });
         $(document).ready(function() {
             $('#loading').show();
+
+            setTimeout(() => {
+                $('#loading').hide();
+            }, 1000);
         });
     </script>
 @endsection
