@@ -8,3 +8,27 @@
     color: white !important;
     padding: 10px !important;
 }
+
+.button_style {
+    background-color: white;
+    border: 1px solid var(--c-primary);
+    color: var(--c-primary);
+    font-size: .8rem;
+    font-weight: 500;
+    border-radius: 25px;
+    margin: 5px 5px 5px 5px;
+    text-transform: uppercase;
+}
+
+.button_style:hover {
+    background-color: var(--c-primary);
+    color: white;
+}
+
+.bypass_padding {
+
+    padding: 5px 7px 5px 7px !important;
+}
+
+
+/* CSS */
