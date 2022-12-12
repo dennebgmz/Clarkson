@@ -93,9 +93,12 @@ Route::get('/admin/membersData', 'AdminController@memberData')->name('dataProces
 Route::get('/admin/campuses', 'AdminController@getAllCampuses')->name('dataCampuses');
 Route::get('/admin/exportMember', 'AdminController@getMemberData');
 Route::get('/admin/printMember', 'AdminController@printMemberData');
-Route::post('/admin/addCampus', 'AdminController@addCampus');
 Route::get('/admin/onboarding', 'AdminController@onboarding');
 Route::post('/admin/onboarding', 'AdminController@saveonboarding');
+
+//Campus management
+Route::post('/admin/addCampus', 'AdminController@addCampus');
+Route::get('/admin/deleteCampus', 'AdminController@deleteCampus');
 
 Route::get('/admin/loans', 'AdminController@loansmasterlist');
 Route::post('/admin/loanData', 'AdminController@loanMasterlistData')->name('loanData');
