@@ -4588,6 +4588,10 @@ tfoot {
     display: none !important
 }
 
+.campus_change:hover {
+    color: var(--c-active-hover-bg) !important
+}
+
 @media (max-width:575px) {
     .mp-hide-xs {
         display: none !important
