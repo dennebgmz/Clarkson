@@ -240,7 +240,8 @@
                 var id = campuses_id;
                 console.log(id);
                 var url = "{{ URL::to('/admin/summaryreports/') }}" + '/' + id; //YOUR CHANGES HERE...
-                window.location.href = url;
+                // window.location.href = url;
+                window.open(url, '_blank');
             });
     </script>
 @endsection

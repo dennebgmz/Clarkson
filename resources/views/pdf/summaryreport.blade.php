@@ -30,98 +30,51 @@ font-size: 15px;
       <div class="" style="color: #414042!important; font-family: Fira Sans,sans-serif; font-size: 15px;">
         Statement Date: {{ date("m/d/Y") }}
       </div>
-
-      <div class="" style="color: #414042!important; font-family: Fira Sans,sans-serif; font-size: 15px;">
-        <div>
-          Name: {{$member->first_name}} {{$member->last_name}}
-        </div>
-        <div>
-          Member ID: {{ $member->member_no }}
-        </div>
-      </div>
     </div>
 
       <div align="center" class="">
         <div class="" style="color: #414042!important; font-family: Fira Sans,sans-serif; font-size: 20px;">
-          Statement of Account
+          Report for {{ $campusname }} 
         </div>
         <table width="100%" class="" cellspacing="1000" style="padding: 30px; padding-bottom: 0px!important;">
           <tr>
-            <th class="">Your Member's Equity</th>
+            <th class="">Campus Equity</th>
             <th></th>
           </tr>
           <tr>
             <td class="">
-              Total Member's Contribution
+            Total Members
             </td>
             <td class="" style="text-align: right;">
-               PHP {{ number_format($membercontribution,2) }} 
+               {{ $memberscount }} 
             </td>
           </tr>
           <tr>
-            <td class="">Total UP Contribution</td>
-            <td class="" style="text-align: right;">PHP {{ number_format($upcontribution,2) }} </td>
+            <td class="">Total Loans Granted</td>
+            <td class="" style="text-align: right;">PHP {{ number_format($upcontri,2) }} </td>
           </tr>
           <tr>
-            <td class="">Earnings from Membership Contribution</td>
-            <td class="" style="text-align: right;">PHP {{ number_format($emcontribution,2) }}</td>
+            <td class="">Total Member Contribution</td>
+            <td class="" style="text-align: right;">PHP {{ number_format($membercontri,2) }}</td>
           </tr>
           <tr>
             <td class="">Earnings from UP Contribution</td>
-            <td class="" style="text-align: right;">PHP {{ number_format($eupcontribution,2) }}</td>
+            <td class="" style="text-align: right;">PHP {{ number_format($earningsUP,2) }}</td>
           </tr>
           <tr>
-            <td>
-              <div class=""></div>
-            </td>
-            <td>
-              <div class=""></div>
-            </td>
+          <td class="">Earnings on Member Contributions</td>
+            <td class="" style="text-align: right;">PHP {{ number_format($earningsMember,2) }}</td>
           </tr>
           <tr>
-            <td colspan="2">
-              <hr>
-            </td>
+            <td class="">Total Members' Outstanding Loans</td>
+            <td class="" style="text-align: right;">PHP {{ number_format($totalloansgranted,2) }}</td>
           </tr>
           <tr class="">
-            <th>Total Equity Balance</th>
-            <th class="" style="text-align: right;">PHP {{ number_format($totalcontributions,2) }}</th>
+            <th>Total Members' Equity</th>
+            <th class="" style="text-align: right;">PHP {{ number_format($totalequity,2) }}</th>
           </tr>
         </table>
-        @if(!empty($outstandingloans))
-        <br>
         
-          <table width="100%" class="" cellspacing="1000" style="padding: 30px">
-            <tr>
-              <th class="">Your Outstanding Loans</th>
-              <th></th>
-            </tr>
-          @foreach($outstandingloans as $loans)
-              <tr>
-                <td class="">{{ $loans->type }}</td>
-                <td class="" style="text-align: right;">PHP {{ number_format($loans->balance,2) }}</td>
-              </tr>
-           @endforeach
-            <tr>
-              <td>
-                <div class=""></div>
-              </td>
-              <td>
-                <div class=""></div>
-              </td>
-            </tr>
-            <tr>
-            <td colspan="2">
-              <hr>
-            </td>
-          </tr>
-            <tr class="">
-              <th>Total Outstanding Loan Balance</th>
-              <th class="" style="text-align: right;">PHP {{ number_format($totalloanbalance,2) }}</th>
-            </tr>
-          </table>
-        
-       @endif
          <br>
         <br>
         <br>
