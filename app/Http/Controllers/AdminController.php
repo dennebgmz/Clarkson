@@ -220,7 +220,7 @@ class AdminController extends Controller
   public function generatesummary($id)
   {
     
-    if (isset($id) && $id != "") {
+    if (isset($id) && $id != "" && $id != 0) {
     $contributions = array();
     $membercontri = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
       ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
@@ -330,13 +330,8 @@ class AdminController extends Controller
     
     $contributions['campusname'] = 'All';
     // print_r($campusname );
-    $totalloansgranted = LoanTransaction::select(DB::raw('SUM(amount) as total'))
-        ->leftjoin('loan', 'loan_transaction.loan_id', 'loan.id')
-        ->leftjoin('member', 'loan.member_id', 'member.id')
-        
-        ->groupBy('member.campus_id')
-        ->first();
-    $contributions['totalloansgranted'] = $totalloansgranted->total;
+    $totalloansgranted = LoanTransaction::sum('amount');
+    $contributions['totalloansgranted'] = $totalloansgranted;
 
     $totalequity = 0;
     $totalequity = $upcontri->total + $membercontri->total + $earningsUP->total + $earningsMember->total;
@@ -348,7 +343,7 @@ class AdminController extends Controller
     $data['earningsUP'] = $earningsUP->total;
     $data['earningsMember'] = $earningsMember->total;
     $data['memberscount'] = $memberscount;
-    $data['totalloansgranted'] = $totalloansgranted->total;
+    $data['totalloansgranted'] = $totalloansgranted;
     }
 
 
