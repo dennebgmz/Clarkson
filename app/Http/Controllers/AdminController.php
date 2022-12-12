@@ -101,18 +101,14 @@ class AdminController extends Controller
 
     if (isset($_GET['campuses_id']) && $_GET['campuses_id'] != "") {
       $someVariable = $_GET['campuses_id'];
-      $upcontri = DB::statement('select t1.amounts 
-    from (select sum(contribution_transaction.amount) as amount,contribution_id,account_id from contribution_transaction where contribution_transaction.account_id = 1) as t1
-    left join (select member_id,id from contribution)as t2  on t1.contribution_id = t2.id 
-    left join (select id,campus_id from member where campus_id = ' . $_GET['campuses_id'] . ')as t3 on t2.member_id = t3.id  group by t3.campus_id, t1.account_id');
-      // $upcontri=DB::table('contribution_transaction')->select('amount')
-      // ->join('contribution','contribution_transaction.contribution_id','contribution.id')
-      // ->join('member','contribution.member_id','member.id')
-      // ->where('member.campus_id',$_GET['campuses_id'])
-      // ->where('contribution_transaction.account_id', '1')
-      // ->groupBy('member.campus_id')
-      // ->groupBy('contribution_transaction.account_id')
-      // ->sum('contribution_transaction.amount');
+      $upcontri = DB::table('contribution_transaction')->select('amount')
+      ->join('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
+      ->join('member', 'contribution.member_id', 'member.id')
+      ->where('member.campus_id', $_GET['campuses_id'])
+      ->where('contribution_transaction.account_id', '1')
+      ->groupBy('member.campus_id')
+      ->groupBy('contribution_transaction.account_id')
+      ->sum('contribution_transaction.amount');
     } else {
       $upcontri = DB::table('contribution_transaction')
         ->where('account_id', '1')
