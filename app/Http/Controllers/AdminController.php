@@ -103,13 +103,23 @@ class AdminController extends Controller
 
     if (isset($_GET['campuses_id']) && $_GET['campuses_id'] != "") {
       $someVariable = $_GET['campuses_id'];
-      $upcontri = DB::table('contribution_transaction')->select('amount')
+    //   $upcontri = DB::table('contribution_transaction')
+    // ->select(DB::raw("sum(contribution_transaction.amount) as aggregatess"))
+    // ->join('contribution','contribution_transaction.contribution_id','contribution.id')
+    // ->join('member','contribution.member_id','member.id')
+    // ->where('member.campus_id',1)
+    // ->where('contribution_transaction.account_id',2)
+    // ->groupBy('member.campus_id','contribution_transaction.account_id')
+    // ->get();
+    // print_r($upcontri);
+      $upcontri = DB::table('contribution_transaction')
       ->join('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
       ->join('member', 'contribution.member_id', 'member.id')
       ->where('member.campus_id', $_GET['campuses_id'])
       ->where('contribution_transaction.account_id', '1')
       ->groupBy('member.campus_id')
       ->groupBy('contribution_transaction.account_id')
+      ->take(1)
       ->sum('contribution_transaction.amount');
     } else {
       $upcontri = DB::table('contribution_transaction')
@@ -118,13 +128,14 @@ class AdminController extends Controller
     }
 
     if (isset($_GET['campuses_id']) && $_GET['campuses_id'] != "") {
-      $membercontri = DB::table('contribution_transaction')->select('amount')
+      $membercontri = DB::table('contribution_transaction')
         ->join('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
         ->join('member', 'contribution.member_id', 'member.id')
         ->where('member.campus_id', $_GET['campuses_id'])
         ->where('contribution_transaction.account_id', '2')
         ->groupBy('member.campus_id')
         ->groupBy('contribution_transaction.account_id')
+        ->take(1)
         ->sum('contribution_transaction.amount');
     } else {
       $membercontri = DB::table('contribution_transaction')
@@ -133,13 +144,14 @@ class AdminController extends Controller
     }
 
     if (isset($_GET['campuses_id']) && $_GET['campuses_id'] != "") {
-      $earningsUP = DB::table('contribution_transaction')->select('amount')
+      $earningsUP = DB::table('contribution_transaction')
         ->join('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
         ->join('member', 'contribution.member_id', 'member.id')
         ->where('member.campus_id', $_GET['campuses_id'])
         ->where('contribution_transaction.account_id', '3')
         ->groupBy('member.campus_id')
         ->groupBy('contribution_transaction.account_id')
+        ->take(1)
         ->sum('contribution_transaction.amount');
     } else {
       $earningsUP = DB::table('contribution_transaction')
@@ -148,13 +160,14 @@ class AdminController extends Controller
     }
 
     if (isset($_GET['campuses_id']) && $_GET['campuses_id'] != "") {
-      $earningsMember = DB::table('contribution_transaction')->select('amount')
+      $earningsMember = DB::table('contribution_transaction')
         ->join('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
         ->join('member', 'contribution.member_id', 'member.id')
         ->where('member.campus_id', $_GET['campuses_id'])
         ->where('contribution_transaction.account_id', '4')
         ->groupBy('member.campus_id')
         ->groupBy('contribution_transaction.account_id')
+        ->take(1)
         ->sum('contribution_transaction.amount');
     } else {
       $earningsMember = DB::table('contribution_transaction')
@@ -177,6 +190,7 @@ class AdminController extends Controller
         ->leftjoin('member', 'loan.member_id', 'member.id')
         ->where('member.campus_id', $_GET['campuses_id'])
         ->groupBy('member.campus_id')
+        ->take(1)
         ->sum('amount');
     } else {
       $totalloansgranted = LoanTransaction::leftjoin('loan', 'loan_transaction.loan_id', 'loan.id')
@@ -205,71 +219,137 @@ class AdminController extends Controller
   }
   public function generatesummary($id)
   {
-    $member = User::where('users.id', $id)
-      ->select('*', 'member.id as member_id', 'users.id as user_id', 'campus.name as campus_name')
-      ->leftjoin('member', 'users.id', '=', 'member.user_id')
-      ->leftjoin('campus', 'member.campus_id', '=', 'campus.id')
+    
+    if (isset($id) && $id != "") {
+    $contributions = array();
+    $membercontri = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
+      ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
+      ->join('member', 'contribution.member_id', 'member.id')
+      ->where('member.campus_id', $id)
+      ->where('contribution_transaction.account_id', '=', 2)
       ->first();
+    $contributions['membercontri'] = $membercontri->total;
+
+
+    $upcontri = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
+    ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
+    ->join('member', 'contribution.member_id', 'member.id')
+    ->where('member.campus_id', $id)
+    ->where('contribution_transaction.account_id', '=', 1)
+    ->first();
+    $contributions['upcontri'] = $upcontri->total;
+
+
+    $earningsUP = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
+    ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
+    ->join('member', 'contribution.member_id', 'member.id')
+    ->where('member.campus_id', $id)
+    ->where('contribution_transaction.account_id', '=', 3)
+    ->first();
+    $contributions['earningsUP'] = $earningsUP->total;
+
+
+    $earningsMember = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
+    ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
+    ->join('member', 'contribution.member_id', 'member.id')
+    ->where('member.campus_id', $id)
+    ->where('contribution_transaction.account_id', '=', 4)
+    ->first();
+    $contributions['earningsMember'] = $earningsMember->total;
+
+    $memberscount = DB::table('member')
+        ->where('member.campus_id', $id)
+        ->count();
+
+    $campusname = Campus::select('name')
+    ->where('id', $id)
+    ->first();
+    $contributions['campusname'] = $campusname->name;
+    // print_r($campusname );
+    $totalloansgranted = LoanTransaction::select(DB::raw('SUM(amount) as total'))
+        ->leftjoin('loan', 'loan_transaction.loan_id', 'loan.id')
+        ->leftjoin('member', 'loan.member_id', 'member.id')
+        ->where('member.campus_id', $id)
+        ->groupBy('member.campus_id')
+        ->first();
+    $contributions['totalloansgranted'] = $totalloansgranted->total;
+
+    $totalequity = 0;
+    $totalequity = $upcontri->total + $membercontri->total + $earningsUP->total + $earningsMember->total;
+
+    $data['campusname'] = $campusname->name;
+    $data['totalequity'] = $totalequity;
+    $data['membercontri'] = $membercontri->total;
+    $data['upcontri'] = $upcontri->total;
+    $data['earningsUP'] = $earningsUP->total;
+    $data['earningsMember'] = $earningsMember->total;
+    $data['memberscount'] = $memberscount;
+    $data['totalloansgranted'] = $totalloansgranted->total;
+    }else{
 
     $contributions = array();
-
-    $membercontribution = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
+    $membercontri = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
       ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
+      ->join('member', 'contribution.member_id', 'member.id')
+      
       ->where('contribution_transaction.account_id', '=', 2)
-      ->where('contribution.member_id', '=', $member->member_id)
       ->first();
-    $contributions['membercontribution'] = $membercontribution->total;
+    $contributions['membercontri'] = $membercontri->total;
 
 
-    $upcontribution = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
-      ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
-      ->where('contribution_transaction.account_id', '=', 1)
-      ->where('contribution.member_id', '=', $member->member_id)
-      ->first();
-    $contributions['upcontribution'] = $upcontribution->total;
+    $upcontri = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
+    ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
+    ->join('member', 'contribution.member_id', 'member.id')
+    
+    ->where('contribution_transaction.account_id', '=', 1)
+    ->first();
+    $contributions['upcontri'] = $upcontri->total;
 
 
-    $eupcontribution = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
-      ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
-      ->where('contribution_transaction.account_id', '=', 3)
-      ->where('contribution.member_id', '=', $member->member_id)
-      ->first();
-    $contributions['eupcontribution'] = $eupcontribution->total;
+    $earningsUP = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
+    ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
+    ->join('member', 'contribution.member_id', 'member.id')
+    
+    ->where('contribution_transaction.account_id', '=', 3)
+    ->first();
+    $contributions['earningsUP'] = $earningsUP->total;
 
 
-    $emcontribution = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
-      ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
-      ->where('contribution_transaction.account_id', '=', 4)
-      ->where('contribution.member_id', '=', $member->member_id)
-      ->first();
-    $contributions['emcontribution'] = $emcontribution->total;
+    $earningsMember = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
+    ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
+    ->join('member', 'contribution.member_id', 'member.id')
+    
+    ->where('contribution_transaction.account_id', '=', 4)
+    ->first();
+    $contributions['earningsMember'] = $earningsMember->total;
 
+    $memberscount = DB::table('member')
+        
+        ->count();
 
-    $totalcontributions = array_sum($contributions);
+    
+    $contributions['campusname'] = 'All';
+    // print_r($campusname );
+    $totalloansgranted = LoanTransaction::select(DB::raw('SUM(amount) as total'))
+        ->leftjoin('loan', 'loan_transaction.loan_id', 'loan.id')
+        ->leftjoin('member', 'loan.member_id', 'member.id')
+        
+        ->groupBy('member.campus_id')
+        ->first();
+    $contributions['totalloansgranted'] = $totalloansgranted->total;
 
+    $totalequity = 0;
+    $totalequity = $upcontri->total + $membercontri->total + $earningsUP->total + $earningsMember->total;
 
-
-    $outstandingloans = LoanTransaction::select('loan_type.name as type', DB::raw('SUM(amount) as balance'))
-      ->leftjoin('loan', 'loan_transaction.loan_id', 'loan.id')
-      ->leftjoin('loan_type', 'loan.type_id', 'loan_type.id')
-      ->where('loan.member_id', '=', $member->member_id)
-      ->groupBy('loan_type.name')
-      ->get();
-
-    $totalloanbalance = 0;
-    foreach ($outstandingloans as $loan) {
-      $totalloanbalance += $loan->balance;
+    $data['campusname'] = $campusname->name;
+    $data['totalequity'] = $totalequity;
+    $data['membercontri'] = $membercontri->total;
+    $data['upcontri'] = $upcontri->total;
+    $data['earningsUP'] = $earningsUP->total;
+    $data['earningsMember'] = $earningsMember->total;
+    $data['memberscount'] = $memberscount;
+    $data['totalloansgranted'] = $totalloansgranted->total;
     }
-
-    $data['totalloanbalance'] = $totalloanbalance;
-    $data['outstandingloans'] = $outstandingloans;
-    $data['totalcontributions'] = $totalcontributions;
-    $data['emcontribution'] = $emcontribution->total;
-    $data['eupcontribution'] = $eupcontribution->total;
-    $data['upcontribution'] = $upcontribution->total;
-    $data['membercontribution'] = $membercontribution->total;
-    $data['member'] = $member;
-
 
 
     $pdf = PDF::loadView('pdf.summaryreport', $data);
