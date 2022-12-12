@@ -90,6 +90,7 @@ Route::get('/admin/summaryreports/{id}', 'AdminController@generatesummary');
 Route::get('/admin/member_soa/{id}', 'AdminController@member_soa');
 Route::get('/admin/members', 'AdminController@members');
 Route::get('/admin/membersData', 'AdminController@memberData')->name('dataProcessing');
+Route::get('/admin/campuses', 'AdminController@getAllCampuses')->name('dataCampuses');
 Route::get('/admin/exportMember', 'AdminController@getMemberData');
 Route::get('/admin/printMember', 'AdminController@printMemberData');
 Route::get('/admin/onboarding', 'AdminController@onboarding');
