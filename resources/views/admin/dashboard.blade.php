@@ -1,19 +1,32 @@
 @extends('layouts/main')
 @section('content_body')
     <div class="container mp-container">
-        <button class="toggle button" data-target="myPopup">Manage Campus</button>
+
+        <link href="/css/css-module/global_css/global.css" rel="stylesheet">
         <div class="row no-gutters mp-mt4">
             <div class="col mp-ph2 mp-pv2">
                 <div class="mp-card mp-card--plain mp-pv4">
                     <div class="row align-items-center">
+                         
                         <div class="col-lg-4">
-                            <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
-                                style="width: 100%; font-size:20px" id="campuses_select">
-                                <option value="">All Campuses</option>
-                                @foreach ($campuses as $row)
-                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                @endforeach
-                            </select>
+                            <div class="row align-items-center">
+                                 <div class ="col-md-6 col-lg-7">
+                                  <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
+                                     style="width: 100%; font-size:20px" id="campuses_select">
+                                         <option value="">All Campuses</option>
+                                        @foreach ($campuses as $row)
+                                            <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                        @endforeach
+                                 </select>
+                            </div> 
+                            <div class ="col-md-6  col-lg-5 ">
+                                 <button class="button_style bypass_padding toggle button " 
+                                 data-target="myPopup">Manage Campus</button>
+                            </div>
+                            </div>
+                           
+                           
+                          
                         </div>
                         <div class="col-md-6 col-lg-4">
                             <div class="mp-text-c-gray mp-text-fs-small mp-pt3">
@@ -26,7 +39,8 @@
                                 </div>
                                 <div class="col-auto col-lg-12 col-xl-auto mp-text-right">
                                     <a href="{{ url('/admin/members') }}"
-                                        class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                                        class="button_style bypass_padding">
+                                        <!-- mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small -->
                                         View All Members
                                     </a>
                                 </div>
@@ -46,11 +60,11 @@
                                 </div>
                                 <div class="col-auto col-lg-12 col-xl-auto mp-text-right">
                                     <a href="{{ url('/admin/loans') }}"
-                                        class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                                        class="button_style bypass_padding">
                                         View All Loans
                                     </a>
                                     <a href="#" id="generate_summary"
-                                        class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                                        class="button_style bypass_padding">
                                         Print Report
                                     </a>
                                 </div>
