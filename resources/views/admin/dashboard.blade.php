@@ -294,17 +294,6 @@
             });
         });
         $(document).on('click', '#generate_summary', function(e) {
-            var id = campuses_id;
-            console.log(id);
-            var url = "{{ URL::to('/admin/summaryreports/') }}" + '/' + id; //YOUR CHANGES HERE...
-            window.location.href = url;
-        });
 
-        $(document).on('click', '.toggle', function(event) {
-            event.preventDefault();
-
-            var target = $(this).data('target');
-            $('#' + target).toggleClass('hide');
-        });
     </script>
 @endsection
