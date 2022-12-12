@@ -186,13 +186,23 @@
         <div class="popup-body">
             <div class="container">
                 <form id="addCampus" method="POST">
+                    <input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>"><input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>">
                     <div>
                         <label>Campus Key</label>
                         <input type="text" name="campus_key" required />
                     </div>
                     <div>
                         <label>Campus Name</label>
-                        <input type="text" name="campus_key" required />
+                        <input type="text" name="campus_name" required />
+                    </div>
+                    <div>
+                        <label>Cluster</label>
+                        <select name="cluster" required>
+                            <option value="">Select Cluster</option>
+                            @foreach($cluster as $row)
+                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <button type="submit">Save Changes</button>
                 </form>
@@ -306,5 +316,35 @@
             var target = $(this).data('target');
             $('#' + target).toggleClass('hide');
         });
+
+        $(document).on('submit', '#addCampus', function(e) {
+            e.preventDefault();
+            
+            $.ajax({
+                url: "/admin/addCampus",
+                method: "POST",
+                data: new FormData(this),
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    if (data.message != '') {
+                        Swal.fire('Warning!', 'Campus already exist.', 'warning');
+                    } else {
+                        Swal.fire(
+                            'Thank you!',
+                            'Successfully added.',
+                            'success'
+                        );
+                        $('#addCampus').trigger('reset');
+                        var table = $('#campusTable').DataTable();
+                        table.draw();
+                    }
+                },
+                error: function() {
+                    Swal.fire('Error!', 'Something went wrong. Please try again later!', 'error');
+                }
+            })
+        })
     </script>
 @endsection
