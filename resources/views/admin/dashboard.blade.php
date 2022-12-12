@@ -186,13 +186,23 @@
         <div class="popup-body">
             <div class="container">
                 <form id="addCampus" method="POST">
+                    <input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>"><input type = "hidden" name = "_token" value = "<?php echo csrf_token(); ?>">
                     <div>
                         <label>Campus Key</label>
                         <input type="text" name="campus_key" required />
                     </div>
                     <div>
                         <label>Campus Name</label>
-                        <input type="text" name="campus_key" required />
+                        <input type="text" name="campus_name" required />
+                    </div>
+                    <div>
+                        <label>Cluster</label>
+                        <select name="cluster" required>
+                            <option value="">Select Cluster</option>
+                            @foreach($cluster as $row)
+                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <button type="submit">Save Changes</button>
                 </form>
@@ -304,6 +314,5 @@
             var target = $(this).data('target');
             $('#' + target).toggleClass('hide');
         });
-
     </script>
 @endsection

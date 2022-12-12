@@ -39,10 +39,12 @@ class AdminController extends Controller
       ->orderBy(\DB::raw('count(campus.id)'), 'DESC')
       ->get();
     $campuses = Campus::all();
+    $cluster = DB::table('cluster')->get();
 
     $data = array(
       'campusmembers' => $campusmembers,
-      'campuses' => $campuses
+      'campuses' => $campuses,
+      'cluster' => $cluster
     );
     return view('admin.dashboard')->with($data);
   }
@@ -680,6 +682,31 @@ class AdminController extends Controller
     header('Content-Transfer-Encoding: binary');
     header('Cache-Control: must-revalidate');
     echo $memData;
+  }
+
+  public function addCampus(Request $request)
+  {
+    $message = '';
+    $campus = DB::table('campus')
+      ->where('name', $request->input('campus_name'))
+      ->orWhere('campus_key', $request->input('campus_key'))
+      ->count();
+
+      if($campus > 0) {
+        $message = 'Campus exist';
+      } else {
+        $insertCampus = array(
+          'campus_key' => $request->input('campus_key'),
+          'name' => $request->input('campus_name'),
+          'cluster_id' => $request->input('cluster')
+        ); 
+        DB::table('campus')->insert($insertCampus);
+      }
+      $output = array(
+        'message' => $message,
+      );
+  
+      echo json_encode($output);
   }
 
   // public function printMemberData()
