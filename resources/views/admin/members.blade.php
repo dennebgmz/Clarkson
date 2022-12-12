@@ -121,10 +121,22 @@
                 tableMember.draw();
             });
             $('#from').on('change', function() {
-                tableMember.draw();
+                if($('#from').val() < $('#to').val())
+                {
+                    alert('Invalid date please check date');
+                }else{
+                    tableMember.draw();
+                }
+                
             });
             $('#to').on('change', function() {
-                tableMember.draw();
+                if($('#from').val() < $('#to').val())
+                {
+                    alert('Invalid date please check date');
+                    $('#to').val() = '';
+                }else{
+                    tableMember.draw();
+                }
             });
 
             $(document).on('click', '.view_member', function(e) {
