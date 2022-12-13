@@ -382,7 +382,7 @@ class AdminController extends Controller
         $row[] = '<div class="input-name" title="Click to edit">' . $r->name . '</div>
                   <input type="hidden" class="edit_name" data-id="' . $r->id . '" value="' . $r->name . '"/>';
 
-        $row[] = '<div class="cluster_id">' . $r->cluster_id . '</div>
+        $row[] = '<div class="cluster_id" title="Click to edit">' . $r->cluster_id . '</div>
                   <div class="select_cluster" style="display:none;">' . $cluster . '</div>';
         $row[] = '<button class="delete_campus" id="' . $r->id . '" title="Delete Campus">Delete</button>';
         // $row[] = $r->campus_key;
@@ -763,6 +763,42 @@ class AdminController extends Controller
     echo json_encode($output);
   }
 
+  public function exportCampus()
+  {
+    $records = DB::table('campus')
+      ->get();
+
+    $campusData = "";
+    if (count($records) > 0) {
+      $campusData .= '
+      <table>
+        <tr>
+          <th>Campus Key</th>
+          <th>Campus Name</th>
+          <th>Cluster ID</th>
+        </tr>
+      ';
+      foreach ($records as $row) {
+        $cluster = DB::table('cluster')
+          ->where('id', $row->cluster_id)
+          ->first();
+        $campusData .= '
+        <tr>
+          <td>' . $row->campus_key . '</td>
+          <td>' . $row->name . '</td>
+          <td>' . $cluster->name . '</td>
+        </tr>
+        ';
+      }
+      $campusData .= '</table>';
+    }
+
+    header('Content-Disposition: attachment; filename=List of campuses.xls');
+    header('Content-Type: application/xls');
+    header('Content-Transfer-Encoding: binary');
+    header('Cache-Control: must-revalidate');
+    echo $campusData;
+  }
   // public function printMemberData()
   // {
   //   $records = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')

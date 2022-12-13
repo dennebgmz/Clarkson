@@ -242,6 +242,7 @@
                         </select>
                     </div>
                     <button type="submit">Save Changes</button>
+                    <a href="{{ url('/admin/exportCampus') }}">Export Campus</a>
                 </form>
                 <div class="mp-overflow-x">
                     <table class="mp-table mp-text-fs-small" id="campusTable" cellspacing="0" width="100%">
