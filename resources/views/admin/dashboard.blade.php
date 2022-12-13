@@ -439,5 +439,26 @@
             select.value = e.target.getAttribute('value');
             select.dispatchEvent(new Event('change'));
         });
+
+        // $(document).on('click', '.box-input', function() {
+        //     $(this).next('input').attr('type', 'text').focus();
+        //     $(this).hide();
+        //     $(this).attr('type', 'hidden');
+        // });
+        // $(document).on('focusout', '.edit_campusKey', function() {
+        //     $(this).attr('type', 'hidden');
+        //     $(this).next('span').show(300);
+        //     $(this).prev('div').show();
+        // });
+
+        // $(document).on('click', '.cluster_id', function() {
+        //     $(this).next('div').show();
+        //     $(this).hide();
+        // });
+        // $(document).on('focusout', '.select_cluster', function() {
+        //     $(this).prev('div').show();
+        //     $(this).hide();
+        // });
+        
     </script>
 @endsection
