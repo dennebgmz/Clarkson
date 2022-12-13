@@ -103,14 +103,14 @@ class AdminController extends Controller
 
     if (isset($_GET['campuses_id']) && $_GET['campuses_id'] != "") {
       $upcontri = DB::table('contribution_transaction')
-      ->join('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
-      ->join('member', 'contribution.member_id', 'member.id')
-      ->where('member.campus_id', $_GET['campuses_id'])
-      ->where('contribution_transaction.account_id', '1')
-      ->groupBy('member.campus_id')
-      ->groupBy('contribution_transaction.account_id')
-      ->take(1)
-      ->sum('contribution_transaction.amount');
+        ->join('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
+        ->join('member', 'contribution.member_id', 'member.id')
+        ->where('member.campus_id', $_GET['campuses_id'])
+        ->where('contribution_transaction.account_id', '1')
+        ->groupBy('member.campus_id')
+        ->groupBy('contribution_transaction.account_id')
+        ->take(1)
+        ->sum('contribution_transaction.amount');
     } else {
       $upcontri = DB::table('contribution_transaction')
         ->where('account_id', '1')
@@ -207,115 +207,115 @@ class AdminController extends Controller
 
     echo json_encode($data);
   }
-  
+
   public function generatesummary($id)
   {
-    
+
     if (isset($id) && $id != "" && $id != 0) {
-    $contributions = array();
-    $membercontri = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
-      ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
-      ->join('member', 'contribution.member_id', 'member.id')
-      ->where('member.campus_id', $id)
-      ->where('contribution_transaction.account_id', '=', 2)
-      ->first();
-    $contributions['membercontri'] = $membercontri->total;
+      $contributions = array();
+      $membercontri = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
+        ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
+        ->join('member', 'contribution.member_id', 'member.id')
+        ->where('member.campus_id', $id)
+        ->where('contribution_transaction.account_id', '=', 2)
+        ->first();
+      $contributions['membercontri'] = $membercontri->total;
 
 
-    $upcontri = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
-    ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
-    ->join('member', 'contribution.member_id', 'member.id')
-    ->where('member.campus_id', $id)
-    ->where('contribution_transaction.account_id', '=', 1)
-    ->first();
-    $contributions['upcontri'] = $upcontri->total;
+      $upcontri = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
+        ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
+        ->join('member', 'contribution.member_id', 'member.id')
+        ->where('member.campus_id', $id)
+        ->where('contribution_transaction.account_id', '=', 1)
+        ->first();
+      $contributions['upcontri'] = $upcontri->total;
 
 
-    $earningsUP = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
-    ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
-    ->join('member', 'contribution.member_id', 'member.id')
-    ->where('member.campus_id', $id)
-    ->where('contribution_transaction.account_id', '=', 3)
-    ->first();
-    $contributions['earningsUP'] = $earningsUP->total;
+      $earningsUP = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
+        ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
+        ->join('member', 'contribution.member_id', 'member.id')
+        ->where('member.campus_id', $id)
+        ->where('contribution_transaction.account_id', '=', 3)
+        ->first();
+      $contributions['earningsUP'] = $earningsUP->total;
 
 
-    $earningsMember = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
-    ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
-    ->join('member', 'contribution.member_id', 'member.id')
-    ->where('member.campus_id', $id)
-    ->where('contribution_transaction.account_id', '=', 4)
-    ->first();
-    $contributions['earningsMember'] = $earningsMember->total;
+      $earningsMember = ContributionTransaction::select(DB::raw('SUM(contribution_transaction.amount) as total'))
+        ->leftjoin('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
+        ->join('member', 'contribution.member_id', 'member.id')
+        ->where('member.campus_id', $id)
+        ->where('contribution_transaction.account_id', '=', 4)
+        ->first();
+      $contributions['earningsMember'] = $earningsMember->total;
 
-    $memberscount = DB::table('member')
+      $memberscount = DB::table('member')
         ->where('member.campus_id', $id)
         ->count();
 
-    $campusname = Campus::select('name')
-    ->where('id', $id)
-    ->first();
-    $contributions['campusname'] = $campusname->name;
-    // print_r($campusname );
-    $totalloansgranted = LoanTransaction::select(DB::raw('SUM(amount) as total'))
+      $campusname = Campus::select('name')
+        ->where('id', $id)
+        ->first();
+      $contributions['campusname'] = $campusname->name;
+      // print_r($campusname );
+      $totalloansgranted = LoanTransaction::select(DB::raw('SUM(amount) as total'))
         ->leftjoin('loan', 'loan_transaction.loan_id', 'loan.id')
         ->leftjoin('member', 'loan.member_id', 'member.id')
         ->where('member.campus_id', $id)
         ->groupBy('member.campus_id')
         ->first();
-    $contributions['totalloansgranted'] = $totalloansgranted->total;
+      $contributions['totalloansgranted'] = $totalloansgranted->total;
 
-    $totalequity = 0;
-    $totalequity = $upcontri->total + $membercontri->total + $earningsUP->total + $earningsMember->total;
+      $totalequity = 0;
+      $totalequity = $upcontri->total + $membercontri->total + $earningsUP->total + $earningsMember->total;
 
-    $data['campusname'] = $campusname->name;
-    $data['totalequity'] = $totalequity;
-    $data['membercontri'] = $membercontri->total;
-    $data['upcontri'] = $upcontri->total;
-    $data['earningsUP'] = $earningsUP->total;
-    $data['earningsMember'] = $earningsMember->total;
-    $data['memberscount'] = $memberscount;
-    $data['totalloansgranted'] = $totalloansgranted->total;
-    }else{
-      
-    $upcontri = DB::table('contribution_transaction')->select('amount')
-    ->where('account_id', '1')
-    ->sum('amount');
+      $data['campusname'] = $campusname->name;
+      $data['totalequity'] = $totalequity;
+      $data['membercontri'] = $membercontri->total;
+      $data['upcontri'] = $upcontri->total;
+      $data['earningsUP'] = $earningsUP->total;
+      $data['earningsMember'] = $earningsMember->total;
+      $data['memberscount'] = $memberscount;
+      $data['totalloansgranted'] = $totalloansgranted->total;
+    } else {
 
-    //Member Contributions
-    $membercontri = DB::table('contribution_transaction')->select('amount')
-      ->where('account_id', '2')
-      ->sum('amount');
+      $upcontri = DB::table('contribution_transaction')->select('amount')
+        ->where('account_id', '1')
+        ->sum('amount');
 
-    //Earnings UP
-    $earningsUP = DB::table('contribution_transaction')->select('amount')
-      ->where('account_id', '3')
-      ->sum('amount');
+      //Member Contributions
+      $membercontri = DB::table('contribution_transaction')->select('amount')
+        ->where('account_id', '2')
+        ->sum('amount');
 
-    //Earnings Member
-    $earningsMember = DB::table('contribution_transaction')->select('amount')
-      ->where('account_id', '4')
-      ->sum('amount');
+      //Earnings UP
+      $earningsUP = DB::table('contribution_transaction')->select('amount')
+        ->where('account_id', '3')
+        ->sum('amount');
 
-    //Member Count
-    $memberscount = count(Member::all());
+      //Earnings Member
+      $earningsMember = DB::table('contribution_transaction')->select('amount')
+        ->where('account_id', '4')
+        ->sum('amount');
 
-    //Loan granted
-    $totalloansgranted = LoanTransaction::sum('amount');
-    $campusname = 'All';
-    // print_r($campusname );
+      //Member Count
+      $memberscount = count(Member::all());
 
-    $totalequity = 0;
-    $totalequity = $upcontri + $membercontri + $earningsUP + $earningsMember;
+      //Loan granted
+      $totalloansgranted = LoanTransaction::sum('amount');
+      $campusname = 'All';
+      // print_r($campusname );
 
-    $data['campusname'] = $campusname;
-    $data['totalequity'] = $totalequity;
-    $data['membercontri'] = $membercontri;
-    $data['upcontri'] = $upcontri;
-    $data['earningsUP'] = $earningsUP;
-    $data['earningsMember'] = $earningsMember;
-    $data['memberscount'] = $memberscount;
-    $data['totalloansgranted'] = $totalloansgranted;
+      $totalequity = 0;
+      $totalequity = $upcontri + $membercontri + $earningsUP + $earningsMember;
+
+      $data['campusname'] = $campusname;
+      $data['totalequity'] = $totalequity;
+      $data['membercontri'] = $membercontri;
+      $data['upcontri'] = $upcontri;
+      $data['earningsUP'] = $earningsUP;
+      $data['earningsMember'] = $earningsMember;
+      $data['memberscount'] = $memberscount;
+      $data['totalloansgranted'] = $totalloansgranted;
     }
 
 
@@ -370,23 +370,25 @@ class AdminController extends Controller
 
         $cluster = '';
         $clusterDetails = DB::table('cluster')->get();
-        $cluster .= "<select name='staff[]' class='form-control form-control-sm assignStaff' data-id=".$r->id.">
+        $cluster .= "<select class='form-control form-control-sm edit_cluster' data-id=" . $r->id . ">
                       <option value=''>Select Cluster</option>";
         foreach ($clusterDetails as $cls) {
-          $cluster .= "<option value=".$cls->id.">".$cls->name."</option>";
+          $cluster .= "<option value=" . $cls->id . ">" . $cls->name . "</option>";
         }
         $cluster .= "</select>";
+        $row[] = '<div class="box-input" title="Click to edit">' . $r->campus_key . '</div>
+                  <input type="hidden" class="edit_campusKey" data-id="' . $r->id . '" value="' . $r->campus_key . '"/>';
 
-        $row[] = '<div class="box-input" title="Click to edit">'.$r->campus_key.'</div>
-                  <input type="hidden" class="edit_campusKey" data-id="'.$r->id.'" value="'.$r->campus_key.'"/>';
+        $row[] = '<div class="input-name" title="Click to edit">' . $r->name . '</div>
+                  <input type="hidden" class="edit_name" data-id="' . $r->id . '" value="' . $r->name . '"/>';
 
-        $row[] = '<div class="box-input" title="Click to edit">'.$r->name.'</div>
-                  <input type="hidden" class="edit_name" data-id="'.$r->id.'" value="'.$r->name.'"/>';
-
-        $row[] = '<div class="cluster_id">'.$r->cluster_id.'</div>
-                  <div class="select_cluster" style="display:none;">'.$cluster.'</div>';
-
-        $row[] = '<button class="delete_campus" id="'.$r->id.'" title="Delete Campus">Delete</button>';
+        $row[] = '<div class="cluster_id">' . $r->cluster_id . '</div>
+                  <div class="select_cluster" style="display:none;">' . $cluster . '</div>';
+        $row[] = '<button class="delete_campus" id="' . $r->id . '" title="Delete Campus">Delete</button>';
+        // $row[] = $r->campus_key;
+        // $row[] = $r->name;
+        // $row[] = $r->cluster_id;
+        // $row[] = '<button class="delete_campus" id="'.$r->id.'" title="Delete Campus">Delete</button>';
 
         $data[] = $row;
       }
@@ -674,21 +676,21 @@ class AdminController extends Controller
       ->orWhere('campus_key', $request->input('campus_key'))
       ->count();
 
-      if($campus > 0) {
-        $message = 'Campus exist';
-      } else {
-        $insertCampus = array(
-          'campus_key' => $request->input('campus_key'),
-          'name' => $request->input('campus_name'),
-          'cluster_id' => $request->input('cluster')
-        ); 
-        DB::table('campus')->insert($insertCampus);
-      }
-      $output = array(
-        'message' => $message,
+    if ($campus > 0) {
+      $message = 'Campus exist';
+    } else {
+      $insertCampus = array(
+        'campus_key' => $request->input('campus_key'),
+        'name' => $request->input('campus_name'),
+        'cluster_id' => $request->input('cluster')
       );
-  
-      echo json_encode($output);
+      DB::table('campus')->insert($insertCampus);
+    }
+    $output = array(
+      'message' => $message,
+    );
+
+    echo json_encode($output);
   }
 
   public function deleteCampus(Request $request)
@@ -698,17 +700,67 @@ class AdminController extends Controller
       ->where('campus_id', $request->get('id'))
       ->count();
 
-      if($campus > 0) {
-        $message = 'Data Found';
-      } else {
-        DB::table('campus')
-          ->where('id', $request->get('id'))
-          ->delete();
-      }
-      $output = array(
-        'message' => $message,
-      );
-      echo json_encode($output);
+    if ($campus > 0) {
+      $message = 'Data Found';
+    } else {
+      DB::table('campus')
+        ->where('id', $request->get('id'))
+        ->delete();
+    }
+    $output = array(
+      'message' => $message,
+    );
+    echo json_encode($output);
+  }
+
+  public function editCampusKey(Request $request)
+  {
+    $message = '';
+    $campus = DB::table('campus')
+      ->where('campus_key', $request->get('campus_key'))
+      ->count();
+
+    if ($campus > 0) {
+      $message = 'Data Found';
+    } else {
+      DB::table('campus')
+        ->where('id', $request->get('id'))
+        ->update(array('campus_key' => $request->get('campus_key')));
+    }
+    $output = array(
+      'message' => $message,
+    );
+    echo json_encode($output);
+  }
+  public function editCampusName(Request $request)
+  {
+    $message = '';
+    $campus = DB::table('campus')
+      ->where('name', $request->get('campus_name'))
+      ->count();
+
+    if ($campus > 0) {
+      $message = 'Data Found';
+    } else {
+      DB::table('campus')
+        ->where('id', $request->get('id'))
+        ->update(array('name' => $request->get('campus_name')));
+    }
+    $output = array(
+      'message' => $message,
+    );
+    echo json_encode($output);
+  }
+  public function editCluster(Request $request)
+  {
+    $message = '';
+    DB::table('campus')
+      ->where('id', $request->get('id'))
+      ->update(array('cluster_id' => $request->get('cluster_id')));
+    $output = array(
+      'message' => $message,
+    );
+    echo json_encode($output);
   }
 
   // public function printMemberData()

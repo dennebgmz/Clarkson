@@ -3,13 +3,15 @@
     <div class="container mp-container">
         <link href="/css/css-module/global_css/global.css" rel="stylesheet">
         <div class="row row no-gutters mp-mt4">
-            <div class="col-12 mp-text-right"  style="display: flex; flex-direction: row; justify-content: right">
+            <div class="col-12 mp-text-right" style="display: flex; flex-direction: row; justify-content: right">
                 <div class="row no-gutters">
                     <div class="mp-ph2 mp-pv2">
-                        <a data-target="myPopup" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                        <a data-target="myPopup"
+                            class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
                             Manage Campus
                         </a>
-                        <a href="#" id="generate_summary" class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                        <a href="#" id="generate_summary"
+                            class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
                             Print Report
                         </a>
                     </div>
@@ -20,50 +22,37 @@
             <div class="col mp-ph2 mp-pv2">
                 <div class="mp-card mp-card--plain mp-pv4">
                     <div class="row align-items-center">
-                    <div class="col-lg-4">
-                        <div id="campusSelector" class="mp-dropdown mp-ph3">
-                            <a class="mp-dropdown__toggle mp-link mp-link--accent">
-                                <span class="mp-text-fs-xxlarge campus_title text_link_primary">
-                                    All UP Campuses
-                                </span>
-                                <i class="mp-icon icon-arrow-down mp-ml2"></i>
-                            </a>
-                            <div class="mp-dropdown__menu">
-                                <a value="" class="text_link mp-dropdown__item mp-link mp-link--normal campus_change" style="cursor: pointer">All UP Campuses</a>
-                                @foreach ($campuses as $row)
-                                <a value="{{ $row->id }}" class="text_link mp-dropdown__item mp-link mp-link--normal campus_change" style="cursor: pointer">
-                                    {{ $row->name }}
+                        <div class="col-lg-4">
+                            <div id="campusSelector" class="mp-dropdown mp-ph3">
+                                <a class="mp-dropdown__toggle mp-link mp-link--accent">
+                                    <span class="mp-text-fs-xxlarge campus_title text_link_primary">
+                                        All UP Campuses
+                                    </span>
+                                    <i class="mp-icon icon-arrow-down mp-ml2"></i>
                                 </a>
-                                @endforeach
+                                <div class="mp-dropdown__menu">
+                                    <a value=""
+                                        class="text_link mp-dropdown__item mp-link mp-link--normal campus_change"
+                                        style="cursor: pointer">All UP Campuses</a>
+                                    @foreach ($campuses as $row)
+                                        <a value="{{ $row->id }}"
+                                            class="text_link mp-dropdown__item mp-link mp-link--normal campus_change"
+                                            style="cursor: pointer">
+                                            {{ $row->name }}
+                                        </a>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-4" hidden>
-                        <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
-                            style="width: 100%; font-size:20px" id="campuses_select">
-                            <option value="">All Campuses</option>
-                            @foreach ($campuses as $row)
-                                <option value="{{ $row->id }}">{{ $row->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                        <!-- <div class="col-lg-4">
-                                        <div class="row align-items-center">
-                                             <div class ="col-md-5 col-lg-7">
-                                              <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
-                                                 style="width: 100%; font-size:20px" id="campuses_select">
-                                                     <option value="">All Campuses</option>
-                                                    @foreach ($campuses as $row)
-    <option value="{{ $row->id }}">{{ $row->name }}</option>
-    @endforeach
-                                             </select>
-                                        </div>
-                                        <div class ="col-md-7  col-lg-5 ">
-                                             <button class="button_style bypass_padding toggle button "
-                                             data-target="myPopup">Manage Campus</button>
-                                        </div>
-                                        </div>
-                                    </div> -->
+                        <div class="col-lg-4" hidden>
+                            <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
+                                style="width: 100%; font-size:20px" id="campuses_select">
+                                <option value="">All Campuses</option>
+                                @foreach ($campuses as $row)
+                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
                         <div class="col-md-6 col-lg-4">
                             <div class="mp-text-c-gray mp-text-fs-small mp-pt3">
@@ -75,7 +64,8 @@
                                     <span class="mp-text-fs-xlarge" id="totalMember"></span>
                                 </div>
                                 <div class="col-auto col-lg-12 col-xl-auto mp-text-right">
-                                    <a href="{{ url('/admin/members') }}" class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                                    <a href="{{ url('/admin/members') }}"
+                                        class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
                                         <!-- mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small -->
                                         View All Members
                                     </a>
@@ -95,7 +85,8 @@
                                     </span>
                                 </div>
                                 <div class="col-auto col-lg-12 col-xl-auto mp-text-right">
-                                    <a href="{{ url('/admin/loans') }}" class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                                    <a href="{{ url('/admin/loans') }}"
+                                        class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
                                         View All Loans
                                     </a>
                                 </div>
@@ -415,7 +406,9 @@
                         dataType: 'json',
                         success: function(data) {
                             if (data.message != '') {
-                                Swal.fire('Warning!', 'Cannot delete campus. There are records exist', 'warning');
+                                Swal.fire('Warning!',
+                                    'Cannot delete campus. There are records exist',
+                                    'warning');
                             } else {
                                 Swal.fire(
                                     'Thank you!',
@@ -434,31 +427,117 @@
                 }
             })
         });
-        $('.campus_change').on('click', function(e) { 
+
+        $(document).on('change', '.edit_campusKey', function() {
+            var id = $(this).data('id');
+            var campus_key = $(this).val();
+            $.ajax({
+                url: "/admin/editCampusKey",
+                method: "GET",
+                data: {
+                    id: id,
+                    campus_key: campus_key
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if (data.message != '') {
+                        alert('Failed to update. Campus key already exist');
+                    } else {
+                        var table = $('#campusTable').DataTable();
+                        table.draw();
+                    }
+                },
+                error: function() {
+                    alert('Something went wrong. Please try again later!');
+                }
+            });
+        });
+        $(document).on('change', '.edit_name', function() {
+            var id = $(this).data('id');
+            var campus_name = $(this).val();
+            $.ajax({
+                url: "/admin/editCampusName",
+                method: "GET",
+                data: {
+                    id: id,
+                    campus_name: campus_name
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if (data.message != '') {
+                        alert('Failed to update. Campus name already exist');
+                    } else {
+                        var table = $('#campusTable').DataTable();
+                        table.draw();
+                    }
+                },
+                error: function() {
+                    alert('Something went wrong. Please try again later!');
+                }
+            });
+        });
+        $(document).on('change', '.edit_cluster', function() {
+            var id = $(this).data('id');
+            var cluster_id = $(this).val();
+            $.ajax({
+                url: "/admin/editCluster",
+                method: "GET",
+                data: {
+                    id: id,
+                    cluster_id: cluster_id
+                },
+                dataType: 'json',
+                success: function(data) {
+                    if (data.message != '') {
+                        alert('Failed to update. Cluster already exist');
+                    } else {
+                        var table = $('#campusTable').DataTable();
+                        table.draw();
+                    }
+                },
+                error: function() {
+                    alert('Something went wrong. Please try again later!');
+                }
+            });
+        });
+
+
+
+
+
+        $('.campus_change').on('click', function(e) {
             var select = document.querySelector('#campuses_select')
             select.value = e.target.getAttribute('value');
             select.dispatchEvent(new Event('change'));
         });
 
-        // $(document).on('click', '.box-input', function() {
-        //     $(this).next('input').attr('type', 'text').focus();
-        //     $(this).hide();
-        //     $(this).attr('type', 'hidden');
-        // });
-        // $(document).on('focusout', '.edit_campusKey', function() {
-        //     $(this).attr('type', 'hidden');
-        //     $(this).next('span').show(300);
-        //     $(this).prev('div').show();
-        // });
+        $(document).on('click', '.box-input', function() {
+            $(this).next('input').attr('type', 'text').focus();
+            $(this).hide();
+            $(this).attr('type', 'hidden');
+        });
+        $(document).on('focusout', '.edit_campusKey', function() {
+            $(this).attr('type', 'hidden');
+            $(this).prev('div').show();
+        });
 
-        // $(document).on('click', '.cluster_id', function() {
-        //     $(this).next('div').show();
-        //     $(this).hide();
-        // });
-        // $(document).on('focusout', '.select_cluster', function() {
-        //     $(this).prev('div').show();
-        //     $(this).hide();
-        // });
-        
+        $(document).on('click', '.input-name', function() {
+            $(this).next('input').attr('type', 'text').focus();
+            $(this).hide();
+            $(this).attr('type', 'hidden');
+        });
+        $(document).on('focusout', '.edit_name', function() {
+            $(this).attr('type', 'hidden');
+            $(this).prev('div').show();
+        });
+
+        $(document).on('click', '.cluster_id', function() {
+            $(this).next('div').show();
+            $(this).hide();
+        });
+        $(document).on('focusout', '.select_cluster', function() {
+            $(this).prev('div').show();
+            $(this).hide();
+        });
     </script>
 @endsection
