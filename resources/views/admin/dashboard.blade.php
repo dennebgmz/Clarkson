@@ -2,6 +2,7 @@
 @section('content_body')
     <div class="container mp-container">
         <link href="/css/css-module/global_css/global.css" rel="stylesheet">
+        
         <div class="row row no-gutters mp-mt4">
             <div class="col-12 mp-text-right" style="display: flex; flex-direction: row; justify-content: right">
                 <div class="row no-gutters">
@@ -216,11 +217,12 @@
 
 
 
-    <div id="myPopup" class="popup hide">
-        <div class="popup-header">
+    <div id="myPopup" class="modal_background hide ">
+        <div class="popup">
+            <div class="popup-header modal_title">
             Campus Management
             <span class="close toggle" data-target="myPopup">close</span>
-        </div>
+             </div>
         <div class="popup-body">
             <div class="container">
                 <form id="addCampus" method="POST">
@@ -247,7 +249,7 @@
                     <a href="{{ url('/admin/exportCampus') }}">Export Campus</a>
                 </form>
                 <div class="mp-overflow-x">
-                    <table class="mp-table mp-text-fs-small" id="campusTable" cellspacing="0" width="100%">
+                    <table class="mp-table mp-text-fs-small " id="campusTable" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th>Campus Key</th>
@@ -263,6 +265,8 @@
                 </div>
             </div>
         </div>
+        </div>
+        
     </div>
 @endsection
 
