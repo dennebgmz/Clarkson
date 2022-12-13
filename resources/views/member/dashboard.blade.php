@@ -1,6 +1,7 @@
 
 @extends('layouts/main')
 @section('content_body')
+<link href="/css/css-module/global_css/global.css" rel="stylesheet">
   <div class="container mp-container">
     <div class="row no-gutters mp-mh4">
  @if(prme_pr())
@@ -76,14 +77,14 @@
                  <i class="mp-icon icon-envelope mp-mr1 mp-text-fs-medium mp-text-c-primary"></i>
                 
                
-                  <a id="email" href="#" class="mp-link mp-link--primary mp-link--editable">
+                  <a id="email" href="#" class="mp-link mp-link--primary ">
                     {{ $member->email }}
                   </a>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <i class="mp-icon icon-phone mp-mr1 mp-text-fs-medium mp-text-c-primary"></i>
                 
                
-                  <a id="contactNo" href="#" class="mp-link mp-link--primary mp-link--editable">
+                  <a id="contactNo" href="#" class="mp-link mp-link--primary ">
                   +63{{ $member->contact_no }}
                   </a>
               </div>
@@ -97,7 +98,7 @@
                 Your Member's Equity History
               </div>
               <div class="mp-overflow-x">
-                <table class="mp-table mp-table--mini">
+                <table class="mp-table table_style">
                   <thead>
                     <tr>
                       <th>Date</th>
@@ -128,7 +129,7 @@
                 Your Loan Transactions History
               </div>
               <div class="mp-overflow-x">
-                <table class="mp-table mp-table--mini">
+                <table class="mp-table table_style">
                   <thead>
                     <tr>
                       <th>Date</th>
