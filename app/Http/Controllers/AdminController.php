@@ -354,7 +354,7 @@ class AdminController extends Controller
       ->orWhere('name', 'like', '%' . $searchValue . '%');
     $totalRecordswithFilter = $records->count();
 
-    // Fetch records
+    // Fetch recordsx
     $records = DB::table('campus')
       ->where('campus_key', 'like', '%' . $searchValue . '%')
       ->orWhere('name', 'like', '%' . $searchValue . '%');
@@ -368,9 +368,24 @@ class AdminController extends Controller
         $start++;
         $row = array();
 
-        $row[] = $r->campus_key;
-        $row[] = $r->name;
-        $row[] = $r->cluster_id;
+        $cluster = '';
+        $clusterDetails = DB::table('cluster')->get();
+        $cluster .= "<select name='staff[]' class='form-control form-control-sm assignStaff' data-id=".$r->id.">
+                      <option value=''>Select Cluster</option>";
+        foreach ($clusterDetails as $cls) {
+          $cluster .= "<option value=".$cls->id.">".$cls->name."</option>";
+        }
+        $cluster .= "</select>";
+
+        $row[] = '<div class="box-input" title="Click to edit">'.$r->campus_key.'</div>
+                  <input type="hidden" class="edit_campusKey" data-id="'.$r->id.'" value="'.$r->campus_key.'"/>';
+
+        $row[] = '<div class="box-input" title="Click to edit">'.$r->name.'</div>
+                  <input type="hidden" class="edit_name" data-id="'.$r->id.'" value="'.$r->name.'"/>';
+
+        $row[] = '<div class="cluster_id">'.$r->cluster_id.'</div>
+                  <div class="select_cluster" style="display:none;">'.$cluster.'</div>';
+
         $row[] = '<button class="delete_campus" id="'.$r->id.'" title="Delete Campus">Delete</button>';
 
         $data[] = $row;
