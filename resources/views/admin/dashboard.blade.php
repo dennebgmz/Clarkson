@@ -1,13 +1,52 @@
 @extends('layouts/main')
 @section('content_body')
     <div class="container mp-container">
-
         <link href="/css/css-module/global_css/global.css" rel="stylesheet">
-        <div class="row no-gutters mp-mt4">
+        <div class="row row no-gutters mp-mt4">
+            <div class="col-12 mp-text-right"  style="display: flex; flex-direction: row; justify-content: right">
+                <div class="row no-gutters">
+                    <div class="mp-ph2 mp-pv2">
+                        <a data-target="myPopup" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                            Manage Campus
+                        </a>
+                        <a href="#" id="generate_summary" class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                            Print Report
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row no-gutters">
             <div class="col mp-ph2 mp-pv2">
                 <div class="mp-card mp-card--plain mp-pv4">
                     <div class="row align-items-center">
-
+                    <div class="col-lg-4">
+                        <div id="campusSelector" class="mp-dropdown mp-ph3">
+                            <a class="mp-dropdown__toggle mp-link mp-link--accent">
+                                <span class="mp-text-fs-xxlarge campus_title text_link_primary">
+                                    All UP Campuses
+                                </span>
+                                <i class="mp-icon icon-arrow-down mp-ml2"></i>
+                            </a>
+                            <div class="mp-dropdown__menu">
+                                <a value="" class="text_link mp-dropdown__item mp-link mp-link--normal campus_change" style="cursor: pointer">All UP Campuses</a>
+                                @foreach ($campuses as $row)
+                                <a value="{{ $row->id }}" class="text_link mp-dropdown__item mp-link mp-link--normal campus_change" style="cursor: pointer">
+                                    {{ $row->name }}
+                                </a>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" hidden>
+                        <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
+                            style="width: 100%; font-size:20px" id="campuses_select">
+                            <option value="">All Campuses</option>
+                            @foreach ($campuses as $row)
+                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                         <!-- <div class="col-lg-4">
                                         <div class="row align-items-center">
                                              <div class ="col-md-5 col-lg-7">
@@ -28,27 +67,6 @@
 
                         <div class="col-md-6 col-lg-4">
                             <div class="mp-text-c-gray mp-text-fs-small mp-pt3">
-                                Campuses
-                            </div>
-                            <div class="row align-items-center mp-pb3">
-                                <div class="col">
-                                    <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
-                                        style="width: 100%; font-size:20px" id="campuses_select">
-                                        <option value="">All Campuses</option>
-                                        @foreach ($campuses as $row)
-                                            <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="col-auto col-lg-12 col-xl-auto mp-text-right">
-                                    <button class="button_style bypass_padding toggle button " data-target="myPopup">Manage
-                                        Campus</button>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6 col-lg-4">
-                            <div class="mp-text-c-gray mp-text-fs-small mp-pt3">
                                 Total Members
                             </div>
                             <div class="row align-items-center mp-pb3">
@@ -57,7 +75,7 @@
                                     <span class="mp-text-fs-xlarge" id="totalMember"></span>
                                 </div>
                                 <div class="col-auto col-lg-12 col-xl-auto mp-text-right">
-                                    <a href="{{ url('/admin/members') }}" class="button_style bypass_padding">
+                                    <a href="{{ url('/admin/members') }}" class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
                                         <!-- mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small -->
                                         View All Members
                                     </a>
@@ -77,11 +95,8 @@
                                     </span>
                                 </div>
                                 <div class="col-auto col-lg-12 col-xl-auto mp-text-right">
-                                    <a href="{{ url('/admin/loans') }}" class="button_style bypass_padding">
+                                    <a href="{{ url('/admin/loans') }}" class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
                                         View All Loans
-                                    </a>
-                                    <a href="#" id="generate_summary" class="button_style bypass_padding">
-                                        Print Report
                                     </a>
                                 </div>
                             </div>
@@ -306,8 +321,10 @@
             }
         });
         var campuses_id;
+        var campus_title = "ALL UP Campuses";
         $('#campuses_select').on('change', function(e) {
             campuses_id = $(this).val();
+            console.log(campuses_id);
             $.ajax({
                 url: "/admin/count_percampuses",
                 method: "GET",
@@ -330,6 +347,9 @@
                     $('#label').text(response.label);
                 },
                 complete: function(response) {
+                    var select = document.querySelector('#campuses_select')
+                    var output = select.options[select.selectedIndex].textContent;
+                    document.querySelector('.campus_title').textContent = output;
                     $('#loading').hide();
                 }
             });
@@ -338,7 +358,7 @@
             var id = campuses_id;
             console.log(id);
             var url = "{{ URL::to('/admin/summaryreports/') }}" + '/' + id; //YOUR CHANGES HERE...
-            window.location.href = url;
+            window.open(url, '_blank');
         });
         $(document).on('click', '.toggle', function(event) {
             event.preventDefault();
@@ -414,5 +434,31 @@
                 }
             })
         });
+        $('.campus_change').on('click', function(e) { 
+            var select = document.querySelector('#campuses_select')
+            select.value = e.target.getAttribute('value');
+            select.dispatchEvent(new Event('change'));
+        });
+
+        // $(document).on('click', '.box-input', function() {
+        //     $(this).next('input').attr('type', 'text').focus();
+        //     $(this).hide();
+        //     $(this).attr('type', 'hidden');
+        // });
+        // $(document).on('focusout', '.edit_campusKey', function() {
+        //     $(this).attr('type', 'hidden');
+        //     $(this).next('span').show(300);
+        //     $(this).prev('div').show();
+        // });
+
+        // $(document).on('click', '.cluster_id', function() {
+        //     $(this).next('div').show();
+        //     $(this).hide();
+        // });
+        // $(document).on('focusout', '.select_cluster', function() {
+        //     $(this).prev('div').show();
+        //     $(this).hide();
+        // });
+        
     </script>
 @endsection
