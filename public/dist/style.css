@@ -4756,3 +4756,17 @@ tfoot {
     outline:none;
     box-shadow: 1px 2px 3px #F5F5F5;
   }
+
+.text_link:hover {
+    color: var(--c-active-hover-bg) !important;
+    cursor: pointer !important
+}
+
+.text_link_primary:hover {
+    color: var(--c-accent-80) !important;
+}
+
+.text_link_primary {
+    color: var(--c-accent) !important;
+    cursor: pointer !important
+}
