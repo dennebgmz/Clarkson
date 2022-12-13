@@ -6,7 +6,7 @@
             <div class="col-12 mp-text-right"  style="display: flex; flex-direction: row; justify-content: right">
                 <div class="row no-gutters">
                     <div class="mp-ph2 mp-pv2">
-                        <a id="generate_summary" data-target="myPopup" class="text_link toggle mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                        <a data-target="myPopup" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
                             Manage Campus
                         </a>
                         <a href="#" id="generate_summary" class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
@@ -357,7 +357,8 @@
             var id = campuses_id;
             console.log(id);
             var url = "{{ URL::to('/admin/summaryreports/') }}" + '/' + id; //YOUR CHANGES HERE...
-            window.location.href = url;
+            // window.location.href = url;
+            window.open(url, '_blank');
         });
         $(document).on('click', '.toggle', function(event) {
             event.preventDefault();
@@ -437,7 +438,6 @@
             var select = document.querySelector('#campuses_select')
             select.value = e.target.getAttribute('value');
             select.dispatchEvent(new Event('change'));
-            
         });
     </script>
 @endsection
