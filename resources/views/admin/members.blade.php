@@ -18,6 +18,7 @@
             padding: 2px;
         }
     </style>
+    <link href="/css/css-module/global_css/global.css" rel="stylesheet">
     <div class="container mp-container">
         <div class="row no-gutters mp-mt5">
             <div class="col-12 mp-ph2 mp-pv2 mp-text-fs-large mp-text-c-accent">
@@ -31,33 +32,42 @@
                         <div class="mp-ph4 mp-pv4 mp-card">
                             <div>
                                 @if (getUserdetails()->role == 'SUPER_ADMIN')
-                                    <a href="{{ url('/admin/summary') }}" class="mp-button mp-button--accent">Generate
-                                        Summary
-                                        Report</a>
+                                    <a href="{{ url('/admin/summary') }}" class="button_style bypass_padding">Generate Summary Report</a>
                                 @endif
+
+                                 <a href="{{ url('/admin/exportMember') }}" class="button_style bypass_padding">Export Data</a>
+                            {{-- <button type="button" class="mp-button mp-button--accent" id="printMember">Print</button> --}}
                             </div>
 
-                            <select name="" class="mp-link mp-link--accent" style="width: 100%;"
-                                id="campuses_select">
-                                <option value="">Filter By Campus</option>
-                                @foreach ($campuses as $row)
-                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                @endforeach
-                            </select>
-
-                            <select name="" class="mp-link mp-link--accent" style="width: 100%;"
-                                id="department_select">
-                                <option value="">Filter By Department</option>
-                                @foreach ($department as $row)
-                                    <option value="{{ $row->id }}">{{ $row->description }}</option>
-                                @endforeach
-                            </select>
-
-                            <a href="{{ url('/admin/exportMember') }}" class="mp-button mp-button--accent">Export Data</a>
-                            {{-- <button type="button" class="mp-button mp-button--accent" id="printMember">Print</button> --}}
-
-                            <input type="date" id="from">
-                            <input type="date" id="to">
+                            <div class="container">
+                                <div class="row">
+                                    <div class="col">
+                                         <select name="" class="mp-link mp-link--accent" style="width: 100%;"
+                                            id="campuses_select">
+                                            <option value="">Filter By Campus</option>
+                                            @foreach ($campuses as $row)
+                                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                            @endforeach
+                                        </select>    
+                                    </div>
+                                    <div class="col">
+                                            <select name="" class="mp-link mp-link--accent" style="width: 100%;"
+                                            id="department_select">
+                                            <option value="">Filter By Department</option>
+                                            @foreach ($department as $row)
+                                                <option value="{{ $row->id }}">{{ $row->description }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col">
+                                        <input type="date" id="from">
+                                    </div>
+                                    <div class="col">
+                                        <input type="date" id="to">
+                                    </div>
+                                </div>
+                            </div>
+                           
 
                             <hr>
                             <div class="mp-overflow-x">

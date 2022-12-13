@@ -22,6 +22,7 @@
             <div class="col mp-ph2 mp-pv2">
                 <div class="mp-card mp-card--plain mp-pv4">
                     <div class="row align-items-center">
+
                         <div class="col-lg-4">
                             <div id="campusSelector" class="mp-dropdown mp-ph3">
                                 <a class="mp-dropdown__toggle mp-link mp-link--accent">
@@ -41,6 +42,7 @@
                                             {{ $row->name }}
                                         </a>
                                     @endforeach
+
                                 </div>
                             </div>
                         </div>
