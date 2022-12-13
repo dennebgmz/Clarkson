@@ -228,24 +228,46 @@
                 <form id="addCampus" method="POST">
                     <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>"><input type="hidden"
                         name="_token" value="<?php echo csrf_token(); ?>">
-                    <div>
-                        <label>Campus Key</label>
-                        <input type="text" name="campus_key" required />
+
+                    <div class="row gc_row">
+                        <div class="col-4">
+                            <label>Campus Key</label>
+                        </div>
+                        <div class="col-8">
+                            <input class="input_style" type="text" name="campus_key" required />
+                        </div>
                     </div>
-                    <div>
-                        <label>Campus Name</label>
-                        <input type="text" name="campus_name" required />
+
+                    <div class="row gc_row">
+                        <div class="col-4">
+                             <label>Campus Name</label>
+                        </div>
+                        <div class="col-8">
+                            <input class="input_style" type="text" name="campus_name" required />
+                        </div>
                     </div>
-                    <div>
-                        <label>Cluster</label>
-                        <select name="cluster" required>
+
+                    <div class="row gc_row">
+                        <div class="col-4">
+                             <label>Cluster</label>
+                        </div>
+                        <div class="col-8">
+                            <select name="cluster" required class= "select_style">
                             <option value="">Select Cluster</option>
                             @foreach ($cluster as $row)
                                 <option value="{{ $row->id }}">{{ $row->name }}</option>
                             @endforeach
                         </select>
+                        </div>
                     </div>
-                    <button type="submit">Save Changes</button>
+                     
+                    <div class="row">
+                        <div class="col-12 save-button">
+                            <button type="submit" class=" button_style mp-button">
+                        Save Changes</button>
+                        </div>
+                    </div>
+                    
                 </form>
                 <div class="mp-overflow-x">
                     <table class="mp-table mp-text-fs-small " id="campusTable" cellspacing="0" width="100%">
