@@ -8,15 +8,15 @@
                 <div class="mp-card mp-card--plain mp-pv4">
                     <div class="row align-items-center">
 
-                        <!-- <div class="col-lg-4">
+                        <!-- back up layout <div class="col-lg-4">
                                         <div class="row align-items-center">
                                              <div class ="col-md-5 col-lg-7">
                                               <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
                                                  style="width: 100%; font-size:20px" id="campuses_select">
                                                      <option value="">All Campuses</option>
                                                     @foreach ($campuses as $row)
-    <option value="{{ $row->id }}">{{ $row->name }}</option>
-    @endforeach
+                                            <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                            @endforeach
                                              </select>
                                         </div>
                                         <div class ="col-md-7  col-lg-5 ">
@@ -24,7 +24,7 @@
                                              data-target="myPopup">Manage Campus</button>
                                         </div>
                                         </div>
-                                    </div> -->
+                        </div> -->
 
                         <div class="col-md-6 col-lg-4">
                             <div class="mp-text-c-gray mp-text-fs-small mp-pt3">
