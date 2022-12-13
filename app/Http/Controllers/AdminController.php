@@ -102,16 +102,6 @@ class AdminController extends Controller
     DB::enableQueryLog();
 
     if (isset($_GET['campuses_id']) && $_GET['campuses_id'] != "") {
-      $someVariable = $_GET['campuses_id'];
-    //   $upcontri = DB::table('contribution_transaction')
-    // ->select(DB::raw("sum(contribution_transaction.amount) as aggregatess"))
-    // ->join('contribution','contribution_transaction.contribution_id','contribution.id')
-    // ->join('member','contribution.member_id','member.id')
-    // ->where('member.campus_id',1)
-    // ->where('contribution_transaction.account_id',2)
-    // ->groupBy('member.campus_id','contribution_transaction.account_id')
-    // ->get();
-    // print_r($upcontri);
       $upcontri = DB::table('contribution_transaction')
       ->join('contribution', 'contribution_transaction.contribution_id', 'contribution.id')
       ->join('member', 'contribution.member_id', 'member.id')
@@ -217,6 +207,7 @@ class AdminController extends Controller
 
     echo json_encode($data);
   }
+  
   public function generatesummary($id)
   {
     

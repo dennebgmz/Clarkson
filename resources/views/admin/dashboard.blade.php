@@ -29,7 +29,7 @@
                                 <i class="mp-icon icon-arrow-down mp-ml2"></i>
                             </a>
                             <div class="mp-dropdown__menu">
-                                <a value="All" class="text_link mp-dropdown__item mp-link mp-link--normal campus_change" style="cursor: pointer">All UP Campuses</a>
+                                <a value="" class="text_link mp-dropdown__item mp-link mp-link--normal campus_change" style="cursor: pointer">All UP Campuses</a>
                                 @foreach ($campuses as $row)
                                 <a value="{{ $row->id }}" class="text_link mp-dropdown__item mp-link mp-link--normal campus_change" style="cursor: pointer">
                                     {{ $row->name }}
@@ -41,7 +41,7 @@
                     <div class="col-lg-4" hidden>
                         <select name="" class="mp-text-field mp-ph3 mp-link mp-link--accent"
                             style="width: 100%; font-size:20px" id="campuses_select">
-                            <option value="All">All Campuses</option>
+                            <option value="">All Campuses</option>
                             @foreach ($campuses as $row)
                                 <option value="{{ $row->id }}">{{ $row->name }}</option>
                             @endforeach
@@ -324,6 +324,7 @@
         var campus_title = "ALL UP Campuses";
         $('#campuses_select').on('change', function(e) {
             campuses_id = $(this).val();
+            console.log(campuses_id);
             $.ajax({
                 url: "/admin/count_percampuses",
                 method: "GET",
@@ -357,7 +358,6 @@
             var id = campuses_id;
             console.log(id);
             var url = "{{ URL::to('/admin/summaryreports/') }}" + '/' + id; //YOUR CHANGES HERE...
-            // window.location.href = url;
             window.open(url, '_blank');
         });
         $(document).on('click', '.toggle', function(event) {
