@@ -520,9 +520,6 @@ class AdminController extends Controller
       foreach ($posts as $r) {
         $start++;
         $row = array();
-        $row[] = "<a title='View Member' class='view_member' id='" . $r->id . "'>
-                    <i class='mp-icon md-tooltip icon-book-open mp-text-c-primary mp-text-fs-large'></i>
-                  </a>";
         $row[] = $r->member_no;
         $row[] = '<span class="mp-text-fw-heavy">' . $r->last_name . ', ' . $r->first_name . ' ' . $r->middle_name . '</span>';
         $row[] = date("D M j, Y", strtotime($r->memdate));
@@ -530,7 +527,9 @@ class AdminController extends Controller
         $row[] = $r->department;
         $row[] = $r->position_id;
         $row[] = date("M j, Y", strtotime($r->created_at));
-
+        $row[] = "<a data-md-tooltip='View Member' class='view_member' id='" . $r->id . "' style='cursor: pointer'>
+                    <i class='mp-icon md-tooltip icon-book-open mp-text-c-primary mp-text-fs-large'></i>
+                  </a>";
         $data[] = $row;
       }
     }

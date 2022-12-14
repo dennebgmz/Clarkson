@@ -29,65 +29,87 @@
             <div class="col-12 mp-ph2 mp-pv2">
                 <div class="row no-gutters">
                     <div class="col">
-                        <div class="mp-ph4 mp-pv4 mp-card">
-                            <div>
+                        <div class="mp-ph3 mp-pv4 mp-card ">
+                            <div style="display: flex; flex-direction: row; gap: 10px; justify-content: right">
                                 @if (getUserdetails()->role == 'SUPER_ADMIN')
-                                    <a href="{{ url('/admin/summary') }}" class="button_style bypass_padding">Generate Summary Report</a>
+                                <span>
+                                    <a href="{{ url('/admin/summary') }}" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Generate Summary Report</a>
+                                </span>
                                 @endif
-
-                                 <a href="{{ url('/admin/exportMember') }}" class="button_style bypass_padding">Export Data</a>
+                                <span>
+                                    <a href="{{ url('/admin/exportMember') }}" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Export Data</a>
+                                </span>
                             {{-- <button type="button" class="mp-button mp-button--accent" id="printMember">Print</button> --}}
                             </div>
 
-                            <div class="container">
+                            <div class="container bottom-divider top-divider">
                                 <div class="row">
-                                    <div class="col">
-                                         <select name="" class="mp-link mp-link--accent" style="width: 100%;"
-                                            id="campuses_select">
-                                            <option value="">Filter By Campus</option>
-                                            @foreach ($campuses as $row)
-                                                <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                            @endforeach
-                                        </select>    
+                                    <label for="" class="mp-text-c-accent mp-text-fs-large">Filter</label>
+                                </div>
+                                <div class="row items-between ">
+                                    <div class="col-md-12 col-xl-6">
+                                        <div class="row">
+                                           <label for="row">Fields</label>
+                                        </div>
+                                        <div class="row field-filter">
+                                            <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
+                                                id="campuses_select">
+                                                <option value="">Filter By Campus</option>
+                                                @foreach ($campuses as $row)
+                                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                                @endforeach
+                                            </select>    
+                                                <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
+                                                id="department_select">
+                                                <option value="">Filter By Department</option>
+                                                @foreach ($department as $row)
+                                                    <option value="{{ $row->id }}">{{ $row->description }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                    <div class="col">
-                                            <select name="" class="mp-link mp-link--accent" style="width: 100%;"
-                                            id="department_select">
-                                            <option value="">Filter By Department</option>
-                                            @foreach ($department as $row)
-                                                <option value="{{ $row->id }}">{{ $row->description }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col">
-                                        <input type="date" id="from">
-                                    </div>
-                                    <div class="col">
-                                        <input type="date" id="to">
+                                    <div class="col-md-12 col-xl-5">
+                                        <div class="row">
+                                           <label for="row">Date Range</label>
+                                        </div>
+                                        <div class="row date_range">
+                                            <input type="date" id="from" class="radius-1 border-1 date-input outline" style="height: 30px;">
+                                            <span for="" class="self_center mv-1">to</span>
+                                            <input type="date" id="to" class="radius-1 border-1 date-input outline" style="height: 30px;">
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                            
 
                             <hr>
-                            <div class="mp-overflow-x">
-                                <table class="mp-table mp-text-fs-small" id="membersTable" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th></th>
-                                            <th>Member ID</th>
-                                            <th>Member Name</th>
-                                            <th>Membership Date</th>
-                                            <th>Campus</th>
-                                            <th>Class</th>
-                                            <th>Position</th>
-                                            <th>Created At</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
+                            <div class="">
+                                <div class="row">
+                                    <div class="col-12 ">
+                                        <label for="" class="mp-text-c-accent mp-text-fs-large">Member List</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 mp-overflow-x">
+                                        <table class="mp-table mp-text-fs-small" id="membersTable" cellspacing="0" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Member ID</th>
+                                                    <th>Member Name</th>
+                                                    <th>Membership Date</th>
+                                                    <th>Campus</th>
+                                                    <th>Class</th>
+                                                    <th>Position</th>
+                                                    <th>Created At</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
 
-                                    </tbody>
-                                </table>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
