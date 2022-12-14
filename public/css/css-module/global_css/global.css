@@ -134,7 +134,9 @@
     background-color: var(--c-accent) !important;
     color: white !important;
     margin-bottom: 10px;
-    padding: 10px;
+    padding: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .mp-top-button a:hover {

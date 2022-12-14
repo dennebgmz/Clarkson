@@ -6,7 +6,7 @@
             
         </style>
         
-        <div class="row row no-gutters mp-mt4">
+        <div class="row no-gutters mp-mt4">
             <div class="col-12 mp-text-right" style="display: flex; flex-direction: row; justify-content: right">
                 <div class="row no-gutters">
                     <div class="mp-ph2 mp-pv2">
