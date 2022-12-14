@@ -558,7 +558,7 @@ class AdminController extends Controller
         ->leftjoin('loan_type', 'loan.type_id', '=', 'loan_type.id')
         ->leftjoin('member', 'loan.member_id', '=', 'member.id')
         ->leftjoin('users', 'member.user_id', '=', 'users.id')
-        ->groupBy('memberNo')
+        ->groupBy('loan.id')
         ->orderBy('lastTransactionDate', 'desc')
         ->offset($start)
         ->limit($limit)
@@ -575,7 +575,7 @@ class AdminController extends Controller
         ->orWhere('last_name', 'like', "%{$search}%")
         ->orWhere('middle_name', 'like', "%{$search}%")
         ->orWhere('member.member_no', 'like', "%{$search}%")
-        ->groupBy('memberNo')
+        ->groupBy('loan.id')
         ->offset($start)
         ->limit($limit)
         ->get();
@@ -589,7 +589,7 @@ class AdminController extends Controller
         ->orWhere('last_name', 'like', "%{$search}%")
         ->orWhere('middle_name', 'like', "%{$search}%")
         ->orWhere('member.member_no', 'like', "%{$search}%")
-        ->groupBy('memberNo')
+        ->groupBy('loan.id')
         ->count();
     }
 
