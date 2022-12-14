@@ -99,11 +99,11 @@
 
 @section('scripts')
     <script type="text/javascript">
+        $('#loading').show();
         $(window).load(function() {
             $('#loading').hide();
         });
         $(document).ready(function() {
-            $('#loading').show();
             var tableMember = $('#membersTable').DataTable({
                 language: {
                     search: '',
