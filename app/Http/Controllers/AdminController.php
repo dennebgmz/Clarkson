@@ -425,6 +425,7 @@ class AdminController extends Controller
     $department  = $request->get('department');
     $dt_from  = $request->get('dt_from');
     $dt_to  = $request->get('dt_to');
+    $search  = $request->get('searchValue');
 
     // Total records
     // $records = Member::select('count(*) as allcount');
@@ -432,7 +433,7 @@ class AdminController extends Controller
       ->leftjoin('users', 'member.user_id', 'users.id')
       ->leftjoin('campus', 'member.campus_id', 'campus.id')
       ->leftjoin('department', 'member.department_id', 'department.id')
-      ->where('last_name', 'like', '%' . $searchValue . '%');
+      ->where('member_no', 'like', '%' . $search . '%');
 
     ## Add custom filter conditions
     if (!empty($campus)) {
@@ -441,17 +442,12 @@ class AdminController extends Controller
     if (!empty($department)) {
       $records->where('department_id', $department);
     }
+    if (!empty($search)) {
+      $records->orWhere('member_no', 'like', '%' . $search . '%');
+      $records->orWhere('last_name', 'like', '%' . $search . '%');
+    }
     if (!empty($dt_from) && !empty($dt_to)) {
       $records->whereBetween(DB::raw('DATE(membership_date)'), array($dt_from, $dt_to));
-    }
-    //Search Box
-    if ($searchValue) {
-      $records->orWhere('first_name', 'like', '%' . $searchValue . '%');
-      $records->orWhere('middle_name', 'like', '%' . $searchValue . '%');
-      $records->orWhere('position_id', 'like', '%' . $searchValue . '%');
-      $records->orWhere('campus.name', 'like', '%' . $searchValue . '%');
-      $records->orWhere('department.name', 'like', '%' . $searchValue . '%');
-      $records->orWhere('member.member_no', 'like', '%' . $searchValue . '%');
     }
     $totalRecords = $records->count();
 
@@ -460,7 +456,7 @@ class AdminController extends Controller
       ->leftjoin('users', 'member.user_id', 'users.id')
       ->leftjoin('campus', 'member.campus_id', 'campus.id')
       ->leftjoin('department', 'member.department_id', 'department.id')
-      ->where('last_name', 'like', '%' . $searchValue . '%');
+      ->where('member_no', 'like', '%' . $search . '%');
 
     ## Add custom filter conditions
     if (!empty($campus)) {
@@ -469,18 +465,12 @@ class AdminController extends Controller
     if (!empty($department)) {
       $records->where('department_id', $department);
     }
+    if (!empty($search)) {
+      $records->orWhere('member_no', 'like', '%' . $search . '%');
+      $records->orWhere('last_name', 'like', '%' . $search . '%');
+    }
     if (!empty($dt_from) && !empty($dt_to)) {
       $records->whereBetween(DB::raw('DATE(membership_date)'), array($dt_from, $dt_to));
-    }
-
-    //Search Box
-    if ($searchValue) {
-      $records->orWhere('first_name', 'like', '%' . $searchValue . '%');
-      $records->orWhere('middle_name', 'like', '%' . $searchValue . '%');
-      $records->orWhere('position_id', 'like', '%' . $searchValue . '%');
-      $records->orWhere('campus.name', 'like', '%' . $searchValue . '%');
-      $records->orWhere('department.name', 'like', '%' . $searchValue . '%');
-      $records->orWhere('member.member_no', 'like', '%' . $searchValue . '%');
     }
     $totalRecordswithFilter = $records->count();
 
@@ -489,7 +479,7 @@ class AdminController extends Controller
       ->leftjoin('users', 'member.user_id', 'users.id')
       ->leftjoin('campus', 'member.campus_id', 'campus.id')
       ->leftjoin('department', 'member.department_id', 'department.id')
-      ->where('last_name', 'like', '%' . $searchValue . '%');
+      ->where('member_no', 'like', '%' . $search . '%');
 
     ## Add custom filter conditions
     if (!empty($campus)) {
@@ -498,19 +488,14 @@ class AdminController extends Controller
     if (!empty($department)) {
       $records->where('department_id', $department);
     }
+    if (!empty($search)) {
+      $records->orWhere('member_no', 'like', '%' . $search . '%');
+      $records->orWhere('last_name', 'like', '%' . $search . '%');
+    }
     if (!empty($dt_from) && !empty($dt_to)) {
       $records->whereBetween(DB::raw('DATE(membership_date)'), array($dt_from, $dt_to));
     }
-
-    //Search Box
-    if ($searchValue) {
-      $records->orWhere('first_name', 'like', '%' . $searchValue . '%');
-      $records->orWhere('middle_name', 'like', '%' . $searchValue . '%');
-      $records->orWhere('position_id', 'like', '%' . $searchValue . '%');
-      $records->orWhere('campus.name', 'like', '%' . $searchValue . '%');
-      $records->orWhere('department.name', 'like', '%' . $searchValue . '%');
-      $records->orWhere('member.member_no', 'like', '%' . $searchValue . '%');
-    }
+    
 
     $posts = $records->skip($start)
       ->take($rowperpage)

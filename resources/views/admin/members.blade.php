@@ -85,13 +85,14 @@
                 <div class="row no-gutters">
                     <div class="col ">
                         <div class="mp-ph3 mp-pv4 mp-card ">
-                          
+                            <input type="text" id="search_value" placeholder="Serach By Member No and Last Name">
                             <div class="">
                                 <div class="row">
                                     <div class="col-12 ">
                                         <label for="" class="mp-text-c-accent mp-text-fs-large">Member List</label>
                                     </div>
                                 </div>
+                                
                                 <div class="row">
                                     <div class="col-12 mp-overflow-x">
                                         <table class="mp-table mp-text-fs-small" id="membersTable" cellspacing="0" width="100%">
@@ -136,6 +137,7 @@
                     processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br>Loading...',
                 },
                 "ordering": false,
+                "searching": false,
                 "processing": true,
                 "serverSide": true,
                 "ajax": {
@@ -145,6 +147,7 @@
                         data.department = $('#department_select').val();
                         data.dt_from = $('#from').val();
                         data.dt_to = $('#to').val();
+                        data.searchValue = $('#search_value').val();
                     }
                 },
             });
@@ -153,6 +156,9 @@
                 tableMember.draw();
             });
             $('#department_select').on('change', function() {
+                tableMember.draw();
+            });
+            $('#search_value').on('change', function() {
                 tableMember.draw();
             });
             $('#from').on('change', function() {
