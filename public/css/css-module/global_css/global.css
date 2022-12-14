@@ -126,5 +126,24 @@
 
 .filter-text {
     font-size: 30px;
-    text-align: center;
+    margin-left: 15px;
+    margin-top: 20px;
+}
+
+.mp-top-button a {
+    background-color: var(--c-accent) !important;
+    color: white !important;
+    margin-bottom: 10px;
+    padding: 6px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.mp-top-button a:hover {
+    color: white !important;
+    transform: scale(1.2);
+}
+
+.mp-top-button {
+    margin: 20px;
 }
