@@ -520,8 +520,8 @@ class AdminController extends Controller
       foreach ($posts as $r) {
         $start++;
         $row = array();
-        $row[] = "<a data-md-tooltip='View Member' class='view_member' id='" . $r->id . "' style='cursor: pointer'>
-                    <i class='mp-icon md-tooltip icon-book-open mp-text-c-primary mp-text-fs-large'></i>
+        $row[] = "<a data-md-tooltip='View Member' class='view_member md-tooltip--right' id='" . $r->id . "' style='cursor: pointer'>
+                    <i class='mp-icon md-tooltip--right icon-book-open mp-text-c-primary mp-text-fs-large'></i>
                   </a>";
         $row[] = $r->member_no;
         $row[] = '<span class="mp-text-fw-heavy">' . $r->last_name . ', ' . $r->first_name . ' ' . $r->middle_name . '</span>';
