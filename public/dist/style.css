@@ -4651,6 +4651,18 @@ tfoot {
     transform: translateX(-120%) scale(1)
 }
 
+[data-md-tooltip].md-tooltip--right:before {
+    left: auto;
+    right: -10px;
+    bottom: auto;
+    top: 50%;
+    transform: translate(100%, -50%) scale(0);
+    transform-origin: left center;
+  }
+  [data-md-tooltip].md-tooltip--right:hover:before {
+    transform: translate(100%, -50%) scale(1);
+}
+
 .hide {
     visibility: hidden;
     opacity: 0;
