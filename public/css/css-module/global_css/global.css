@@ -10,7 +10,9 @@
 }
 
 .button_style {
-    background-color: white;
+    background-color: var(--c-primary);
+    color: white !important;
+
     border: 1px solid var(--c-primary);
     color: var(--c-primary);
     font-size: .8rem;
@@ -21,8 +23,8 @@
 }
 
 .button_style:hover {
-    background-color: var(--c-primary);
-    color: white;
+    background-color: white;
+    color: var(--c-primary) !important;
 }
 
 .bypass_padding {
@@ -52,11 +54,20 @@
     padding: 5px;
     width: 100%;
     border-radius: 10px;
+    border-color: var(--c-active-hover-bg);
+    color: var(--c-primary);
+    outline: 0 none;
 }
 
 .input_style {
     width: 100%;
     padding: 3px;
+    color: var(--c-primary);
+    outline: 0 none;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: thin;
+    border-color: var(--c-primary);
 }
 
 .gc_row {
@@ -66,4 +77,44 @@
 .save-button {
     text-align: center;
     margin: 10px;
+}
+
+.delete_campus {
+    color: red !important
+}
+
+.delete_campus:hover {
+    border: 1px red !important;
+    transform: scale(1.1);
+}
+
+.export_campus {
+    margin: 2px;
+    float: right;
+    color: var(--c-primary);
+}
+
+.export_campus:hover {
+    color: var(--c-primary);
+    transform: scale(1.1);
+}
+
+#campusTable_wrapper {
+    margin-top: 10px;
+}
+
+#dataTables_paginate {
+    color: var(--c-primary);
+}
+
+#campusTable_filter input {
+    width: 100%;
+    margin-left: -20px;
+    padding: 3px;
+    color: var(--c-primary);
+    outline: 0 none;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: thin;
+    border-color: var(--c-primary);
 }
