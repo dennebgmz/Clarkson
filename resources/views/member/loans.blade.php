@@ -26,7 +26,7 @@ padding:2px;
         </div>
       </div>
    
-
+    <!-- loading timeout -->
  
 
     <div class="row no-gutters mp-mb4">
