@@ -66,6 +66,7 @@
                             </div>
 
                     </div>
+
                 </div>
                 <div class="row no-gutters">
                     <div class="col ">
@@ -114,26 +115,30 @@
     $(window).load(function() {
         $('#loading').hide();
     });
-    $(document).ready(function() {
-        var tableMember = $('#membersTable').DataTable({
-            language: {
-                search: '',
-                searchPlaceholder: "Search Here...",
-                processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br>Loading...',
-            },
-            "ordering": false,
-            "processing": true,
-            "serverSide": true,
-            "ajax": {
-                "url": "{{ route('dataProcessing') }}",
-                "data": function(data) {
-                    data.campus = $('#campuses_select').val();
-                    data.department = $('#department_select').val();
-                    data.dt_from = $('#from').val();
-                    data.dt_to = $('#to').val();
-                }
-            },
-        });
+
+        $(document).ready(function() {
+            var tableMember = $('#membersTable').DataTable({
+                language: {
+                    search: '',
+                    searchPlaceholder: "Search Here...",
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br>Loading...',
+                },
+                "ordering": false,
+                "searching": false,
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "{{ route('dataProcessing') }}",
+                    "data": function(data) {
+                        data.campus = $('#campuses_select').val();
+                        data.department = $('#department_select').val();
+                        data.dt_from = $('#from').val();
+                        data.dt_to = $('#to').val();
+                        data.searchValue = $('#search_value').val();
+                    }
+                },
+            });
+
 
         $(document).ready(function() {
             var tableMember = $('#membersTable').DataTable({
@@ -236,6 +241,10 @@
                 tableMember.draw();
             }
         });
+            $('#search_value').on('change', function() {
+                tableMember.draw();
+            });
+            
 
         $(document).on('click', '.view_member', function(e) {
             var id = $(this).attr('id');
