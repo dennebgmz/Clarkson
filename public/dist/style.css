@@ -4895,6 +4895,15 @@ tfoot {
     align-items: stretch
 }
 
+.up-button {
+    background-color: var(--c-accent) !important;
+    color: white !important;
+}
+
+.up-button:hover {
+    color: white !important;
+}
+
 @media (max-width:576px) {
     .field-filter {
         grid-template-columns: 1fr;

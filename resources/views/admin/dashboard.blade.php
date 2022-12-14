@@ -1,7 +1,8 @@
 @extends('layouts/main')
 @section('content_body')
+    <link href="/css/css-module/global_css/global.css" rel="stylesheet">
     <div class="container mp-container">
-        <link href="/css/css-module/global_css/global.css" rel="stylesheet">
+
         <style>
             
         </style>
@@ -11,11 +12,11 @@
                 <div class="row no-gutters">
                     <div class="mp-ph2 mp-pv2">
                         <a data-target="myPopup"
-                            class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                            class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">
                             Manage Campus
                         </a>
                         <a href="#" id="generate_summary"
-                            class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                            class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">
                             Print Report
                         </a>
                     </div>
