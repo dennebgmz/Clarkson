@@ -18,6 +18,7 @@ ul.pagination li a {
 padding:2px;
 }
 </style>
+<link href="/css/css-module/global_css/global.css" rel="stylesheet">
   <div class="container mp-container">
     
       <div class="row no-gutters mp-mt5">
@@ -25,8 +26,8 @@ padding:2px;
           Your Account History
         </div>
       </div>
-   
-
+    
+                
  
 
     <div class="row no-gutters mp-mb4">
@@ -52,6 +53,49 @@ padding:2px;
         </div>
         <div class="row no-gutters">
           <div class="col">
+              <div class="container bottom-divider top-divider" 
+                  style= "background-color:white; 
+                          margin-top: 0px !important;
+                          border-top: 0px !important;
+                          border-radius: 5px;
+                          " >
+                                <div class="row ">
+                                    <div class="col">
+                                          <label for="" class="mp-text-c-accent mp-text-fs-large  text-center">Filter</label>     
+                                    </div>  
+                                   
+                                </div>
+                                <div class="row items-between ">
+                                    <div class="col-md-12 col-xl-6">
+                                        <div class="row">
+                                           <label for="row">Fields</label>
+                                        </div>
+                                        <div class="row field-filter">
+                                            <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
+                                                id="">
+                                                <option value="">Filter By Sample</option>
+                                               
+                                            </select>    
+                                                <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
+                                                id="">
+                                                <option value="">Filter By Sample 2</option>
+                                               
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-12 col-xl-5">
+                                        <div class="row">
+                                           <label for="row">Date Range</label>
+                                        </div>
+                                        <div class="row date_range">
+                                            <input type="date" id="from" class="radius-1 border-1 date-input outline" style="height: 30px;">
+                                            <span for="" class="self_center mv-1">to</span>
+                                            <input type="date" id="to" class="radius-1 border-1 date-input outline" style="height: 30px;">
+                                        </div>
+                                    </div>
+                                </div>
+          
             <div class="mp-ph4 mp-pv4 mp-card mp-card--tabbed">
             
               <div class="mp-overflow-x">
@@ -147,7 +191,9 @@ padding:2px;
                 </div>
               </div>
             </div>
+          
           </div>
+        </div>
         </div>
       </div>
     </div>
