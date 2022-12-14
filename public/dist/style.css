@@ -4548,6 +4548,10 @@ tfoot {
     margin-bottom: 1.5rem !important
 }
 
+.mp-mt4_5 {
+    margin-top: 2rem !important
+}
+
 .mp-mt5 {
     margin-top: 3rem !important
 }
@@ -4777,9 +4781,16 @@ tfoot {
     align-self: center;
 }
 
-.mv-1 {
+
+
+.mh-1 {
     margin-left: .5rem;
     margin-right: .5rem;
+}
+
+.mv-auto {
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 .ph-0 {
@@ -4814,11 +4825,11 @@ tfoot {
 .date-input {
     padding: 1px 4px 0 4px;
     transition: 0.2s;
-    border:1px solid #aaa;
+    border: 1px solid #aaa;
 }
 
 .select-field {
-    border:1px solid #aaa;
+    border: 1px solid #aaa;
     transition: 0.2s;
 }
 
@@ -4838,7 +4849,7 @@ tfoot {
 }
 
 .top-divider {
-    border-top: 2px solid;
+    /* border-top: 2px solid; */
     border-color: #ececec;
     border-color: var(--c-base-10);
     width: 100%;
@@ -4888,6 +4899,7 @@ tfoot {
     .field-filter {
         grid-template-columns: 1fr;
     }
+
     .date_range {
         justify-content: center;
         flex-direction: column;

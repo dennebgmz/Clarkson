@@ -90,7 +90,7 @@ padding:2px;
                                         </div>
                                         <div class="row date_range">
                                             <input type="date" id="from" class="radius-1 border-1 date-input outline" style="height: 30px;">
-                                            <span for="" class="self_center mv-1">to</span>
+                                            <span for="" class="self_center mh-1">to</span>
                                             <input type="date" id="to" class="radius-1 border-1 date-input outline" style="height: 30px;">
                                         </div>
                                     </div>
