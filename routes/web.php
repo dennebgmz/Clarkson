@@ -104,8 +104,9 @@ Route::get('/admin/editCampusName', 'AdminController@editCampusName');
 Route::get('/admin/editCluster', 'AdminController@editCluster');
 Route::get('/admin/exportCampus', 'AdminController@exportCampus');
 
+Route::get('/admin/export_loandata/{id}/{dt_from}/{dt_to}', 'AdminController@getLoanData');
 Route::get('/admin/loans', 'AdminController@loansmasterlist');
-Route::post('/admin/loanData', 'AdminController@loanMasterlistData')->name('loanData');
+Route::get('/admin/loanData', 'AdminController@loanMasterlistData')->name('loanDatas');
 Route::get('/admin/loan-details/{id}', 'AdminController@loandetails');
 
 Route::get('/admin/member_equity/{id}', 'AdminController@equity');
