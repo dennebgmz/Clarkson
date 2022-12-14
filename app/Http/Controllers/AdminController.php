@@ -541,80 +541,84 @@ class AdminController extends Controller
     );
     echo json_encode($json_data);
   }
-
   public function loanMasterlistData(Request $request)
   {
-    $totalData = LoanTransaction::count();
-
-    $limit = $request->input('length');
-    $start = $request->input('start');
-    $order = $request->input('order.0.column');
-    $dir = $request->input('order.0.dir');
-
-    if (empty($request->input('search.value'))) {
-      $loans = LoanTransaction::select('loan.id as id', 'loan_type.name as type', 'member.member_no as memberNo', 'users.first_name as firstname', 'users.middle_name as middlename', 'users.last_name as lastname', DB::raw('MAX(date) as lastTransactionDate'), DB::raw('SUM(amount) AS balance'), DB::raw('MAX(start_amort_date) AS startAmortDate'), DB::raw('MAX(end_amort_date) AS endAmortDate'))
+    ## Read value
+    DB::enableQueryLog();
+    $totalRecords = LoanTransaction::groupBy('loan_id')->pluck('loan_id')->count();
+    $draw = $request->get('draw');
+    $start = $request->get("start");
+    $rowperpage = $request->get("length"); // Rows display per page
+    $columnIndex_arr = $request->get('order');
+    $columnName_arr = $request->get('columns');
+    $order_arr = $request->get('order');
+    $search_arr = $request->get('search');
+    $columnIndex = $columnIndex_arr[0]['column']; // Column index
+    // $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+    $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+    $searchValue = $search_arr['value']; // Search value
+    // Custom search filter 
+    $loan_type  = $request->get('loan_type');
+    $dt_from = $request->get('dt_from');
+    $dt_to = $request->get('dt_to');
+    
+    ## Add custom filter conditions
+    if (!empty($loan_type) || !empty($searchValue)) {
+      $records = LoanTransaction::select('loan.id as id', 'loan_type.name as type', 'member.member_no as memberNo', 'users.first_name as firstname', 'users.middle_name as middlename', 'users.last_name as lastname', DB::raw('MAX(date) as lastTransactionDate'), DB::raw('SUM(amount) AS balance'), DB::raw('MAX(start_amort_date) AS startAmortDate'), DB::raw('MAX(end_amort_date) AS endAmortDate'))
+      ->leftjoin('loan', 'loan_transaction.loan_id', '=', 'loan.id')
+      ->leftjoin('loan_type', 'loan.type_id', '=', 'loan_type.id')
+      ->leftjoin('member', 'loan.member_id', '=', 'member.id')
+      ->leftjoin('users', 'member.user_id', '=', 'users.id')
+      ->where('loan_type.id', $loan_type)
+      ->Where('first_name', 'like', '%' . $searchValue . '%')
+      ->orWhere('last_name', 'like', '%' . $searchValue . '%')
+      ->orWhere('middle_name', 'like', '%' . $searchValue . '%')
+      ->orWhere('member.member_no', 'like', '%' . $searchValue . '%')
+      ->groupBy('loan.id');
+      
+      $totalRecordswithFilter = $records->pluck('loan.id')->count();
+    }else{
+      $records = LoanTransaction::select('loan.id as id', 'loan_type.name as type', 'member.member_no as memberNo', 'users.first_name as firstname', 'users.middle_name as middlename', 'users.last_name as lastname', DB::raw('MAX(date) as lastTransactionDate'), DB::raw('SUM(amount) AS balance'), DB::raw('MAX(start_amort_date) AS startAmortDate'), DB::raw('MAX(end_amort_date) AS endAmortDate'))
         ->leftjoin('loan', 'loan_transaction.loan_id', '=', 'loan.id')
         ->leftjoin('loan_type', 'loan.type_id', '=', 'loan_type.id')
         ->leftjoin('member', 'loan.member_id', '=', 'member.id')
         ->leftjoin('users', 'member.user_id', '=', 'users.id')
-        ->groupBy('loan.id')
-        ->orderBy('lastTransactionDate', 'desc')
-        ->offset($start)
-        ->limit($limit)
-        ->get();
-      $totalFiltered = LoanTransaction::count();
-    } else {
-      $search = $request->input('search.value');
-      $loans = LoanTransaction::select('loan.id as id', 'loan_type.name as type', 'member.member_no as memberNo', 'users.first_name as firstname', 'users.middle_name as middlename', 'users.last_name as lastname', DB::raw('MAX(date) as lastTransactionDate'), DB::raw('SUM(amount) AS balance'), DB::raw('MAX(start_amort_date) AS startAmortDate'), DB::raw('MAX(end_amort_date) AS endAmortDate'))
-        ->leftjoin('loan', 'loan_transaction.loan_id', '=', 'loan.id')
-        ->leftjoin('loan_type', 'loan.type_id', '=', 'loan_type.id')
-        ->leftjoin('member', 'loan.member_id', '=', 'member.id')
-        ->leftjoin('users', 'member.user_id', '=', 'users.id')
-        ->where('first_name', 'like', "%{$search}%")
-        ->orWhere('last_name', 'like', "%{$search}%")
-        ->orWhere('middle_name', 'like', "%{$search}%")
-        ->orWhere('member.member_no', 'like', "%{$search}%")
-        ->groupBy('loan.id')
-        ->offset($start)
-        ->limit($limit)
-        ->get();
-
-      $totalFiltered = LoanTransaction::select('loan.id as id', 'loan_type.name as type', 'member.member_no as memberNo', 'users.first_name as firstname', 'users.middle_name as middlename', 'users.last_name as lastname', DB::raw('MAX(date) as lastTransactionDate'), DB::raw('SUM(amount) AS balance'), DB::raw('MAX(start_amort_date) AS startAmortDate'), DB::raw('MAX(end_amort_date) AS endAmortDate'))
-        ->leftjoin('loan', 'loan_transaction.loan_id', '=', 'loan.id')
-        ->leftjoin('loan_type', 'loan.type_id', '=', 'loan_type.id')
-        ->leftjoin('member', 'loan.member_id', '=', 'member.id')
-        ->leftjoin('users', 'member.user_id', '=', 'users.id')
-        ->where('first_name', 'like', "%{$search}%")
-        ->orWhere('last_name', 'like', "%{$search}%")
-        ->orWhere('middle_name', 'like', "%{$search}%")
-        ->orWhere('member.member_no', 'like', "%{$search}%")
-        ->groupBy('loan.id')
-        ->count();
+        ->groupBy('loan.id');
+        $totalRecordswithFilter = $records->pluck('loan.id')->count();
     }
-
+    if (!empty($dt_from) && !empty($dt_to)) {
+      $records->whereBetween('loan_transaction.date', ["$dt_from","$dt_to"]);
+      $totalRecordswithFilter = $records->pluck('loan.id')->count();
+    }
+    //Search Box
+    
+    $posts = $records->skip($start)
+      ->take($rowperpage)
+      ->get();
+    $query = DB::getQueryLog();
     $data = array();
-    if ($loans) {
-      foreach ($loans as $loan) {
+    if ($posts) {
+      foreach ($posts as $r) {
         $start++;
         $row = array();
-        $row[] = "<a title='View Loans History' class='view_loan_history' id='" . $loan->id . "'>
+        $row[] = "<a title='View Loans History' class='view_loan_history' id='" . $r->id . "'>
                     <i class='mp-icon md-tooltip icon-book-open mp-text-c-primary mp-text-fs-large'></i>
                   </a>";
-        $row[] = $loan->type;
-        $row[] = $loan->memberNo;
-        $row[] = '<span class="mp-text-fw-heavy">' . $loan->lastname . ', ' . $loan->firstname . ' ' . $loan->middlename . '</span>';
-        $row[] = $loan->lastTransactionDate == null ? '' : date('m/d/Y', strtotime($loan->lastTransactionDate));
-        $row[] = 'PHP ' . number_format($loan->balance, 2);
-        $row[] = $loan->startAmortDate == null ? '' : date('m/d/Y', strtotime($loan->startAmortDate));
-        $row[] = $loan->endAmortDate == null ? '' : date('m/d/Y', strtotime($loan->endAmortDate));
-
+        $row[] = $r->type;
+        $row[] = $r->memberNo;
+        $row[] = '<span class="mp-text-fw-heavy">' . $r->lastname . ', ' . $r->firstname . ' ' . $r->middlename . '</span>';
+        $row[] = $r->lastTransactionDate == null ? '' : date('m/d/Y', strtotime($r->lastTransactionDate));
+        $row[] = 'PHP ' . number_format($r->balance, 2);
+        $row[] = $r->startAmortDate == null ? '' : date('m/d/Y', strtotime($r->startAmortDate));
+        $row[] = $r->endAmortDate == null ? '' : date('m/d/Y', strtotime($r->endAmortDate));
         $data[] = $row;
       }
     }
     $json_data = array(
-      "draw" => intval($request->input('draw')),
-      "recordsTotal" => intval($totalData),
-      "recordsFiltered" => intval($totalFiltered),
+      "draw" => intval($draw),
+      "recordsTotal" => intval($totalRecords),
+      "recordsFiltered" => intval($totalRecordswithFilter),
+      "query" => $query ,
       "data" => $data
     );
     echo json_encode($json_data);
@@ -666,7 +670,67 @@ class AdminController extends Controller
     header('Cache-Control: must-revalidate');
     echo $memData;
   }
+  public function getLoanData($id,$dt_from,$dt_to)
+  {
+    DB::enableQueryLog();
+    if(!empty($id) && $id != 0){
+    $records = LoanTransaction::select('loan.id as id', 'loan_type.name as type', 'member.member_no as memberNo', 'users.first_name as firstname', 'users.middle_name as middlename', 'users.last_name as lastname', DB::raw('MAX(date) as lastTransactionDate'), DB::raw('SUM(amount) AS balance'), DB::raw('MAX(start_amort_date) AS startAmortDate'), DB::raw('MAX(end_amort_date) AS endAmortDate'))
+    ->leftjoin('loan', 'loan_transaction.loan_id', '=', 'loan.id')
+    ->leftjoin('loan_type', 'loan.type_id', '=', 'loan_type.id')
+    ->leftjoin('member', 'loan.member_id', '=', 'member.id')
+    ->leftjoin('users', 'member.user_id', '=', 'users.id')
+    ->where('loan_type.id', $id)
+    ->groupBy('loan.id');
+    }else{
+    $records = LoanTransaction::select('loan.id as id', 'loan_type.name as type', 'member.member_no as memberNo', 'users.first_name as firstname', 'users.middle_name as middlename', 'users.last_name as lastname', DB::raw('MAX(date) as lastTransactionDate'), DB::raw('SUM(amount) AS balance'), DB::raw('MAX(start_amort_date) AS startAmortDate'), DB::raw('MAX(end_amort_date) AS endAmortDate'))
+    ->leftjoin('loan', 'loan_transaction.loan_id', '=', 'loan.id')
+    ->leftjoin('loan_type', 'loan.type_id', '=', 'loan_type.id')
+    ->leftjoin('member', 'loan.member_id', '=', 'member.id')
+    ->leftjoin('users', 'member.user_id', '=', 'users.id')
+    ->groupBy('loan.id');
+    }
+    if (!empty($dt_from) && !empty($dt_to) && $dt_from != 0 && $dt_to != 0) {
+      $records->whereBetween('loan_transaction.date', ["$dt_from","$dt_to"]);
+    }
 
+    $loanData = "";
+    $posts = $records->get();
+    if (count($posts) > 0) {
+      $loanData .= '
+      <table>
+        <tr>
+          <th>Loan Type</th>
+          <th>Member ID</th>
+          <th>Member Name</th>
+          <th>Last Transaction Date</th>
+          <th>Balance</th>
+          <th>Start Amort Date</th>
+          <th>End Amort Date</th>
+        </tr>
+      ';
+      foreach ($posts as $row) {
+        $loanData .= '
+        <tr>
+          <td>' . $row->type . '</td>
+          <td>' . $row->memberNo . '</td>
+          <td>' . $row->lastname . ', ' . $row->firstname . ' ' . $row->middlename . '</td>
+          <td>' . $row->lastTransactionDate . '</td>
+          <td>' . 'PHP '.number_format($row->balance, 2) . '</td>
+          <td>' . $amort1 = ($row->startAmortDate == null ? '' : date('m/d/Y', strtotime($row->startAmortDate))) . '</td>
+          <td>' . $amort2 = ($row->endAmortDate == null ? '' : date('m/d/Y', strtotime($row->endAmortDate))) . '</td>
+        </tr>
+        ';
+      }
+      $loanData .= '</table>';
+    }
+
+    header('Content-Disposition: attachment; filename=Active Loan List.xls');
+    header('Content-Type: application/xls');
+    header('Content-Transfer-Encoding: binary');
+    header('Cache-Control: must-revalidate');
+    $query = DB::getQueryLog();
+    echo($loanData);
+  }
   public function addCampus(Request $request)
   {
     $message = '';
@@ -1068,8 +1132,11 @@ class AdminController extends Controller
 
     //   ->paginate(10);
 
+    $data['loan_type'] = DB::table('loan_type')
+    ->get();
 
-    return view('admin.loans_masterlist');
+    // $data['loan_type'] = LoanType::all();
+    return view('admin.loans_masterlist')->with($data);
   }
 
   public function loandetails($id)
