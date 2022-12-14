@@ -97,6 +97,7 @@
                                         <table class="mp-table mp-text-fs-small" id="membersTable" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
+                                                    <th>Action</th>
                                                     <th>Member ID</th>
                                                     <th>Member Name</th>
                                                     <th>Membership Date</th>
@@ -104,7 +105,6 @@
                                                     <th>Class</th>
                                                     <th>Position</th>
                                                     <th>Created At</th>
-                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
