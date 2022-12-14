@@ -179,7 +179,8 @@
                 $('#to').val('');
             } else {
                 tableMember.draw();
-            });
+            }
+        });
             $('#search_value').on('change', function() {
                 tableMember.draw();
             });
