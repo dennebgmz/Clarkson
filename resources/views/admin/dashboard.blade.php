@@ -2,6 +2,9 @@
 @section('content_body')
     <div class="container mp-container">
         <link href="/css/css-module/global_css/global.css" rel="stylesheet">
+        <style>
+            
+        </style>
         
         <div class="row row no-gutters mp-mt4">
             <div class="col-12 mp-text-right" style="display: flex; flex-direction: row; justify-content: right">
@@ -225,7 +228,14 @@
              </div>
         <div class="popup-body">
             <div class="container">
+                
                 <form id="addCampus" method="POST">
+                    <div class="row">
+                        <div class="col-12">
+                            <a href="{{ url('/admin/exportCampus') }}" class="export_campus">Export Campus</a>
+                        </div>
+                    </div>
+
                     <input type="hidden" name="_token" value="<?php echo csrf_token(); ?>"><input type="hidden"
                         name="_token" value="<?php echo csrf_token(); ?>">
 
@@ -265,16 +275,18 @@
                         <div class="col-12 save-button">
                             <button type="submit" class=" button_style mp-button">
                         Save Changes</button>
+                          
                         </div>
                     </div>
- 
-                    <a href="{{ url('/admin/exportCampus') }}">Export Campus</a>
- 
                 </form>
+                <hr>
                 <div class="mp-overflow-x">
-                    <table class="mp-table mp-text-fs-small " id="campusTable" cellspacing="0" width="100%">
+                    
+                    <table class="mp-table mp-text-fs-small table_style " id="campusTable" cellspacing="0" width="100%">
                         <thead>
+                           
                             <tr>
+                               
                                 <th>Campus Key</th>
                                 <th>Campus</th>
                                 <th>Cluster</th>
@@ -312,6 +324,12 @@
                 "ajax": {
                     "url": "{{ route('dataCampuses') }}",
                 },
+                //  columnDefs: [
+                //     {
+                //         targets: -1,
+                //         className: 'dt-body-right'
+                //     }
+                // ]
             });
 
             load_upcontri();
