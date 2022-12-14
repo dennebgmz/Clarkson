@@ -27,10 +27,7 @@
         </div>
         <div class="row no-gutters mp-mb4">
             <div class="col-12 ">
-                <div class="row no-gutters custom_header">
-                    <div class="col m-5">
-                            <div class="container bottom-divider top-divider">
-                                <div style="display: flex; flex-direction: row; gap: 10px; justify-content: right">
+                 <div class= "mp-top-button" style="display: flex; flex-direction: row; gap: 10px; justify-content: right">
                                 @if (getUserdetails()->role == 'SUPER_ADMIN')
                                 <span>
                                     <a href="{{ url('/admin/summary') }}" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Generate Summary Report</a>
@@ -41,6 +38,10 @@
                                     </span>
                                 {{-- <button type="button" class="mp-button mp-button--accent" id="printMember">Print</button> --}}
                                 </div>
+                <div class="row no-gutters custom_header">
+                    <div class="col m-5">
+                            <div class="container bottom-divider top-divider">
+                               
                                 <div class="row">
                                     <div class="col">
                                          <label for="" class="filter-text">Filtering Section</label>   
@@ -70,7 +71,7 @@
                                     </div>
                                     <div class="col-md-12 col-xl-5">
                                         <div class="row">
-                                           <label for="row">Date Range</label>
+                                           <label for="row">Date Filter</label>
                                         </div>
                                         <div class="row date_range">
                                             <input type="date" id="from" class="radius-1 border-1 date-input outline" style="height: 30px;">
