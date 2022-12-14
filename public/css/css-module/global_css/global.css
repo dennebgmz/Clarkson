@@ -118,3 +118,13 @@
     border-width: thin;
     border-color: var(--c-primary);
 }
+
+.custom_header {
+    background-color: var(--c-accent);
+    color: white;
+}
+
+.filter-text {
+    font-size: 30px;
+    text-align: center;
+}

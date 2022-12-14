@@ -4801,8 +4801,8 @@ tfoot {
 .items-between {
     justify-content: space-between;
     gap: 10px;
-    margin-left: .2rem;
-    margin-right: .2rem;
+    margin-left: 1rem;
+    margin-right: 1rem;
 }
 
 .radius-1 {
@@ -4816,11 +4816,11 @@ tfoot {
 .date-input {
     padding: 1px 4px 0 4px;
     transition: 0.2s;
-    border:1px solid #aaa;
+    border: 1px solid #aaa;
 }
 
 .select-field {
-    border:1px solid #aaa;
+    border: 1px solid #aaa;
     transition: 0.2s;
 }
 
@@ -4840,7 +4840,7 @@ tfoot {
 }
 
 .top-divider {
-    border-top: 2px solid;
+    /* border-top: 2px solid; */
     border-color: #ececec;
     border-color: var(--c-base-10);
     width: 100%;
@@ -4852,6 +4852,7 @@ tfoot {
     .field-filter {
         grid-template-columns: 1fr;
     }
+
     .date_range {
         justify-content: center;
         flex-direction: column;
