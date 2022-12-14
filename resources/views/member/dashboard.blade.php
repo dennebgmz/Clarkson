@@ -77,16 +77,16 @@
                  <i class="mp-icon icon-envelope mp-mr1 mp-text-fs-medium mp-text-c-primary"></i>
                 
                
-                  <a id="email" href="#" class="mp-link mp-link--primary ">
+                  <label id="email" href="#" class="mp-link mp-link--primary ">
                     {{ $member->email }}
-                  </a>
+                  </label>
                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                 <i class="mp-icon icon-phone mp-mr1 mp-text-fs-medium mp-text-c-primary"></i>
                 
                
-                  <a id="contactNo" href="#" class="mp-link mp-link--primary ">
+                  <alabel id="contactNo" href="#" class="mp-link mp-link--primary ">
                   +63{{ $member->contact_no }}
-                  </a>
+                  </label>
               </div>
 
          
