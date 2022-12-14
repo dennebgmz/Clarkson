@@ -147,3 +147,19 @@
 .mp-top-button {
     margin: 20px;
 }
+
+.active-tab {
+    padding-top: 10px;
+    background-color: var(--c-accent);
+
+}
+
+.active-tab a {
+    color: white !important;
+}
+
+.unactive-tab {
+
+    background-color: white;
+    color: black;
+}
