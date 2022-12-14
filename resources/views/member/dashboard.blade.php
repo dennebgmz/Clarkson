@@ -2,7 +2,7 @@
 @extends('layouts/main')
 @section('content_body')
 <link href="/css/css-module/global_css/global.css" rel="stylesheet">
-  <div class="container mp-container">
+  <div class="container-fluid ">
     <div class="row no-gutters mp-mh4">
  @if(prme_pr())
 
@@ -44,7 +44,7 @@
         </div>
       </div>
 
-      <div class="col-lg-6">
+      <div class="col-lg-8">
         <div class="row no-gutters">
           <div class="col-12 mp-ph2 mp-pv2">
             <div class="mp-ph4 mp-pv4 mp-card mp-card--plain">
@@ -172,7 +172,7 @@
           </div>
         </div>
       </div>
-      <div class="col-lg-6 mp-ph2 mp-pv2">
+      <div class="col-lg-4 mp-ph2 mp-pv2">
         <div class="mp-ph4 mp-pv4 mp-card">
           <div class="mp-card__header">
             <div class="mp-text-fs-medium">Statement of Account</div>
