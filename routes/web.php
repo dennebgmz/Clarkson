@@ -102,6 +102,7 @@ Route::get('/admin/deleteCampus', 'AdminController@deleteCampus');
 Route::get('/admin/editCampusKey', 'AdminController@editCampusKey');
 Route::get('/admin/editCampusName', 'AdminController@editCampusName');
 Route::get('/admin/editCluster', 'AdminController@editCluster');
+Route::get('/admin/exportCampus', 'AdminController@exportCampus');
 
 Route::get('/admin/loans', 'AdminController@loansmasterlist');
 Route::post('/admin/loanData', 'AdminController@loanMasterlistData')->name('loanData');

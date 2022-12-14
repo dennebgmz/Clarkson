@@ -67,6 +67,7 @@
 @section('scripts')
     <script src="{{ asset('dist/adminActiveLoans.js') }}"></script>
     <script type="text/javascript">
+        $('#loading').show();
         $(window).load(function() {
             $('#loading').hide();
         });

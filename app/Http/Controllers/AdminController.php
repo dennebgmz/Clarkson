@@ -382,7 +382,7 @@ class AdminController extends Controller
         $row[] = '<div class="input-name" title="Click to edit">' . $r->name . '</div>
                   <input type="hidden" class="edit_name" data-id="' . $r->id . '" value="' . $r->name . '"/>';
 
-        $row[] = '<div class="cluster_id">' . $r->cluster_id . '</div>
+        $row[] = '<div class="cluster_id" title="Click to edit">' . $r->cluster_id . '</div>
                   <div class="select_cluster" style="display:none;">' . $cluster . '</div>';
         $row[] = '<button class="delete_campus" id="' . $r->id . '" title="Delete Campus">Delete</button>';
         // $row[] = $r->campus_key;
@@ -520,9 +520,6 @@ class AdminController extends Controller
       foreach ($posts as $r) {
         $start++;
         $row = array();
-        $row[] = "<a title='View Member' class='view_member' id='" . $r->id . "'>
-                    <i class='mp-icon md-tooltip icon-book-open mp-text-c-primary mp-text-fs-large'></i>
-                  </a>";
         $row[] = $r->member_no;
         $row[] = '<span class="mp-text-fw-heavy">' . $r->last_name . ', ' . $r->first_name . ' ' . $r->middle_name . '</span>';
         $row[] = date("D M j, Y", strtotime($r->memdate));
@@ -530,7 +527,9 @@ class AdminController extends Controller
         $row[] = $r->department;
         $row[] = $r->position_id;
         $row[] = date("M j, Y", strtotime($r->created_at));
-
+        $row[] = "<a data-md-tooltip='View Member' class='view_member' id='" . $r->id . "' style='cursor: pointer'>
+                    <i class='mp-icon md-tooltip icon-book-open mp-text-c-primary mp-text-fs-large'></i>
+                  </a>";
         $data[] = $row;
       }
     }
@@ -558,7 +557,7 @@ class AdminController extends Controller
         ->leftjoin('loan_type', 'loan.type_id', '=', 'loan_type.id')
         ->leftjoin('member', 'loan.member_id', '=', 'member.id')
         ->leftjoin('users', 'member.user_id', '=', 'users.id')
-        ->groupBy('member.member_no')
+        ->groupBy('loan.id')
         ->orderBy('lastTransactionDate', 'desc')
         ->offset($start)
         ->limit($limit)
@@ -575,7 +574,7 @@ class AdminController extends Controller
         ->orWhere('last_name', 'like', "%{$search}%")
         ->orWhere('middle_name', 'like', "%{$search}%")
         ->orWhere('member.member_no', 'like', "%{$search}%")
-        ->groupBy('member.member_no')
+        ->groupBy('loan.id')
         ->offset($start)
         ->limit($limit)
         ->get();
@@ -589,7 +588,7 @@ class AdminController extends Controller
         ->orWhere('last_name', 'like', "%{$search}%")
         ->orWhere('middle_name', 'like', "%{$search}%")
         ->orWhere('member.member_no', 'like', "%{$search}%")
-        ->groupBy('member.member_no')
+        ->groupBy('loan.id')
         ->count();
     }
 
@@ -763,6 +762,42 @@ class AdminController extends Controller
     echo json_encode($output);
   }
 
+  public function exportCampus()
+  {
+    $records = DB::table('campus')
+      ->get();
+
+    $campusData = "";
+    if (count($records) > 0) {
+      $campusData .= '
+      <table>
+        <tr>
+          <th>Campus Key</th>
+          <th>Campus Name</th>
+          <th>Cluster ID</th>
+        </tr>
+      ';
+      foreach ($records as $row) {
+        $cluster = DB::table('cluster')
+          ->where('id', $row->cluster_id)
+          ->first();
+        $campusData .= '
+        <tr>
+          <td>' . $row->campus_key . '</td>
+          <td>' . $row->name . '</td>
+          <td>' . $cluster->name . '</td>
+        </tr>
+        ';
+      }
+      $campusData .= '</table>';
+    }
+
+    header('Content-Disposition: attachment; filename=List of campuses.xls');
+    header('Content-Type: application/xls');
+    header('Content-Transfer-Encoding: binary');
+    header('Cache-Control: must-revalidate');
+    echo $campusData;
+  }
   // public function printMemberData()
   // {
   //   $records = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')
