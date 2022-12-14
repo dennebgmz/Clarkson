@@ -27,7 +27,7 @@
         </div>
         <div class="row no-gutters mp-mb4">
             <div class="col-12 ">
-                <div class="row no-gutters mp-mt5 custom_header">
+                <div class="row no-gutters custom_header">
                     <div class="col m-5">
                             <div class="container bottom-divider top-divider">
                                 <div style="display: flex; flex-direction: row; gap: 10px; justify-content: right">
