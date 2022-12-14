@@ -49,16 +49,12 @@
                                         <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
                                             id="campuses_select">
                                             <option value="">Filter By Campus</option>
-                                            @foreach ($campuses as $row)
-                                                <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                            @endforeach
+                                            
                                         </select>    
                                             <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
                                             id="department_select">
                                             <option value="">Filter By Department</option>
-                                            @foreach ($department as $row)
-                                                <option value="{{ $row->id }}">{{ $row->description }}</option>
-                                            @endforeach
+                                            
                                         </select>
                                     </div>
                                 </div>
