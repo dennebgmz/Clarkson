@@ -169,6 +169,8 @@ Route::post('/admin/prmepr_generate', 'RefundController@prmepr_generate');
 Route::get('/admin/add_member', 'AdminController@add_member');
 
 Route::get('/admin/loan-app', 'LoanappController@admin_index');
+Route::get('/admin/dataLoans', 'LoanappController@dataLoans')->name('dataLoans');
+
 Route::get('/admin/loan-app-details/{id}', 'LoanappController@admin_peb_details');
 Route::get('/admin/loan-for-processing/{id}', 'LoanappController@admin_loan_processing');
 Route::post('/admin/loan-app-closed', 'LoanappController@admin_loan_closed');
