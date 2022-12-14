@@ -46,7 +46,7 @@
                                 <div class="row">
                                     <label for="" class="mp-text-c-accent mp-text-fs-large">Filter</label>
                                 </div>
-                                <div class="row items-between ">
+                                <div class="row items-between">
                                     <div class="col-md-12 col-xl-6">
                                         <div class="row">
                                            <label for="row">Fields</label>
@@ -94,6 +94,7 @@
                                         <table class="mp-table mp-text-fs-small" id="membersTable" cellspacing="0" width="100%">
                                             <thead>
                                                 <tr>
+                                                    <th>Action</th>
                                                     <th>Member ID</th>
                                                     <th>Member Name</th>
                                                     <th>Membership Date</th>
@@ -101,7 +102,6 @@
                                                     <th>Class</th>
                                                     <th>Position</th>
                                                     <th>Created At</th>
-                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>

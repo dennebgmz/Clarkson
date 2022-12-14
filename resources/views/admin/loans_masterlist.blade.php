@@ -36,7 +36,45 @@
             <div class="col-12 mp-ph2 mp-pv2">
                 <div class="row no-gutters">
                     <div class="col">
-                        <div class="mp-ph4 mp-pv4 mp-card">
+                        <div class="mp-ph4 mp-pv4 ft-card border-bottom-0" >
+                            <div class="row mp-pv4">
+                                <label for="" class="mp-text-fs-xlarge mp-text--c-white ">Filtering Section</label>
+                            </div>
+                            <div class="row items-between mp-pv4">
+                                <div class="col-md-12 col-xl-6">
+                                    <div class="row mp-text--c-white">
+                                        <label for="row">Fields</label>
+                                    </div>
+                                    <div class="row field-filter">
+                                        <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
+                                            id="campuses_select">
+                                            <option value="">Filter By Campus</option>
+                                            @foreach ($campuses as $row)
+                                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                            @endforeach
+                                        </select>    
+                                            <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
+                                            id="department_select">
+                                            <option value="">Filter By Department</option>
+                                            @foreach ($department as $row)
+                                                <option value="{{ $row->id }}">{{ $row->description }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-xl-5">
+                                    <div class="row mp-text--c-white">
+                                        <label for="row">Date Range</label>
+                                    </div>
+                                    <div class="row date_range">
+                                        <input type="date" id="from" class="radius-1 border-1 date-input outline" style="height: 30px;">
+                                        <span for="" class="self_center mv-1 mp-text--c-white">to</span>
+                                        <input type="date" id="to" class="radius-1 border-1 date-input outline" style="height: 30px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mp-ph4 mp-pv4 tb-card border-top-0">
                             <div class="mp-overflow-x">
                                 <table class="mp-table mp-text-fs-small" id="loansTable" cellspacing="0" width="100%">
                                     <thead>
