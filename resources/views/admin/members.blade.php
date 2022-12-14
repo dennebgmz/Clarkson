@@ -19,18 +19,18 @@
         }
     </style>
     <link href="/css/css-module/global_css/global.css" rel="stylesheet">
-    <div class="container mp-container">
+    <div class="container mp-container ">
         <div class="row no-gutters mp-mt5">
             <div class="col-12 mp-ph2 mp-pv2 mp-text-fs-large mp-text-c-accent">
                 Members
             </div>
         </div>
         <div class="row no-gutters mp-mb4">
-            <div class="col-12 mp-ph2 mp-pv2">
-                <div class="row no-gutters">
-                    <div class="col">
-                        <div class="mp-ph3 mp-pv4 mp-card ">
-                            <div style="display: flex; flex-direction: row; gap: 10px; justify-content: right">
+            <div class="col-12 ">
+                <div class="row no-gutters mp-mt5 custom_header">
+                    <div class="col m-5">
+                            <div class="container bottom-divider top-divider">
+                                <div style="display: flex; flex-direction: row; gap: 10px; justify-content: right">
                                 @if (getUserdetails()->role == 'SUPER_ADMIN')
                                 <span>
                                     <a href="{{ url('/admin/summary') }}" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Generate Summary Report</a>
@@ -38,13 +38,13 @@
                                 @endif
                                 <span>
                                     <a href="{{ url('/admin/exportMember') }}" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Export Data</a>
-                                </span>
-                            {{-- <button type="button" class="mp-button mp-button--accent" id="printMember">Print</button> --}}
-                            </div>
-
-                            <div class="container bottom-divider top-divider">
+                                    </span>
+                                {{-- <button type="button" class="mp-button mp-button--accent" id="printMember">Print</button> --}}
+                                </div>
                                 <div class="row">
-                                    <label for="" class="mp-text-c-accent mp-text-fs-large">Filter</label>
+                                    <div class="col">
+                                         <label for="" class="filter-text">Filtering Section</label>   
+                                    </div> 
                                 </div>
                                 <div class="row items-between ">
                                     <div class="col-md-12 col-xl-6">
@@ -80,9 +80,12 @@
                                     </div>
                                 </div>
                             </div>
-                           
-
-                            <hr>
+                    </div>
+                </div>
+                <div class="row no-gutters">
+                    <div class="col ">
+                        <div class="mp-ph3 mp-pv4 mp-card ">
+                          
                             <div class="">
                                 <div class="row">
                                     <div class="col-12 ">
