@@ -282,8 +282,8 @@ class LoanappController extends Controller
         $start++;
         $row = array();
 
-        $row[] = "<a data-md-tooltip='View Details' class='view_details' id='" . $loan->id . "' style='cursor: pointer'>
-                  <i class='mp-icon md-tooltip icon-book-open mp-text-c-primary mp-text-fs-large'></i>
+        $row[] = "<a data-md-tooltip='View Details' class='view_details md-tooltip--right' id='" . $loan->id . "' style='cursor: pointer'>
+                  <i class='mp-icon md-tooltip--right icon-book-open mp-text-c-primary mp-text-fs-large'></i>
                 </a>";
         $row[] = date("m/d/Y h:i A", strtotime($loan->date_created));
         $row[] = $loan->member_no;

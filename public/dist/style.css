@@ -4885,6 +4885,10 @@ tfoot {
     border-top-right-radius: 0 !important;
 }
 
+.border-top-left-0 {
+    border-top-left-radius: 0 !important;
+}
+
 .border-bottom-0 {
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
@@ -4907,6 +4911,19 @@ tfoot {
     align-items: stretch
 }
 
+.flex-right {
+    display: flex; 
+    flex-direction: row; 
+    gap: 10px; 
+    justify-content: right
+}
+
+.search_field {
+    width: 350px;
+    padding: 4px;
+    padding-top: 6px;
+}
+
 .up-button {
     background-color: var(--c-accent) !important;
     color: white !important;
@@ -4924,5 +4941,17 @@ tfoot {
     .date_range {
         justify-content: center;
         flex-direction: column;
+    }
+
+    .search_field {
+        width: 100%;
+        padding: 4px;
+        padding-top: 6px;
+    }
+}
+
+@media (min-width:1200px) {
+    .loan_container {
+        max-width: 1217px;
     }
 }
