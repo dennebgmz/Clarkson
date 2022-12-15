@@ -83,14 +83,9 @@ padding:2px;
                                            <label for="row">Fields</label>
                                         </div>
                                         <div class="row field-filter">
-                                            <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
-                                                id="campuses_select">
-                                                <option value="">Filter By Campus</option>
-                                                <!-- loop here -->
-                                            </select>    
                                                 <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
                                                 id="department_select">
-                                                <option value="">Filter By Department</option>
+                                                <option value="">Filter By Account</option>
                                                <!-- loop here -->
                                             </select>
                                         </div>

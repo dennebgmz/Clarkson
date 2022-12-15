@@ -114,6 +114,8 @@ class MemberController extends Controller
 
     public function equity()
     {
+
+      
       $member= User::where('users.id',Auth::user()->id)
       ->select('*','member.id as member_id','users.id as user_id','campus.name as campus_name')
       ->leftjoin('member','users.id','=','member.user_id')
