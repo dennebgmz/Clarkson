@@ -36,7 +36,9 @@
                         </span>
                     @endif
                     <span>
-                      <a href="#" id="exportEquity" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Export Data</a>
+                        <a href="#" id="exportEquity"
+                            class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Export
+                            Data</a>
                     </span>
                     {{-- <button type="button" id="printMember">Print</button> --}}
                 </div>
@@ -83,21 +85,22 @@
                                                 <div class="row items-between " style="margin:15px">
                                                     <div class="col-md-12 col-xl-6">
                                                         <div class="row">
-                                                            <label for="row">Fields</label>
+                                                            <label for="row">Filter By Account</label>
                                                         </div>
                                                         <div class="row field-filter">
                                                             <select name="" class="radius-1 outline select-field"
                                                                 style="width: 100%; height: 30px" id="filter_account">
-                                                                <option value="">Filter By Account</option>
+                                                                <option value="">Show all</option>
                                                                 @foreach ($account as $row)
-                                                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                                                    <option value="{{ $row->id }}">{{ $row->name }}
+                                                                    </option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12 col-xl-5">
                                                         <div class="row">
-                                                            <label for="row">Date Range</label>
+                                                            <label for="row">Date Filter</label>
                                                         </div>
                                                         <div class="row date_range">
                                                             <input type="date" id="from"
@@ -117,83 +120,31 @@
                                     <div class="row no-gutters">
                                         <div class="col ">
                                             <div class="mp-ph4 mp-pv4 mp-card mp-card--tabbed">
-                                              <input type="text" id="search_value" placeholder="Serach By Member No and Last Name">
+                                                <div class="row">
+                                                    <div class="col-4 ">
+                                                        <label for="" class="mp-text-c-accent mp-text-fs-large">Member's Equity</label>
+                                                    </div>
+                                                    <div class="col-8">
+                                                        <input type="text" id="search_value"
+                                                            placeholder="Search by transaction">
+                                                    </div>
+                                                </div>
                                                 <div class="mp-overflow-x">
 
-                                                  <table class="mp-table mp-text-fs-small" id="equityTable" cellspacing="0" width="100%">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Action</th>
-                                                            <th>Member ID</th>
-                                                            <th>Member Name</th>
-                                                            <th>Membership Date</th>
-                                                            <th>Campus</th>
-                                                            <th>Class</th>
-                                                            <th>Position</th>
-                                                            <th>Created At</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-        
-                                                    </tbody>
-                                                  </table>
-
-
-
-
-                                                    <table class="mp-table mp-text-fs-small">
+                                                    <table class="mp-table mp-text-fs-small" id="equityTable"
+                                                        cellspacing="0" width="100%">
                                                         <thead>
                                                             <tr>
                                                                 <th>Date</th>
                                                                 <th>Transaction</th>
                                                                 <th>Account</th>
-                                                                <th class="mp-text-center">Debit</th>
-                                                                <th class="mp-text-center">Credit</th>
-                                                                <th class="mp-text-center">Balance</th>
+                                                                <th>Debit</th>
+                                                                <th>Credit</th>
+                                                                <th>Balance</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <?php
-                                                            
-                                                            $curdate = '';
-                                                            $amount = '';
-                                                            $reference = '';
-                                                            foreach ($equity as $key => $value) {
-                                                                if ($curdate == $value->date && number_format($value->amount, 2) == $amount && $reference == $value->reference_no) {
-                                                                    unset($equity[$key - 1]);
-                                                                    unset($equity[$key]);
-                                                                }
-                                                            
-                                                                $curdate = $value->date;
-                                                                $amount = number_format(abs($value->amount), 2);
-                                                            }
-                                                            ?>
-                                                            <?php
-                                                            $curdate = '';
-                                                            $reference = ''; ?>
-                                                            @foreach ($equity as $contri)
-                                                                <tr>
-                                                                    <td>{{ date('m/d/Y', strtotime($contri->date)) }}</td>
-                                                                    <td>{{ $contri->reference_no }}</td>
-                                                                    <td>{{ $contri->name }}</td>
-                                                                    <td class="mp-text-right">
-                                                                        {{ $contri->amount < 0 ? 'PHP ' . number_format(abs($contri->amount), 2) : '' }}
-                                                                    </td>
-                                                                    <td class="mp-text-right">
-                                                                        {{ $contri->amount >= 0 ? 'PHP ' . number_format($contri->amount, 2) : '' }}
-                                                                    </td>
-                                                                    @if ($curdate == $contri->date)
-                                                                        <td class="mp-text-right"></td>
-                                                                    @else
-                                                                        <td class="mp-text-right">
-                                                                            {{ 'PHP ' . number_format($contri->balance, 2) }}
-                                                                        </td>
-                                                                        <?php
-                                                                        $curdate = $contri->date;
-                                                                        ?>
-                                                                    @endif
-                                                                </tr>
-                                                            @endforeach
+
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -205,11 +156,7 @@
                                                             Download PDF
                                                         </a>
                                                     </div>
-                                                    <div>
 
-                                                        {{ $equity->links('pagination.default') }}
-
-                                                    </div>
                                                 </div>
 
                                             </div>
@@ -241,7 +188,7 @@
             $('#loading').hide();
         });
         $(document).ready(function() {
-          var tableMember = $('#equityTable').DataTable({
+            var tableEquity = $('#equityTable').DataTable({
                 language: {
                     search: '',
                     searchPlaceholder: "Search Here...",
@@ -261,6 +208,36 @@
                     }
                 },
             });
+            $('#filter_account').on('change', function() {
+                tableEquity.draw();
+            });
+            $('#search_value').on('change', function() {
+                tableEquity.draw();
+            });
+            $('#from').on('change', function() {
+                if ($('#from').val() > $('#to').val() && $('#to').val() != '') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Invalid Date Range,Please Check the date. Thank you!',
+                    });
+                    $('#from').val('');
+                } else {
+                    tableEquity.draw();
+                }
+            });
+            $('#to').on('change', function() {
+                if ($('#to').val() < $('#from').val()) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Invalid Date Range,Please Check the date. Thank you!',
+                    });
+                    $('#to').val('');
+                } else {
+                    tableEquity.draw();
+                }
+            });
 
 
             $(document).on('click', '#exportEquity', function(e) {
@@ -278,7 +255,8 @@
                     var dt_to = 0;
                 }
                 console.log(id);
-                var url = "{{ URL::to('/member/exportEquity') }}" + '/' + id + '/' + dt_from + '/' + dt_to; //YOUR CHANGES HERE...
+                var url = "{{ URL::to('/member/exportEquity') }}" + '/' + id + '/' + dt_from + '/' +
+                dt_to; //YOUR CHANGES HERE...
                 window.open(url, '_blank');
             });
         });
