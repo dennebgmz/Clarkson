@@ -72,58 +72,61 @@ ul.pagination li a {
             <br>
             
             <div class="mp-overflow-x">
-              <table class="mp-table mp-text-fs-small">
+            <div class="mp-ph4 mp-pv4 ft-card border-bottom-0" >
+                            <div class="row mp-pv4">
+                                <label for="" class="mp-text-fs-xlarge mp-text--c-white ">Filtering Section</label>
+                            </div>
+                            <div class="row items-between mp-pv4">
+                                <div class="col-md-12 col-xl-6">
+                                    <div class="row mp-text--c-white">
+                                        <label for="row">Fields</label>
+                                    </div>
+                                    <div class="row field-filter">
+                                        <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
+                                                id="loan_type">
+                                                <option value="">Filter By Loan Type</option>
+                                                @foreach ($loan_type as $row)
+                                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                                @endforeach
+                                            </select>    
+                                            <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
+                                                id="loan_status">
+                                                <option value="">Filter By Status</option>
+                                                <option value="PROCESSING">PROCESSING</option>
+                                                <option value="DONE">DONE</option>
+                                                <option value="CONFIRMED">CONFIRMED</option>
+                                                <option value="CANCELLED">CANCELLED</option>
+                                                
+                                            </select>    
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-xl-5">
+                                    <div class="row mp-text--c-white">
+                                        <label for="row">Date Range based on Date Applied Date</label>
+                                    </div>
+                                    <div class="row date_range">
+                                        <input type="date" id="from" class="radius-1 border-1 date-input outline" style="height: 30px;">
+                                        <span for="" class="self_center mh-1 mp-text--c-white">to</span>
+                                        <input type="date" id="to" class="radius-1 border-1 date-input outline" style="height: 30px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+              <table class="mp-table mp-text-fs-small" id="member_loan_table" cellspacing="0" width="100%">
                 <thead>
                   <tr>
+                    <th class="mp-text-center"></th>
                     <th class="mp-text-center">Date Applied</th>
                     <th class="mp-text-center">Loan Application Number</th>
                     <th class="mp-text-center">Loan Type</th>
                     <th class="mp-text-center">Loan Status</th>
-                    <th class="mp-text-center"></th>
-                    
                   </tr>
                 </thead>
                 <tbody>
-                 
-                 @foreach($loans as $loan)
-                 <tr>
-                  <td class="mp-text-center">{{date("m/d/Y h:i A", strtotime($loan->date_created))}}</td>
-                  <td class="mp-text-center">{{$loan->control_number}}</td>
-                  <td >{{$loan->description.' ('.$loan->name.')'}}</td>
-                  @if($loan->status=="SUBMITTED")
-                  <td class="mp-text-center" style="color:#feb236;"><strong>{{$loan->status}}</strong></td>
-                  @endif
-                  @if($loan->status=="PROCESSING")
-                  <td class="mp-text-center" style="color:#82b74b;"><strong>{{$loan->status}}</strong></td>
-                  @endif
-
-                  @if($loan->status=="DONE")
-                  <td class="mp-text-center" style="color:#034f84;"><strong>FOR MEMBER CONFIRMATION</strong></td>
-                  @endif
-
-                  @if($loan->status=="CANCELLED")
-                  <td class="mp-text-center" style="color:#d64161;"><strong>{{$loan->status}}</strong></td>
-                  @endif
-                  @if($loan->status=="CONFIRMED")
-                  <td class="mp-text-center" style="color:#894168"><strong>{{$loan->status}}</strong></td>
-                  @endif
-                  <td class="mp-text-center">
-                    <a data-md-tooltip="View Details" href="{{url('/member/loan-details').'/'.$loan->id}}">
-                      <i class="mp-icon md-tooltip icon-book-open mp-text-c-primary mp-text-fs-large"></i>
-                    </a>
-                    
-                  </td>
-                  @endforeach
-                  
-                  
-                  
-                </tr>
-                
-              </tbody>
+                </tbody>
             </table>
 
           </div>
-          {{$loans->links('pagination.default')}}
 
           
           
@@ -142,6 +145,61 @@ ul.pagination li a {
 @section('scripts')
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script type="text/javascript">
+  $(document).ready(function() {
+            var member_loan_table = $('#member_loan_table').DataTable({
+                language: {
+                    search: '',
+                    searchPlaceholder: "Search Loan Application No.",
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br>Loading...',
+                },
+                "ordering": false,
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "{{ route('member_loans') }}",
+                    "data": function(data) {
+                        // data._token = "ss";
+                        data.loan_type = $('#loan_type').val();
+                        data.loan_status = $('#loan_status').val();
+                        data.dt_from = $('#from').val();
+                        data.dt_to = $('#to').val();
+                    }
+                },
+            });
+            $(document).on('change', '#loan_type', function(e) {
+                member_loan_table.draw();
+            });
+            $(document).on('change', '#loan_status', function(e) {
+                member_loan_table.draw();
+            });
+            $('#from').on('change', function() {
+                if($('#from').val() > $('#to').val() && $('#to').val() != '')
+                {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Invalid Date Range,Please Check the date. Thank you!',  
+                        });
+                    $('#from').val('');
+                }else{
+                    member_loan_table.draw();
+                }
+                
+            });
+            $('#to').on('change', function() {
+                if($('#to').val() < $('#from').val())
+                {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Invalid Date Range,Please Check the date. Thank you!',                       
+                        });
+                    $('#to').val('');
+                }else{
+                    member_loan_table.draw();
+                }
+            });
+        });
  
 </script>
 @endsection
