@@ -37,7 +37,7 @@
                                 </span>
                                 @endif
                                 <span>
-                                    <a href="{{ url('/admin/exportMember') }}" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Export Data</a>
+                                    <a href="#" id="exportMember" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Export Data</a>
                                     </span>
                                 {{-- <button type="button" class="mp-button mp-button--accent" id="printMember">Print</button> --}}
                                 </div>
@@ -201,6 +201,30 @@
                 window.open(url, 'targetWindow', 'resizable=yes,width=1000,height=1000');
             });
 
+            $(document).on('click', '#exportMember', function(e) {
+                if ($('#campuses_select').val() != "") {
+                    var camp_id = $('#campuses_select').val();
+                } else {
+                    var camp_id = 0;
+                }
+
+                if ($('#department_select').val() != "") {
+                    var dept = $('#department_select').val();
+                } else {
+                    var dept = 0;
+                }
+
+                if ($('#from').val() != "" && $('#to').val() != "") {
+                    var dt_from = $('#from').val();
+                    var dt_to = $('#to').val();
+                } else {
+                    var dt_from = 0;
+                    var dt_to = 0;
+                }
+                // console.log(id);
+                var url = "{{ URL::to('/admin/exportMember') }}" + '/' + camp_id + '/' + dept + '/' + dt_from + '/' + dt_to; //YOUR CHANGES HERE...
+                window.open(url, '_blank');
+            });
 
         });
     </script>

@@ -610,16 +610,31 @@ class AdminController extends Controller
     echo json_encode($json_data);
   }
 
-  public function getMemberData()
+  public function getMemberData($camp_id,$dept,$dt_from,$dt_to)
   {
-    $records = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')
-      ->leftjoin('users', 'member.user_id', 'users.id')
-      ->leftjoin('campus', 'member.campus_id', 'campus.id')
-      ->leftjoin('department', 'member.department_id', 'department.id')
-      ->get();
+    DB::enableQueryLog();
+    if(!empty($camp_id) && $camp_id != 0){
+      $records = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')
+        ->leftjoin('users', 'member.user_id', 'users.id')
+        ->leftjoin('campus', 'member.campus_id', 'campus.id')
+        ->leftjoin('department', 'member.department_id', 'department.id')
+        ->where('member.campus_id', $camp_id);
+    }else{
+      $records = Member::select('users.*', DB::raw('CONCAT(users.first_name," ",users.last_name) AS full_name'), 'member.member_no as member_no', 'member.position_id', 'campus.name as campus', 'department.name as department', 'member.membership_date as memdate')
+        ->leftjoin('users', 'member.user_id', 'users.id')
+        ->leftjoin('campus', 'member.campus_id', 'campus.id')
+        ->leftjoin('department', 'member.department_id', 'department.id');
+    }
+    if (!empty($dept) && $dept != 0) {
+      $records->where('member.department_id', $dept);
+    }
+    if (!empty($dt_from) && !empty($dt_to) && $dt_from != 0 && $dt_to != 0) {
+      $records->whereBetween(DB::raw('DATE(member.membership_date)'), array($dt_from, $dt_to));
+    }
 
     $memData = "";
-    if (count($records) > 0) {
+    $posts = $records->get();
+    if (count($posts) > 0) {
       $memData .= '
       <table>
         <tr>
@@ -633,7 +648,7 @@ class AdminController extends Controller
           <th>Position</th>
         </tr>
       ';
-      foreach ($records as $row) {
+      foreach ($posts as $row) {
         $memData .= '
         <tr>
           <td>' . $row->member_no . '</td>
@@ -654,7 +669,8 @@ class AdminController extends Controller
     header('Content-Type: application/xls');
     header('Content-Transfer-Encoding: binary');
     header('Cache-Control: must-revalidate');
-    echo $memData;
+    $query = DB::getQueryLog();
+    echo($memData);
   }
   public function getLoanData($id,$dt_from,$dt_to)
   {
