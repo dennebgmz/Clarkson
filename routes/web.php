@@ -64,6 +64,7 @@ Route::get('/generate/soa', 'MemberController@generatesoa');
 Route::get('/generate/equity', 'MemberController@generateequity');
 Route::get('/generate/loans', 'MemberController@generateloans');
 
+Route::get('/member/member_loan', 'LoanappController@member_loandetails')->name('member_loans');
 Route::get('/member/loan-app', 'LoanappController@index');
 Route::get('/member/coborrower', 'LoanappController@index_coborrower');
 Route::get('/member/new-loan', 'LoanappController@new_loan');

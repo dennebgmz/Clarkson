@@ -39,19 +39,97 @@ class LoanappController extends Controller
 
     // dd(getUserdetails());
 
-    $loans = DB::table('loan_applications')
-      ->select('loan_applications.*', 'loan_type.name', 'loan_type.description')
-      ->leftjoin('loan_type', 'loan_applications.loan_type', 'loan_type.id')
-      ->where('loan_applications.member_no', getUserdetails()->member_no)
-      ->orderByRaw("field(loan_applications.status,'PROCESSING','DONE','CONFIRMED','CANCELLED')")
-      ->orderBy('loan_applications.loan_type', 'asc')
-      ->orderBy('loan_applications.date_created', 'desc')
 
-      ->paginate(10);
+    $loan_type = DB::table('loan_type')
+      ->select('*')
+      ->get();
+    $data = array(
+      'loan_type' => $loan_type,
+    );
 
-    return view('member.loan_application.index', array('loans' => $loans));
+    return view('member.loan_application.index')->with($data);
   }
+  public function member_loandetails(Request $request)
+  {
+    ## Read value
+    DB::enableQueryLog();
+    $totalRecords = DB::table('loan_applications')
+    ->select('loan_applications.*', 'loan_type.name', 'loan_type.description')
+    ->leftjoin('loan_type','loan_applications.loan_type','loan_type.id')
+    ->where('loan_applications.member_no',getUserdetails()->member_no)
+    ->orderByRaw("field(loan_applications.status,'PROCESSING','DONE','CONFIRMED','CANCELLED')")
+    ->orderBy('loan_applications.loan_type','asc')
+    ->orderBy('loan_applications.date_created','desc')
+    ->count();
+    $draw = $request->get('draw');
+    $start = $request->get("start");
+    $rowperpage = $request->get("length"); // Rows display per page
+    $columnIndex_arr = $request->get('order');
+    $columnName_arr = $request->get('columns');
+    $order_arr = $request->get('order');
+    $search_arr = $request->get('search');
+    $columnIndex = $columnIndex_arr[0]['column']; // Column index
+    // $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+    $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+    $searchValue = $search_arr['value']; // Search value
+    // Custom search filter 
+    $loan_type  = $request->get('loan_type');
+    $loan_status = $request->get('loan_status');
+    $dt_from = $request->get('dt_from');
+    $dt_to = $request->get('dt_to');
 
+    $records=DB::table('loan_applications')
+    ->select('loan_applications.*', 'loan_type.name', 'loan_type.description')
+    ->leftjoin('loan_type','loan_applications.loan_type','loan_type.id')
+    ->where('loan_applications.member_no',getUserdetails()->member_no)
+    ->orderByRaw("field(loan_applications.status,'PROCESSING','DONE','CONFIRMED','CANCELLED')")
+    ->orderBy('loan_applications.loan_type','asc')
+    ->orderBy('loan_applications.date_created','desc');
+    ## Add custom filter conditions
+    if (!empty($searchValue)) {
+      $records->where('control_number','%',"'$searchValue'");
+    }
+    if (!empty($loan_type)) {
+      $records->where('loan_type.id', $loan_type);
+    }
+    if (!empty($loan_status)) {
+      $records->where('loan_applications.status', $loan_status);
+    } 
+    if (!empty($dt_from) && !empty($dt_to)) {
+    $records->whereBetween(DB::raw('loan_applications.date_created'), array($dt_from, $dt_to));
+    }
+    $totalRecordswithFilter = $records->count();
+    //Search Box
+    
+    $posts = $records->skip($start)
+      ->take($rowperpage)
+      ->get();
+    $query = DB::getQueryLog();
+    $data = array();
+    if ($posts) {
+
+      foreach ($posts as $r) {
+        $start++;
+        $row = array();
+        $row[] = '<a data-md-tooltip="View Details" href="#">
+                  <i class="mp-icon md-tooltip icon-book-open mp-text-c-primary mp-text-fs-large"></i>
+                  </a>';
+        $row[] = date("m/d/Y h:i A", strtotime($r->date_created));
+        $row[] = $r->control_number;
+        $row[] = $r->name;
+        $row[] = $r->status;
+        $data[] = $row;
+      }
+    }
+    $json_data = array(
+      "draw" => intval($draw),
+      "recordsTotal" => intval($totalRecords),
+      "recordsFiltered" => intval($totalRecordswithFilter),
+      "query" => $query ,
+      "data" => $data
+    );
+    echo json_encode($json_data);
+  }
   public function index_coborrower()
   {
     return view('member.loan_application.index_coborrower');
