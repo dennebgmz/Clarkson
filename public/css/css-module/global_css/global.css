@@ -163,3 +163,11 @@
     background-color: white;
     color: black;
 }
+
+#search_value {
+    width: 100%;
+    max-width: 300px;
+    margin-right: 0;
+    float: right;
+    padding: 5px;
+}
