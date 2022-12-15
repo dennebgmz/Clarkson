@@ -171,3 +171,16 @@
     float: right;
     padding: 5px;
 }
+
+
+.thead_style {
+    background-color: var(--c-primary);
+    color: white;
+    padding: 5px;
+}
+
+.mp_header_style {
+    background-color: var(--c-accent);
+    color: white !important;
+    padding: 15px;
+}

@@ -1,8 +1,8 @@
 
 @extends('layouts/main')
 @section('content_body')
-<div class="container mp-container">
-
+<div class="container-fluid">
+  <link href="/css/css-module/global_css/global.css" rel="stylesheet">
   <div class="row no-gutters mp-mt5">
     <div class="col-12 mp-ph2 mp-pv2 mp-text-fs-large mp-text-c-primary">
       <a class="mp-link mp-link--primary" href="{{url('/member/dashboard')}}">
@@ -13,7 +13,7 @@
   </div>
 
   <div class="row no-gutters">
-    <div class="col-lg-6">
+    <div class="col-lg-8">
       <div class="row no-gutters">
         <div class="col-12 mp-ph2 mp-pv2">
           <div class="mp-ph4 mp-pv4 mp-card mp-card--plain">
@@ -57,17 +57,17 @@
           </div>
         </div>
         <div class="col-12 mp-ph2 mp-pv2">
-          <div class="mp-ph4 mp-pv4 mp-card mp-card--plain" >
-            <div class="mp-mb2 mp-text-fs-medium">
+          <div class="mp-card mp-card--plain  mp-ph4 mp-pv4 " >
+            <div class="mp-mb2 mp-text-fs-medium ">
               Beneficiaries
             </div>
-            <div class="mp-overflow-x">
-              <table class="mp-table mp-table--mini">
-                <thead>
+            <div class="mp-overflow-x ">
+              <table class="mp-table table_style" >
+                <thead >
                   <tr>
-                    <th>Name</th>
-                    <th>Birth Date</th>
-                    <th>Relationship to Member</th>
+                    <th class="thead_style">Name</th>
+                    <th class="thead_style">Birth Date</th>
+                    <th class="thead_style">Relationship to Member</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -108,20 +108,20 @@
                 </tbody>
               </table>
             </div> -->
-            <div class="mp-mt1 mp-text-right">
+            <div class="mp-mt1 mp-text-right  mp-ph4 mp-pv4 ">
               <a href="{{url('/member/edit_beneficiaries')}}" class="mp-link mp-link--primary">Edit</a>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="col-lg-6 mp-ph2 mp-pv2">
-      <div class="mp-ph4 mp-pv4 mp-card">
+    <div class="col-lg-4 mp-ph2 mp-pv2">
+      <div class="mp-card">
         <div class="mp-card__header" style="padding-bottom: 10px!important; margin-bottom:10px!important">
-          <div class="mp-text-fs-medium">Member's Details</div>
+          <div class="mp-text-fs-medium mp_header_style">Member's Details</div>
           <!--   <div class="mp-text-c-light-gray">As of {{ date("m/d/Y") }}</div> -->
         </div>
-        <div class="mp-card__body mp-mh5" style="padding-top: 0px!important; margin-top:0px!important" >
+        <div class="mp-card__body mp-mh5 mp-pb4 mp-pv4" style="padding-top: 0px!important; margin-top:0px!important" >
           <!--   <div class="mp-mb3 mp-text-fw-heavy">Your Member's Equity</div> -->
           
           <div class="row mp-mb2">
@@ -167,7 +167,7 @@
             <div class="col-md-auto">PHP {{  $details ? number_format($details->monthly_salary,2) : '0.00' }}</div>
           </div>
         </div>
-        <div class="mp-card__footer mp-text-right">
+        <div class="mp-card__footer mp-text-right mp-pb4 mp-pv4">
           <a href="{{url('/member/edit_details')}}" class="mp-link mp-link--primary">
             Edit
           </a>
@@ -175,7 +175,7 @@
       </div>
     </div>
 
-    <div class="col-6 mp-ph2 mp-pv2">
+    <div class="col-8 mp-ph2 mp-pv2">
       <div class="mp-ph4 mp-pv4 " style="">
 
         <div class="mp-overflow-x">
@@ -184,17 +184,17 @@
       </div>
     </div>
 
-    <div class="col-lg-6 mp-ph2 mp-pv2">
-      <div class="mp-ph4 mp-pv4 mp-card">
+    <div class="col-lg-4 mp-ph2 mp-pv2">
+      <div class="mp-card">
         <div class="mp-card__header" style="padding-bottom: 10px!important; margin-bottom:10px!important">
-          <div class="mp-text-fs-medium">Member's Details (For Approval)</div>
+          <div class="mp-text-fs-medium mp_header_style">Member's Details (For Approval)</div>
           <!--   <div class="mp-text-c-light-gray">As of {{ date("m/d/Y") }}</div> -->
-          <div class="">
+          <div class="mp-ph4 mp-pv4 ">
             <span style="font-size:14px;">To edit or change the following information, please fill out the <a class="mp-link mp-link--primary" href="https://www.upprovidentfund.com/forms/">Member's Updating Form</a> and submit to a UP Provident Fund office near you.</span>
 
           </div>
         </div>
-        <div class="mp-card__body mp-mh5" style="padding-top: 0px!important; margin-top:0px!important">
+        <div class="mp-card__body mp-mh5 mp-ph4 mp-pv4 " style="padding-top: 0px!important; margin-top:0px!important">
           <!--   <div class="mp-mb3 mp-text-fw-heavy">Your Member's Equity</div> -->
           <div class="row mp-mb2">
             <div class="col mp-text-fw-heavy">Email:</div>

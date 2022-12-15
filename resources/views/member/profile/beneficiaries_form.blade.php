@@ -1,17 +1,25 @@
 @extends('layouts/main')
 @section('content_body')
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<link href="/css/css-module/global_css/global.css" rel="stylesheet">
 <div class="container mp-container">
   <div class="row no-gutters mp-mt4 justify-content-center">
-    <div class="col-12 col-lg-10 mp-ph2 mp-pv2">
-      <div class="mp-pt4 mp-text-fs-large mp-text-c-primary">
-        Update Beneficiaries
+    <div class="col-12 mp-ph2 mp-pv2 mp-text-fs-large mp-text-c-primary">
+        <a class="mp-link mp-link--primary" href="{{url('/member/profile')}}">
+          <i class="mp-icon icon-arrow-left mp-mr1 mp-text-fs-medium"></i>
+          Back
+        </a>
       </div>
-    </div>
+    
   </div>
   <div class="row no-gutters mp-mb4 justify-content-center">
     <div class="col-12 col-lg-10 mp-ph2 mp-pv2">
       <div class="mp-ph4 mp-pv4 mp-card mp-card--plain">
+        <div class="col-12 col-lg-10 mp-ph2 mp-pv2">
+          <div class="mp-pb4 mp-text-fs-large mp-text-c-primary">
+            Update Beneficiaries
+          </div>
+        </div>
         <div class="mp-text-fs-small {{ Session::has('error') or Session::has('success') ? 'mp-mb4' : '' }}">
           @if(Session::has('error'))
           <span style="color:red"><strong>{{ Session::get('error') }}</strong></span>
@@ -25,9 +33,9 @@
 
         <div class="row no-gutters">
           <div class="col">
-            <div class="mp-pb4 mp-pv4 mp-card mp-card--tabbed" align="center">
+            <div class=" mp-card--tabbed" align="center">
                <input type="hidden" id="deleteurl" url="{{url('member/deletebene')}}" />
-              <table style="width:100%" class="mp-table mp-text-fs-small">
+              <table style="width:100%" class="mp-table table_style ">
                 <thead class="mp-text-fs-large" >
                  <tr>
                   <th style="text-align:center">Name</th>
