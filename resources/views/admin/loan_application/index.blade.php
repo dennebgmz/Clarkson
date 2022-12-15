@@ -128,14 +128,14 @@
                                     <thead>
                                         <tr>
                                             <th class="mp-text-center">Action</th>
-                                            <th class="mp-text-center">Date Applied</th>
-                                            <th class="mp-text-center">Member Number</th>
-                                            <th class="mp-text-center">Loan Application Number</th>
-                                            <th class="mp-text-center">Full Name</th>
-                                            <th class="mp-text-center">Campus</th>
-                                            <th class="mp-text-center">Loan Type</th>
-                                            <th class="mp-text-center">Application Type</th>
-                                            <th class="mp-text-center">Loan Status</th>
+                                            <th>Date Applied</th>
+                                            <th>Member Number</th>
+                                            <th>Loan Application Number</th>
+                                            <th>Full Name</th>
+                                            <th>Campus</th>
+                                            <th>Loan Type</th>
+                                            <th>Application Type</th>
+                                            <th>Loan Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
