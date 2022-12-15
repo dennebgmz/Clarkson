@@ -58,7 +58,7 @@
                                 </div>
                                 <div class="col-md-12 col-xl-5">
                                     <div class="row mp-text--c-white">
-                                        <label for="row">Date Range</label>
+                                        <label for="row">Date Range based on Last Transaction Date</label>
                                     </div>
                                     <div class="row date_range">
                                         <input type="date" id="from" class="radius-1 border-1 date-input outline" style="height: 30px;">
@@ -72,7 +72,7 @@
                         <div style="display: flex; flex-direction: row; gap: 10px; justify-content: right">
                                 <span>
                                     <a href="#" id="export_loandata" 
-                                    class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Export Data</a>
+                                    class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small" title="Export Data based on Date range and Loan Type">Export Data</a>
                                 </span>
                             </div>
                             <hr>
@@ -189,7 +189,12 @@
             window.open(url, '_blank');
         });
 
-            
+    $(document).on('click', '.view_loan_history', function(e) {
+            var id = $(this).attr('data-id');
+            console.log(id);
+            var url = "{{ URL::to('/admin/loan-details/') }}" + '/' + id; //YOUR CHANGES HERE...
+            window.location.href = url;
+        });
        
     </script>
 @endsection
