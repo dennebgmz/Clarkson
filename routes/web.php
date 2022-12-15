@@ -34,6 +34,9 @@ Route::get('/member/dashboard', 'MemberController@index');
 Route::get('/member/equity', 'MemberController@equity');
 Route::get('/member/loans', 'MemberController@loans');
 
+Route::get('/member/exportEquity/{id}/{dt_from}/{dt_to}', 'MemberController@exportEquity');
+Route::get('/member/membersEquity', 'AdminController@membersEquity')->name('equityProcessing');
+
 Route::get('/member/profile', 'MemberController@profile');
 Route::get('/member/edit_details', 'MemberController@edit_details');
 Route::post('/member/edit_details', 'MemberController@save_details');

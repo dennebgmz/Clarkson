@@ -114,8 +114,6 @@ class MemberController extends Controller
 
     public function equity()
     {
-
-      
       $member= User::where('users.id',Auth::user()->id)
       ->select('*','member.id as member_id','users.id as user_id','campus.name as campus_name')
       ->leftjoin('member','users.id','=','member.user_id')
@@ -135,11 +133,117 @@ class MemberController extends Controller
       
       ->paginate(10); 
 
-
+      $account = DB::table('contribution_account')
+                 ->get();
+                 
+      $data = array(
+        'equity' => $equity,
+        'account' => $account,
+      );
 
         // dd($equity);
-      return view('member.equity',array('equity'=>$equity));
+      return view('member.equity')->with($data);
 
+    }
+
+    public function exportEquity($id,$dt_from,$dt_to)
+    {
+      DB::enableQueryLog();
+      if(!empty($id) && $id != 0){
+        $member= User::where('users.id',Auth::user()->id)
+          ->select('*','member.id as member_id','users.id as user_id','campus.name as campus_name')
+          ->leftjoin('member','users.id','=','member.user_id')
+          ->leftjoin('campus','member.campus_id','=','campus.id')
+          ->first();
+        $equity=ContributionTransaction::select('contribution_transaction.id as id', DB::raw('ABS(amount) as abs'), 'date', 'account_id', 'contribution_id', 'reference_no', 'amount','contribution_account.name', DB::raw('(select SUM(amount) from contribution_transaction as ct left join contribution as c on ct.contribution_id = c.id where c.member_id=contribution.member_id and c.date<=contribution.date order by date desc, contribution_transaction.id desc) as balance'))
+          ->leftjoin('contribution','contribution_transaction.contribution_id','contribution.id')
+          ->leftjoin('member','contribution.member_id','member.id')
+          ->leftjoin('contribution_account','contribution_transaction.account_id','contribution_account.id')
+          ->where('contribution.member_id','=',$member->member_id)
+          ->where('contribution_transaction.amount','<>',0.00)
+          ->orderBy('date','desc')
+          ->orderBy('contribution.reference_no','desc')
+          ->orderBy('abs','desc')
+          ->orderBy('contribution_transaction.id','desc')
+          ->where('contribution_transaction.account_id', $id);
+      }else{
+        $member= User::where('users.id',Auth::user()->id)
+          ->select('*','member.id as member_id','users.id as user_id','campus.name as campus_name')
+          ->leftjoin('member','users.id','=','member.user_id')
+          ->leftjoin('campus','member.campus_id','=','campus.id')
+          ->first();
+        $equity=ContributionTransaction::select('contribution_transaction.id as id', DB::raw('ABS(amount) as abs'), 'date', 'account_id', 'contribution_id', 'reference_no', 'amount','contribution_account.name', DB::raw('(select SUM(amount) from contribution_transaction as ct left join contribution as c on ct.contribution_id = c.id where c.member_id=contribution.member_id and c.date<=contribution.date order by date desc, contribution_transaction.id desc) as balance'))
+          ->leftjoin('contribution','contribution_transaction.contribution_id','contribution.id')
+          ->leftjoin('member','contribution.member_id','member.id')
+          ->leftjoin('contribution_account','contribution_transaction.account_id','contribution_account.id')
+          ->where('contribution.member_id','=',$member->member_id)
+          ->where('contribution_transaction.amount','<>',0.00)
+          ->orderBy('date','desc')
+          ->orderBy('contribution.reference_no','desc')
+          ->orderBy('abs','desc')
+          ->orderBy('contribution_transaction.id','desc');
+      }
+      if (!empty($dt_from) && !empty($dt_to) && $dt_from != 0 && $dt_to != 0) {
+        $equity->whereBetween(DB::raw('DATE(contribution.date_added)'), array($dt_from, $dt_to));
+      }
+      $curdate = '';
+      $amount = '';
+      $reference = '';
+      $contriData = "";
+      $posts = $equity->get();
+      
+      $curdate = '';
+      $reference = '';
+      if (count($posts) > 0) {
+        $contriData .= '
+        <table>
+          <tr>
+            <th>Date</th>
+            <th>Transaction</th>
+            <th>Account</th>
+            <th>Debit</th>
+            <th>Credit</th>
+            <th>Balance</th>
+          </tr>
+        ';
+        foreach ($posts as $key => $value) {
+          if ($curdate == $value->date && number_format($value->amount, 2) == $amount && $reference == $value->reference_no) {
+              unset($posts[$key - 1]);
+              unset($posts[$key]);
+          }
+          $curdate = $value->date;
+          $amount = number_format(abs($value->amount), 2);
+        }
+        foreach ($posts as $contri) {
+          if ($curdate == $contri->date) {
+            $bal = '';
+          } else {
+            $bal = 'PHP ' . number_format($contri->balance, 2);
+            $curdate = $contri->date;
+          }
+          $debit = $contri->amount < 0 ? 'PHP ' . number_format(abs($contri->amount), 2) : '';
+          $credit = $contri->amount >= 0 ? 'PHP ' . number_format($contri->amount, 2) : '';
+
+          $contriData .= '
+          <tr>
+            <td>' . date('m/d/Y', strtotime($contri->date)) . '</td>
+            <td>' . $contri->reference_no . '</td>
+            <td>' . $contri->name . '</td>
+            <td>' . $debit . '</td>
+            <td>' . $credit . '</td>
+            <td>' . $bal . '</td>
+          </tr>
+          ';
+        }
+        $contriData .= '</table>';
+      }
+
+      header('Content-Disposition: attachment; filename=Equity report.xls');
+      header('Content-Type: application/xls');
+      header('Content-Transfer-Encoding: binary');
+      header('Cache-Control: must-revalidate');
+      $query = DB::getQueryLog();
+      echo($contriData);
     }
 
 
