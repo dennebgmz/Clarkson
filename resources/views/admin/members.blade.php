@@ -75,7 +75,7 @@
                                     </div>
                                     <div class="col-md-12 col-xl-5">
                                         <div class="row">
-                                           <label for="row">Date Range</label>
+                                           <label for="row">Filter by Membership Date</label>
                                         </div>
                                         <div class="row date_range">
                                             <input type="date" id="from" class="radius-1 border-1 date-input outline" style="height: 30px;">
@@ -97,7 +97,7 @@
                                         <label for="" class="mp-text-c-accent mp-text-fs-large">Member List</label>
                                     </div>
                                     <div class="col-8">
-                                       <input type="text" id="search_value" placeholder="Serach By Member No and Last Name">
+                                       <input type="text" id="search_value" placeholder="Search By Member ID and Last Name">
                                     </div>
                                 </div>
                                 
