@@ -48,15 +48,12 @@
                                     </div>
                                     <div class="row field-filter">
                                         <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
-                                            id="campuses_select">
-                                            <option value="">Filter By Campus</option>
-                                            
-                                        </select>    
-                                            <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
-                                            id="department_select">
-                                            <option value="">Filter By Department</option>
-                                            
-                                        </select>
+                                                id="loan_type">
+                                                <option value="">Filter By Loan Type</option>
+                                                @foreach ($loan_type as $row)
+                                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                                @endforeach
+                                            </select>    
                                     </div>
                                 </div>
                                 <div class="col-md-12 col-xl-5">
@@ -73,45 +70,12 @@
                         </div>
                         <div class="mp-ph4 mp-pv4 tb-card border-top-0">
                         <div style="display: flex; flex-direction: row; gap: 10px; justify-content: right">
-                              
                                 <span>
                                     <a href="#" id="export_loandata" 
                                     class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Export Data</a>
                                 </span>
-                           
                             </div>
-                        <div class="container bottom-divider top-divider">
-                                <div class="row">
-                                    <label for="" class="mp-text-c-accent mp-text-fs-large">Filter</label>
-                                </div>
-                                <div class="row items-between ">
-                                    <div class="col-md-12 col-xl-6">
-                                        <div class="row">
-                                           <label for="row">Fields</label>
-                                        </div>
-                                        <div class="row field-filter">
-                                            <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
-                                                id="loan_type">
-                                                <option value="">Filter By Loan Type</option>
-                                                @foreach ($loan_type as $row)
-                                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                                @endforeach
-                                            </select>    
-                                                
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 col-xl-5">
-                                        <div class="row">
-                                           <label for="row">Date Range</label>
-                                        </div>
-                                        <div class="row date_range">
-                                            <input type="date" id="from" class="radius-1 border-1 date-input outline" style="height: 30px;">
-                                            <span for="" class="self_center mv-1">to</span>
-                                            <input type="date" id="to" class="radius-1 border-1 date-input outline" style="height: 30px;">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <hr>
                             <div class="mp-overflow-x">
                                 <table class="mp-table mp-text-fs-small" id="loansTable" cellspacing="0" width="100%">
                                     <thead>
