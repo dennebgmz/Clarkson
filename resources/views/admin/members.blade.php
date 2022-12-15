@@ -90,11 +90,14 @@
                 <div class="row no-gutters">
                     <div class="col ">
                         <div class="mp-ph3 mp-pv4 mp-card ">
-                            <input type="text" id="search_value" placeholder="Serach By Member No and Last Name">
+                            
                             <div class="">
                                 <div class="row">
-                                    <div class="col-12 ">
+                                    <div class="col-4 ">
                                         <label for="" class="mp-text-c-accent mp-text-fs-large">Member List</label>
+                                    </div>
+                                    <div class="col-8">
+                                       <input type="text" id="search_value" placeholder="Serach By Member No and Last Name">
                                     </div>
                                 </div>
                                 
