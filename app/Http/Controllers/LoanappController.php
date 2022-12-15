@@ -165,7 +165,6 @@ class LoanappController extends Controller
     }
      else 
     {
-
       ## Read value
       $draw = $request->get('draw');
       $start = $request->get("start");
@@ -323,6 +322,78 @@ class LoanappController extends Controller
     );
     echo json_encode($json_data);
   }
+
+  public function export_loanapplication($camp_id,$loan_id,$dt_from,$dt_to)
+  {
+    DB::enableQueryLog();
+    if(!empty($camp_id) && $camp_id != 0){
+      $records = DB::table('loan_applications')
+        ->select('loan_applications.*', 'loan_type.name', 'loan_type.description', DB::raw('CONCAT(users.last_name, ", ", users.first_name," ", users.middle_name) AS full_name'), 'loan_applications_peb.type as application_type', 'campus.name as campus')
+        ->leftjoin('loan_type', 'loan_applications.loan_type', 'loan_type.id')
+        ->leftjoin('loan_applications_peb', 'loan_applications.id', 'loan_applications_peb.loan_app_id')
+        ->leftjoin('member', 'loan_applications.member_no', 'member.member_no')
+        ->leftjoin('campus', 'member.campus_id', 'campus.id')
+        ->leftjoin('users', 'member.user_id', 'users.id')
+        ->where('loan_applications.not_archived', 1)
+        ->where('member.campus_id', $camp_id);
+    }else{
+      $records = DB::table('loan_applications')
+        ->select('loan_applications.*', 'loan_type.name', 'loan_type.description', DB::raw('CONCAT(users.last_name, ", ", users.first_name," ", users.middle_name) AS full_name'), 'loan_applications_peb.type as application_type', 'campus.name as campus')
+        ->leftjoin('loan_type', 'loan_applications.loan_type', 'loan_type.id')
+        ->leftjoin('loan_applications_peb', 'loan_applications.id', 'loan_applications_peb.loan_app_id')
+        ->leftjoin('member', 'loan_applications.member_no', 'member.member_no')
+        ->leftjoin('campus', 'member.campus_id', 'campus.id')
+        ->leftjoin('users', 'member.user_id', 'users.id')
+        ->where('loan_applications.not_archived', 1);
+    }
+    if (!empty($loan_id) && $loan_id != 0) {
+      $records->where('loan_applications.loan_type', $loan_id);
+    }
+    if (!empty($dt_from) && !empty($dt_to) && $dt_from != 0 && $dt_to != 0) {
+      $records->whereBetween(DB::raw('DATE(loan_applications.date_created)'), array($dt_from, $dt_to));
+    }
+
+    $loanData = "";
+    $posts = $records->get();
+    if (count($posts) > 0) {
+      $loanData .= '
+      <table>
+        <tr>
+          <th>Date Applied</th>
+          <th>Member ID</th>
+          <th>Loan Application Number</th>
+          <th>Member Name</th>
+          <th>Campus</th>
+          <th>Loan Type</th>
+          <th>Application Type</th>
+          <th>Loan Status</th>
+        </tr>
+      ';
+      foreach ($posts as $loan) {
+        $loanData .= '
+        <tr>
+          <td>' . date("m/d/Y h:i A", strtotime($loan->date_created)) . '</td>
+          <td>' . $loan->member_no . '</td>
+          <td>' . $loan->control_number. '</td>
+          <td>' . $loan->full_name . '</td>
+          <td>' . $loan->campus . '</td>
+          <td>' . $loan->name . '</td>
+          <td>' . $loan->application_type . '</td>
+          <td>' . $loan->status . '</td>
+        </tr>
+        ';
+      }
+      $loanData .= '</table>';
+    }
+
+    header('Content-Disposition: attachment; filename=Loan Applications list.xls');
+    header('Content-Type: application/xls');
+    header('Content-Transfer-Encoding: binary');
+    header('Cache-Control: must-revalidate');
+    $query = DB::getQueryLog();
+    echo($loanData);
+  }
+
   public function admin_index()
   {
     $campuses = Campus::all();

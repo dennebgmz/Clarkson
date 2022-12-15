@@ -170,6 +170,7 @@ Route::get('/admin/add_member', 'AdminController@add_member');
 
 Route::get('/admin/loan-app', 'LoanappController@admin_index');
 Route::get('/admin/dataLoans', 'LoanappController@dataLoans')->name('dataLoans');
+Route::get('/admin/export_loanapplication/{camp_id}/{loan_id}/{dt_from}/{dt_to}', 'LoanappController@export_loanapplication');
 
 Route::get('/admin/loan-app-details/{id}', 'LoanappController@admin_peb_details');
 Route::get('/admin/loan-for-processing/{id}', 'LoanappController@admin_loan_processing');
