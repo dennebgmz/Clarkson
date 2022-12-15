@@ -2418,8 +2418,8 @@ ul {
 }
 
 .mp-dashboard__icon .mp-icon--svg>g {
-    fill: var(--c-accent);
-    fill: var(--c-accent-80)
+    fill: #48a19a;
+    fill: var(--c-primary-80)
 }
 
 @media (min-width:576px) {

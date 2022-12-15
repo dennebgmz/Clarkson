@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="col-auto col-lg-12 col-xl-auto mp-text-right">
                                     <a href="{{ url('/admin/members') }}"
-                                        class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                                        class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">
                                         <!-- mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small -->
                                         View All Members
                                     </a>
@@ -93,7 +93,7 @@
                                 </div>
                                 <div class="col-auto col-lg-12 col-xl-auto mp-text-right">
                                     <a href="{{ url('/admin/loans') }}"
-                                        class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">
+                                        class="mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">
                                         View All Loans
                                     </a>
                                 </div>
