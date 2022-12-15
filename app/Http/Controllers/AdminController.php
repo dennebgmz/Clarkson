@@ -573,7 +573,7 @@ class AdminController extends Controller
         $totalRecordswithFilter = $records->pluck('loan.id')->count();
     }
     if (!empty($dt_from) && !empty($dt_to)) {
-      $records->whereBetween('loan_transaction.date', ["$dt_from","$dt_to"]);
+      $records->having(DB::raw('MAX(loan_transaction.date)'), '>=', "$dt_from")->having(DB::raw('MAX(loan_transaction.date)'), '<=', "$dt_to");
       $totalRecordswithFilter = $records->pluck('loan.id')->count();
     }
     //Search Box
@@ -587,7 +587,7 @@ class AdminController extends Controller
       foreach ($posts as $r) {
         $start++;
         $row = array();
-        $row[] = "<a title='View Loans History' class='view_loan_history' id='" . $r->id . "'>
+        $row[] = "<a title='View Loans History' class='view_loan_history' id='view_loans' data-id='". $r->id ."' href='#'>
                     <i class='mp-icon md-tooltip icon-book-open mp-text-c-primary mp-text-fs-large'></i>
                   </a>";
         $row[] = $r->type;
@@ -676,7 +676,7 @@ class AdminController extends Controller
     ->groupBy('loan.id');
     }
     if (!empty($dt_from) && !empty($dt_to) && $dt_from != 0 && $dt_to != 0) {
-      $records->whereBetween('loan_transaction.date', ["$dt_from","$dt_to"]);
+      $records->having(DB::raw('MAX(loan_transaction.date)'), '>=', "$dt_from")->having(DB::raw('MAX(loan_transaction.date)'), '<=', "$dt_to");
     }
 
     $loanData = "";
@@ -702,8 +702,8 @@ class AdminController extends Controller
           <td>' . $row->lastname . ', ' . $row->firstname . ' ' . $row->middlename . '</td>
           <td>' . $row->lastTransactionDate . '</td>
           <td>' . 'PHP '.number_format($row->balance, 2) . '</td>
-          <td>' . $amort1 = ($row->startAmortDate == null ? '' : date('m/d/Y', strtotime($row->startAmortDate))) . '</td>
-          <td>' . $amort2 = ($row->endAmortDate == null ? '' : date('m/d/Y', strtotime($row->endAmortDate))) . '</td>
+          <td>' . $amort1 = ($row->startAmortDate == '1970-01-01' ? '' : date('m/d/Y', strtotime($row->startAmortDate))) . '</td>
+          <td>' . $amort2 = ($row->endAmortDate == '1970-01-01' ? '' : date('m/d/Y', strtotime($row->endAmortDate))) . '</td>
         </tr>
         ';
       }
