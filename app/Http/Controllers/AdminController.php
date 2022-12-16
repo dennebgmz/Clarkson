@@ -593,8 +593,8 @@ class AdminController extends Controller
       foreach ($posts as $r) {
         $start++;
         $row = array();
-        $row[] = "<a title='View Loans History' class='view_loan_history' id='view_loans' data-id='" . $r->id . "' href='#'>
-                    <i class='mp-icon md-tooltip icon-book-open mp-text-c-primary mp-text-fs-large'></i>
+        $row[] = "<a data-md-tooltip='View Loans History' class='view_loan_history md-tooltip--right' id='view_loans' data-id='" . $r->id . "' href='#'>
+                    <i class='mp-icon md-tooltip md-tooltip--right icon-book-open mp-text-c-primary mp-text-fs-large'></i>
                   </a>";
         $row[] = $r->type;
         $row[] = $r->memberNo;
