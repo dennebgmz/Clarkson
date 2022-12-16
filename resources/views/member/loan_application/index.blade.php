@@ -1,151 +1,160 @@
 @extends('layouts/main')
 @section('content_body')
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
-<style type="text/css">
-ul.pagination {
-  list-style-type:none;
-  margin:0;
-  padding:0;
-  text-align:center;
-}
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+    <style type="text/css">
+        ul.pagination {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
 
-ul.pagination li {
-  display:inline;
-  padding:2px 5px 0;
-  text-align:center;
-}
+        ul.pagination li {
+            display: inline;
+            padding: 2px 5px 0;
+            text-align: center;
+        }
 
-ul.pagination li a {
-  padding:2px;
-}
-</style>
-<div class="container mp-container">
- 
-  <div class="row no-gutters mp-mt5">
-    <div class="col-12 mp-ph2 mp-pv2 mp-text-fs-large mp-text-c-primary">
-      Loan Application
-      <span style="position: relative; float: right;">
-       <a href="{{url('/member/new-loan')}}"  class="mp-button mp-button--primary">
-        Apply for Loan
-      </a>
-    </span>
-  </div>
-  
-</div>
+        ul.pagination li a {
+            padding: 2px;
+        }
+    </style>
+    <div class="container mp-container">
 
-
-<div class="row no-gutters mp-mb4">
-  <div class="col-12 mp-ph2 mp-pv2">
-    <div class="row no-gutters">
-     
-      <div class="col-6 col-lg-3">
-        <div class="mp-tab mp-tab--active">
-          <a class="mp-tab__link" href="{{ url('/member/loan-app') }}">
-            Loan Application
-          </a>
-        </div>
-      </div>
-
-     <!--    <div class="col-6 col-lg-3">
-          <div class="mp-tab ">
-            <a class="mp-tab__link" href="{{ url('/member/coborrower') }}">
-              Co-Borrower Loan
-            </a>
-          </div>
-        </div> -->
-        
-      </div>
-      <div class="row no-gutters">
-        <div class="col">
-          <div class="mp-ph4 mp-pv4 mp-card mp-card--tabbed">
-
-            <div class="mp-text-fs-medium {{ Session::has('error') or Session::has('success') ? 'mp-mb4' : '' }}" align="center">
-              @if(Session::has('error'))
-              <span style="color:red"><strong>{{ Session::get('error') }}</strong></span>
-              @endif
-              @if(Session::has('success'))
-              <span style="color:green"><strong>{{ Session::get('success') }}</strong></span>
-              @endif
+        <div class="row no-gutters mp-mt5">
+            <div class="col-12 mp-ph2 mp-pv2 mp-text-fs-large mp-text-c-primary">
+                Loan Application
+                <span style="position: relative; float: right;">
+                    <a href="{{ url('/member/new-loan') }}" class="mp-button mp-button--primary">
+                        Apply for Loan
+                    </a>
+                </span>
             </div>
 
-            
-            <br>
-            
-            <div class="mp-overflow-x">
-            <div class="mp-ph4 mp-pv4 ft-card border-bottom-0" >
-                            <div class="row mp-pv4">
-                                <label for="" class="mp-text-fs-xlarge mp-text--c-white ">Filtering Section</label>
-                            </div>
-                            <div class="row items-between mp-pv4">
-                                <div class="col-md-12 col-xl-6">
-                                    <div class="row mp-text--c-white">
-                                        <label for="row">Fields</label>
-                                    </div>
-                                    <div class="row field-filter">
-                                        <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
-                                                id="loan_type">
-                                                <option value="">Filter By Loan Type</option>
-                                                @foreach ($loan_type as $row)
-                                                    <option value="{{ $row->id }}">{{ $row->name }}</option>
-                                                @endforeach
-                                            </select>    
-                                            <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
-                                                id="loan_status">
-                                                <option value="">Filter By Status</option>
-                                                <option value="PROCESSING">PROCESSING</option>
-                                                <option value="DONE">DONE</option>
-                                                <option value="CONFIRMED">CONFIRMED</option>
-                                                <option value="CANCELLED">CANCELLED</option>
-                                                
-                                            </select>    
-                                    </div>
-                                </div>
-                                <div class="col-md-12 col-xl-5">
-                                    <div class="row mp-text--c-white">
-                                        <label for="row">Date Range based on Date Applied Date</label>
-                                    </div>
-                                    <div class="row date_range">
-                                        <input type="date" id="from" class="radius-1 border-1 date-input outline" style="height: 30px;">
-                                        <span for="" class="self_center mh-1 mp-text--c-white">to</span>
-                                        <input type="date" id="to" class="radius-1 border-1 date-input outline" style="height: 30px;">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-              <table class="mp-table mp-text-fs-small" id="member_loan_table" cellspacing="0" width="100%">
-                <thead>
-                  <tr>
-                    <th class="mp-text-center"></th>
-                    <th class="mp-text-center">Date Applied</th>
-                    <th class="mp-text-center">Loan Application Number</th>
-                    <th class="mp-text-center">Loan Type</th>
-                    <th class="mp-text-center">Loan Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-
-          </div>
-
-          
-          
-          
-          
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-</div>
-</div>
 
+
+        <div class="row no-gutters mp-mb4">
+            <div class="col-12 mp-ph2 mp-pv2">
+                <div class="row no-gutters">
+
+                    <div class="col-6 col-lg-3">
+                        <div class="mp-tab mp-tab--active">
+                            <a class="mp-tab__link" href="{{ url('/member/loan-app') }}">
+                                Loan Application
+                            </a>
+                        </div>
+                    </div>
+
+                    <!--    <div class="col-6 col-lg-3">
+              <div class="mp-tab ">
+                <a class="mp-tab__link" href="{{ url('/member/coborrower') }}">
+                  Co-Borrower Loan
+                </a>
+              </div>
+            </div> -->
+
+                </div>
+                <div class="row no-gutters">
+                    <div class="col">
+                        <div class="mp-ph4 mp-pv4 mp-card mp-card--tabbed">
+
+                            <div class="mp-text-fs-medium {{ Session::has('error') or (Session::has('success') ? 'mp-mb4' : '') }}"
+                                align="center">
+                                @if (Session::has('error'))
+                                    <span style="color:red"><strong>{{ Session::get('error') }}</strong></span>
+                                @endif
+                                @if (Session::has('success'))
+                                    <span style="color:green"><strong>{{ Session::get('success') }}</strong></span>
+                                @endif
+                            </div>
+
+
+                            <br>
+
+                            <div class="mp-overflow-x">
+                                <div class="mp-ph4 mp-pv4 ft-card border-bottom-0">
+                                    <div class="row mp-pv4">
+                                        <label for="" class="mp-text-fs-xlarge mp-text--c-white ">Filtering
+                                            Section</label>
+                                    </div>
+                                    <div class="row items-between mp-pv4">
+                                        <div class="col-md-12 col-xl-6">
+                                            <div class="row mp-text--c-white">
+                                                <label for="row">Fields</label>
+                                            </div>
+                                            <div class="row field-filter">
+                                                <select name="" class="radius-1 outline select-field"
+                                                    style="width: 100%; height: 30px" id="loan_type">
+                                                    <option value="">Filter By Loan Type</option>
+                                                    @foreach ($loan_type as $row)
+                                                        <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                                <select name="" class="radius-1 outline select-field"
+                                                    style="width: 100%; height: 30px" id="loan_status">
+                                                    <option value="">Filter By Status</option>
+                                                    <option value="PROCESSING">PROCESSING</option>
+                                                    <option value="DONE">DONE</option>
+                                                    <option value="CONFIRMED">CONFIRMED</option>
+                                                    <option value="CANCELLED">CANCELLED</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12 col-xl-5">
+                                            <div class="row mp-text--c-white">
+                                                <label for="row">Date Range based on Date Applied Date</label>
+                                            </div>
+                                            <div class="row date_range">
+                                                <input type="date" id="from"
+                                                    class="radius-1 border-1 date-input outline" style="height: 30px;">
+                                                <span for="" class="self_center mh-1 mp-text--c-white">to</span>
+                                                <input type="date" id="to"
+                                                    class="radius-1 border-1 date-input outline" style="height: 30px;">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <span>
+                                    <a href="#" id="exportLoanApplication"
+                                        class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Export
+                                        Data</a>
+                                </span>
+                                <table class="mp-table mp-text-fs-small" id="member_loan_table" cellspacing="0"
+                                    width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th class="mp-text-center"></th>
+                                            <th class="mp-text-center">Date Applied</th>
+                                            <th class="mp-text-center">Loan Application Number</th>
+                                            <th class="mp-text-center">Loan Type</th>
+                                            <th class="mp-text-center">Loan Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
 @endsection
 @section('scripts')
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-<script type="text/javascript">
-  $(document).ready(function() {
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
             var member_loan_table = $('#member_loan_table').DataTable({
                 language: {
                     search: '',
@@ -173,29 +182,27 @@ ul.pagination li a {
                 member_loan_table.draw();
             });
             $('#from').on('change', function() {
-                if($('#from').val() > $('#to').val() && $('#to').val() != '')
-                {
+                if ($('#from').val() > $('#to').val() && $('#to').val() != '') {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Invalid Date Range,Please Check the date. Thank you!',  
-                        });
+                        text: 'Invalid Date Range,Please Check the date. Thank you!',
+                    });
                     $('#from').val('');
-                }else{
+                } else {
                     member_loan_table.draw();
                 }
-                
+
             });
             $('#to').on('change', function() {
-                if($('#to').val() < $('#from').val())
-                {
+                if ($('#to').val() < $('#from').val()) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Invalid Date Range,Please Check the date. Thank you!',                       
-                        });
+                        text: 'Invalid Date Range,Please Check the date. Thank you!',
+                    });
                     $('#to').val('');
-                }else{
+                } else {
                     member_loan_table.draw();
                 }
             });
@@ -207,5 +214,30 @@ ul.pagination li a {
             // window.location.href = url;
             window.open(url, '_blank');
         });
-</script>
+
+        $(document).on('click', '#exportLoanApplication', function(e) {
+            if ($('#loan_type').val() != "") {
+                var loan = $('#loan_type').val();
+            } else {
+                var loan = 0;
+            }
+
+            if ($('#loan_status').val() != "") {
+                var stat = $('#loan_status').val();
+            } else {
+                var stat = 0;
+            }
+
+            if ($('#from').val() != "" && $('#to').val() != "") {
+                var dt_from = $('#from').val();
+                var dt_to = $('#to').val();
+            } else {
+                var dt_from = 0;
+                var dt_to = 0;
+            }
+            // console.log(id);
+            var url = "{{ URL::to('/member/exportLoanApplication') }}" + '/' + loan + '/' + stat + '/' + dt_from + '/' + dt_to; //YOUR CHANGES HERE...
+            window.open(url, '_blank');
+        });
+    </script>
 @endsection
