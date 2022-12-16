@@ -204,7 +204,8 @@ ul.pagination li a {
             var id = $(this).attr('data-id');
             console.log(id);
             var url = "{{ URL::to('/member/loan-details') }}" + '/' + id; //YOUR CHANGES HERE...
-            window.location.href = url;
+            // window.location.href = url;
+            window.open(url, '_blank');
         });
 </script>
 @endsection
