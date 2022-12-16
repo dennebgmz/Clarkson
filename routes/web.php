@@ -114,6 +114,8 @@ Route::get('/admin/export_loandata/{id}/{dt_from}/{dt_to}', 'AdminController@get
 Route::get('/admin/loans', 'AdminController@loansmasterlist');
 Route::get('/admin/loanData', 'AdminController@loanMasterlistData')->name('loanDatas');
 Route::get('/admin/loan-details/{id}', 'AdminController@loandetails');
+Route::get('/admin/getLoanDetails', 'AdminController@getLoanDetails')->name('getLoanDetails');
+Route::get('/admin/export_loanDetails/{id}/{dt_from}/{dt_to}', 'AdminController@export_loanDetails');
 
 Route::get('/admin/member_equity/{id}', 'AdminController@equity');
 Route::get('/admin/member_loans/{id}', 'AdminController@loans');
