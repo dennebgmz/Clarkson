@@ -45,7 +45,7 @@ class LoanappController extends Controller
       ->get();
     $application = DB::table('loan_applications_peb')
       ->select('type')
-      ->groupBy('loan_applications_peb')
+      ->groupBy('type')
       ->get();
     $data = array(
       'loan_type' => $loan_type,
@@ -54,18 +54,19 @@ class LoanappController extends Controller
 
     return view('member.loan_application.index')->with($data);
   }
+
   public function member_loandetails(Request $request)
   {
     ## Read value
     DB::enableQueryLog();
     $totalRecords = DB::table('loan_applications')
-    ->select('loan_applications.*', 'loan_type.name', 'loan_type.description')
-    ->leftjoin('loan_type','loan_applications.loan_type','loan_type.id')
-    ->where('loan_applications.member_no',getUserdetails()->member_no)
-    ->orderByRaw("field(loan_applications.status,'PROCESSING','DONE','CONFIRMED','CANCELLED')")
-    ->orderBy('loan_applications.loan_type','asc')
-    ->orderBy('loan_applications.date_created','desc')
-    ->count();
+      ->select('loan_applications.*', 'loan_type.name', 'loan_type.description')
+      ->leftjoin('loan_type', 'loan_applications.loan_type', 'loan_type.id')
+      ->where('loan_applications.member_no', getUserdetails()->member_no)
+      ->orderByRaw("field(loan_applications.status,'PROCESSING','DONE','CONFIRMED','CANCELLED')")
+      ->orderBy('loan_applications.loan_type', 'asc')
+      ->orderBy('loan_applications.date_created', 'desc')
+      ->count();
     $draw = $request->get('draw');
     $start = $request->get("start");
     $rowperpage = $request->get("length"); // Rows display per page
@@ -83,29 +84,29 @@ class LoanappController extends Controller
     $dt_from = $request->get('dt_from');
     $dt_to = $request->get('dt_to');
 
-    $records=DB::table('loan_applications')
-    ->select('loan_applications.*', 'loan_type.name', 'loan_type.description')
-    ->leftjoin('loan_type','loan_applications.loan_type','loan_type.id')
-    ->where('loan_applications.member_no',getUserdetails()->member_no)
-    ->orderByRaw("field(loan_applications.status,'PROCESSING','DONE','CONFIRMED','CANCELLED')")
-    ->orderBy('loan_applications.loan_type','asc')
-    ->orderBy('loan_applications.date_created','desc');
+    $records = DB::table('loan_applications')
+      ->select('loan_applications.*', 'loan_type.name', 'loan_type.description')
+      ->leftjoin('loan_type', 'loan_applications.loan_type', 'loan_type.id')
+      ->where('loan_applications.member_no', getUserdetails()->member_no)
+      ->orderByRaw("field(loan_applications.status,'PROCESSING','DONE','CONFIRMED','CANCELLED')")
+      ->orderBy('loan_applications.loan_type', 'asc')
+      ->orderBy('loan_applications.date_created', 'desc');
     ## Add custom filter conditions
     if (!empty($searchValue)) {
-      $records->where('control_number','%',"'$searchValue'");
+      $records->where('control_number', 'like', '%' . $searchValue . '%');
     }
     if (!empty($loan_type)) {
       $records->where('loan_type.id', $loan_type);
     }
     if (!empty($loan_status)) {
       $records->where('loan_applications.status', $loan_status);
-    } 
+    }
     if (!empty($dt_from) && !empty($dt_to)) {
-    $records->whereBetween(DB::raw('loan_applications.date_created'), array($dt_from, $dt_to));
+      $records->whereBetween(DB::raw('loan_applications.date_created'), array($dt_from, $dt_to));
     }
     $totalRecordswithFilter = $records->count();
     //Search Box
-    
+
     $posts = $records->skip($start)
       ->take($rowperpage)
       ->get();
@@ -116,7 +117,7 @@ class LoanappController extends Controller
       foreach ($posts as $r) {
         $start++;
         $row = array();
-        $row[] = '<a data-md-tooltip="View Details" href="#" id="member_loandet" data-id="'.$r->id.'">
+        $row[] = '<a data-md-tooltip="View Details" href="#" id="member_loandet" data-id="' . $r->id . '">
                   <i class="mp-icon md-tooltip icon-book-open mp-text-c-primary mp-text-fs-large"></i>
                   </a>';
         $row[] = date("m/d/Y h:i A", strtotime($r->date_created));
@@ -130,11 +131,71 @@ class LoanappController extends Controller
       "draw" => intval($draw),
       "recordsTotal" => intval($totalRecords),
       "recordsFiltered" => intval($totalRecordswithFilter),
-      "query" => $query ,
+      "query" => $query,
       "data" => $data
     );
     echo json_encode($json_data);
   }
+
+  public function exportLoanApplication($loan, $stat, $dt_from, $dt_to)
+  {
+    if (!empty($loan) && $loan != 0) {
+      $records = DB::table('loan_applications')
+        ->select('loan_applications.*', 'loan_type.name', 'loan_type.description')
+        ->leftjoin('loan_type', 'loan_applications.loan_type', 'loan_type.id')
+        ->where('loan_applications.member_no', getUserdetails()->member_no)
+        ->orderByRaw("field(loan_applications.status,'PROCESSING','DONE','CONFIRMED','CANCELLED')")
+        ->orderBy('loan_applications.loan_type', 'asc')
+        ->orderBy('loan_applications.date_created', 'desc')
+        ->where('loan_type.id', $loan);
+    } else {
+      $records = DB::table('loan_applications')
+        ->select('loan_applications.*', 'loan_type.name', 'loan_type.description')
+        ->leftjoin('loan_type', 'loan_applications.loan_type', 'loan_type.id')
+        ->where('loan_applications.member_no', getUserdetails()->member_no)
+        ->orderByRaw("field(loan_applications.status,'PROCESSING','DONE','CONFIRMED','CANCELLED')")
+        ->orderBy('loan_applications.loan_type', 'asc')
+        ->orderBy('loan_applications.date_created', 'desc');
+    }
+    if (!empty($stat) && $stat != 0) {
+      $records->where('loan_applications.status', $stat);
+    }
+    if (!empty($dt_from) && !empty($dt_to)) {
+      $records->whereBetween(DB::raw('loan_applications.date_created'), array($dt_from, $dt_to));
+    }
+
+    $dataLoan = "";
+    $posts = $records->get();
+    if (count($posts) > 0) {
+      $dataLoan .= '
+      <table>
+        <tr>
+          <th>Date Applied</th>
+          <th>Loan Application Number</th>
+          <th>Loan Type</th>
+          <th>Loan Status</th>
+        </tr>
+      ';
+      foreach ($posts as $r) {
+        $dataLoan .= '
+        <tr>
+          <td>' . date("m/d/Y h:i A", strtotime($r->date_created)) . '</td>
+          <td>' . $r->control_number . '</td>
+          <td>' . $r->name . '</td>
+          <td>' . $r->status . '</td>
+        </tr>
+        ';
+      }
+      $dataLoan .= '</table>';
+    }
+    header('Content-Disposition: attachment; filename=Loan Application.xls');
+    header('Content-Type: application/xls');
+    header('Content-Transfer-Encoding: binary');
+    header('Cache-Control: must-revalidate');
+    $query = DB::getQueryLog();
+    echo ($dataLoan);
+  }
+
   public function index_coborrower()
   {
     return view('member.loan_application.index_coborrower');
@@ -276,11 +337,7 @@ class LoanappController extends Controller
       if (!empty($dt_from) && !empty($dt_to)) {
         $records->whereBetween(DB::raw('DATE(loan_applications.date_created)'), array($dt_from, $dt_to));
       }
-
-
-    }
-     else 
-    {
+    } else {
       ## Read value
       $draw = $request->get('draw');
       $start = $request->get("start");
@@ -470,10 +527,10 @@ class LoanappController extends Controller
     echo json_encode($json_data);
   }
 
-  public function export_loanapplication($camp_id,$loan_id,$dt_from,$dt_to,$app,$stat)
+  public function export_loanapplication($camp_id, $loan_id, $dt_from, $dt_to, $app, $stat)
   {
     DB::enableQueryLog();
-    if(!empty($camp_id) && $camp_id != 0){
+    if (!empty($camp_id) && $camp_id != 0) {
       $records = DB::table('loan_applications')
         ->select('loan_applications.*', 'loan_type.name', 'loan_type.description', DB::raw('CONCAT(users.last_name, ", ", users.first_name," ", users.middle_name) AS full_name'), 'loan_applications_peb.type as application_type', 'campus.name as campus')
         ->leftjoin('loan_type', 'loan_applications.loan_type', 'loan_type.id')
@@ -483,7 +540,7 @@ class LoanappController extends Controller
         ->leftjoin('users', 'member.user_id', 'users.id')
         ->where('loan_applications.not_archived', 1)
         ->where('member.campus_id', $camp_id);
-    }else{
+    } else {
       $records = DB::table('loan_applications')
         ->select('loan_applications.*', 'loan_type.name', 'loan_type.description', DB::raw('CONCAT(users.last_name, ", ", users.first_name," ", users.middle_name) AS full_name'), 'loan_applications_peb.type as application_type', 'campus.name as campus')
         ->leftjoin('loan_type', 'loan_applications.loan_type', 'loan_type.id')
@@ -527,7 +584,7 @@ class LoanappController extends Controller
         <tr>
           <td>' . date("m/d/Y h:i A", strtotime($loan->date_created)) . '</td>
           <td>' . $loan->member_no . '</td>
-          <td>' . $loan->control_number. '</td>
+          <td>' . $loan->control_number . '</td>
           <td>' . $loan->full_name . '</td>
           <td>' . $loan->campus . '</td>
           <td>' . $loan->name . '</td>
@@ -544,7 +601,7 @@ class LoanappController extends Controller
     header('Content-Transfer-Encoding: binary');
     header('Cache-Control: must-revalidate');
     $query = DB::getQueryLog();
-    echo($loanData);
+    echo ($loanData);
   }
 
   public function admin_index()

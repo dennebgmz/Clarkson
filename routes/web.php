@@ -70,6 +70,7 @@ Route::get('/member/member_loan', 'LoanappController@member_loandetails')->name(
 Route::get('/member/loan-app', 'LoanappController@index');
 Route::get('/member/coborrower', 'LoanappController@index_coborrower');
 Route::get('/member/new-loan', 'LoanappController@new_loan');
+Route::get('/member/exportLoanApplication/{loan}/{stat}/{dt_from}/{dt_to}', 'LoanappController@exportLoanApplication');
 
 Route::post('/member/pel-loan-new', 'LoanappController@pel_loan_new');
 Route::post('/member/pel-loan-renew', 'LoanappController@pel_loan_renew');
