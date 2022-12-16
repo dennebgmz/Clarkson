@@ -191,7 +191,7 @@ class LoanappController extends Controller
         $records->where('loan_applications.status', $status);
       }
       if (!empty($search)) {
-        $records->where('users.first_name', 'like', '%' . $search . '%');
+        $records->where('loan_applications.member_no', $search);
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
       }
       if (!empty($dt_from) && !empty($dt_to)) {
@@ -224,7 +224,7 @@ class LoanappController extends Controller
         $records->where('loan_applications.status', $status);
       }
       if (!empty($search)) {
-        $records->where('users.first_name', 'like', '%' . $search . '%');
+        $records->where('loan_applications.member_no', $search);
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
       }
       if (!empty($dt_from) && !empty($dt_to)) {
@@ -257,7 +257,7 @@ class LoanappController extends Controller
         $records->where('loan_applications.status', $status);
       }
       if (!empty($search)) {
-        $records->where('users.first_name', 'like', '%' . $search . '%');
+        $records->where('loan_applications.member_no', $search);
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
       }
       if (!empty($dt_from) && !empty($dt_to)) {
@@ -319,7 +319,7 @@ class LoanappController extends Controller
       }
       //Search Box
       if (!empty($search)) {
-        $records->where('users.first_name', 'like', '%' . $search . '%');
+        $records->where('loan_applications.member_no', $search);
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
       }
       $totalRecords = $records->count();
@@ -354,7 +354,7 @@ class LoanappController extends Controller
       }
       //Search Box
       if (!empty($search)) {
-        $records->where('users.first_name', 'like', '%' . $search . '%');
+        $records->where('loan_applications.member_no', $search);
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
       }
       $totalRecordswithFilter = $records->count();
@@ -389,7 +389,7 @@ class LoanappController extends Controller
       }
       //Search Box
       if (!empty($search)) {
-        $records->where('users.first_name', 'like', '%' . $search . '%');
+        $records->where('loan_applications.member_no', $search);
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
       }
     }
