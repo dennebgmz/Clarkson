@@ -4793,7 +4793,9 @@ tfoot {
     align-self: center;
 }
 
-
+.mb-1{
+    margin-bottom: 1rem;
+}
 
 .mh-1 {
     margin-left: .5rem;
@@ -4808,6 +4810,14 @@ tfoot {
 .ph-0 {
     padding-left: 0 !important;
     padding-right: 0 !important;
+}
+
+.pr-0 {
+    padding-right: 0 !important;
+}
+
+.p-1 {
+    padding: 1rem
 }
 
 .hw-auto {
@@ -4880,6 +4890,15 @@ tfoot {
     border-radius: 5px;
 }
 
+.bg-card {
+    background-color: #6c1242;
+    background-color: var(--c-accent);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, .2);
+    box-shadow: 0 1px 3px 0 var(--c-shadow);
+    
+    border-radius: 5px;
+}
+
 .border-top-0 {
     border-top-left-radius: 0 !important;
     border-top-right-radius: 0 !important;
@@ -4918,6 +4937,21 @@ tfoot {
     justify-content: right
 }
 
+.flex-col-right {
+    display: flex; 
+    flex-direction: column; 
+    gap: 10px; 
+    justify-content: right
+}
+
+.span-1 {
+    display: flex;
+    width: 100%;
+    text-align: center;
+    height: 26px;
+}
+
+
 .search_field {
     width: 350px;
     padding: 4px;
@@ -4929,8 +4963,20 @@ tfoot {
     color: white !important;
 }
 
+.up-button-width {
+    width: 116px !important;
+}
+
 .up-button:hover {
     color: white !important;
+}
+
+.input-height-1 {
+    height: 33px;
+}
+
+.self-end {
+    align-self: flex-end;
 }
 
 @media (max-width:576px) {
@@ -4950,8 +4996,15 @@ tfoot {
     }
 }
 
+
 @media (min-width:1200px) {
     .loan_container {
         max-width: 1217px;
+    }
+}
+
+@media (max-width:768px) {
+    .input-responsive-1 {
+        width: 100%;
     }
 }
