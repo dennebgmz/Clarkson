@@ -166,6 +166,7 @@ class LoanappController extends Controller
       $dt_from  = $request->get('dt_from');
       $dt_to  = $request->get('dt_to');
       $search  = $request->get('searchValue');
+      $searchMember  = $request->get('searchMember');
 
       $records = DB::table('loan_applications')
         ->select('loan_applications.*', 'loan_type.name', 'loan_type.description', DB::raw('CONCAT(users.last_name, ", ", users.first_name," ", users.middle_name) AS full_name'), 'loan_applications_peb.type as application_type', 'campus.name as campus')
@@ -175,7 +176,8 @@ class LoanappController extends Controller
         ->leftjoin('campus', 'member.campus_id', 'campus.id')
         ->leftjoin('users', 'member.user_id', 'users.id')
         ->where('loan_applications.not_archived', 1)
-        ->where('users.first_name', 'like', '%' . $search . '%');
+        ->where('member.member_no', 'like', '%' . $search . '%')
+        ->where('users.last_name', 'like', '%' . $search . '%');
 
       ## Add custom filter conditions
       if (!empty($campus)) {
@@ -191,8 +193,11 @@ class LoanappController extends Controller
         $records->where('loan_applications.status', $status);
       }
       if (!empty($search)) {
-        $records->where('loan_applications.member_no', $search);
+        $records->orWhere('users.first_name', 'like', '%' . $search . '%');
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
+      }
+      if (!empty($searchMember)) {
+        $records->where('loan_applications.member_no', 'like', '%' . $searchMember . '%');
       }
       if (!empty($dt_from) && !empty($dt_to)) {
         $records->whereBetween(DB::raw('DATE(loan_applications.date_created)'), array($dt_from, $dt_to));
@@ -208,7 +213,8 @@ class LoanappController extends Controller
         ->leftjoin('campus', 'member.campus_id', 'campus.id')
         ->leftjoin('users', 'member.user_id', 'users.id')
         ->where('loan_applications.not_archived', 1)
-        ->where('users.first_name', 'like', '%' . $search . '%');
+        ->where('member.member_no', 'like', '%' . $search . '%')
+        ->where('users.last_name', 'like', '%' . $search . '%');
 
       ## Add custom filter conditions
       if (!empty($campus)) {
@@ -224,8 +230,11 @@ class LoanappController extends Controller
         $records->where('loan_applications.status', $status);
       }
       if (!empty($search)) {
-        $records->where('loan_applications.member_no', $search);
+        $records->orWhere('users.first_name', 'like', '%' . $search . '%');
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
+      }
+      if (!empty($searchMember)) {
+        $records->where('loan_applications.member_no', 'like', '%' . $searchMember . '%');
       }
       if (!empty($dt_from) && !empty($dt_to)) {
         $records->whereBetween(DB::raw('DATE(loan_applications.date_created)'), array($dt_from, $dt_to));
@@ -241,7 +250,8 @@ class LoanappController extends Controller
         ->leftjoin('campus', 'member.campus_id', 'campus.id')
         ->leftjoin('users', 'member.user_id', 'users.id')
         ->where('loan_applications.not_archived', 1)
-        ->where('users.first_name', 'like', '%' . $search . '%');
+        ->where('member.member_no', 'like', '%' . $search . '%')
+        ->where('users.last_name', 'like', '%' . $search . '%');
 
       ## Add custom filter conditions
       if (!empty($campus)) {
@@ -257,8 +267,11 @@ class LoanappController extends Controller
         $records->where('loan_applications.status', $status);
       }
       if (!empty($search)) {
-        $records->where('loan_applications.member_no', $search);
+        $records->orWhere('users.first_name', 'like', '%' . $search . '%');
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
+      }
+      if (!empty($searchMember)) {
+        $records->where('loan_applications.member_no', 'like', '%' . $searchMember . '%');
       }
       if (!empty($dt_from) && !empty($dt_to)) {
         $records->whereBetween(DB::raw('DATE(loan_applications.date_created)'), array($dt_from, $dt_to));
@@ -289,6 +302,7 @@ class LoanappController extends Controller
       $dt_from  = $request->get('dt_from');
       $dt_to  = $request->get('dt_to');
       $search  = $request->get('searchValue');
+      $searchMember  = $request->get('searchMember');
 
       $records = DB::table('loan_applications')
         ->select('loan_applications.*', 'loan_type.name', 'loan_type.description', DB::raw('CONCAT(users.last_name, ", ", users.first_name," ", users.middle_name) AS full_name'), 'loan_applications_peb.type as application_type', 'campus.name as campus')
@@ -299,7 +313,8 @@ class LoanappController extends Controller
         ->leftjoin('users', 'member.user_id', 'users.id')
         ->where('campus.cluster_id', '=', getUserdetails()->cluster_id)
         ->where('loan_applications.not_archived', 1)
-        ->where('users.first_name', 'like', '%' . $search . '%');
+        ->where('member.member_no', 'like', '%' . $search . '%')
+        ->where('users.last_name', 'like', '%' . $search . '%');
 
       ## Add custom filter conditions
       if (!empty($campus)) {
@@ -319,8 +334,11 @@ class LoanappController extends Controller
       }
       //Search Box
       if (!empty($search)) {
-        $records->where('loan_applications.member_no', $search);
+        $records->orWhere('users.first_name', 'like', '%' . $search . '%');
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
+      }
+      if (!empty($searchMember)) {
+        $records->where('loan_applications.member_no', 'like', '%' . $searchMember . '%');
       }
       $totalRecords = $records->count();
 
@@ -334,7 +352,8 @@ class LoanappController extends Controller
         ->leftjoin('users', 'member.user_id', 'users.id')
         ->where('campus.cluster_id', '=', getUserdetails()->cluster_id)
         ->where('loan_applications.not_archived', 1)
-        ->where('users.first_name', 'like', '%' . $search . '%');
+        ->where('member.member_no', 'like', '%' . $search . '%')
+        ->where('users.last_name', 'like', '%' . $search . '%');
 
       ## Add custom filter conditions
       if (!empty($campus)) {
@@ -354,8 +373,11 @@ class LoanappController extends Controller
       }
       //Search Box
       if (!empty($search)) {
-        $records->where('loan_applications.member_no', $search);
+        $records->orWhere('users.first_name', 'like', '%' . $search . '%');
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
+      }
+      if (!empty($searchMember)) {
+        $records->where('loan_applications.member_no', 'like', '%' . $searchMember . '%');
       }
       $totalRecordswithFilter = $records->count();
 
@@ -369,7 +391,8 @@ class LoanappController extends Controller
         ->leftjoin('users', 'member.user_id', 'users.id')
         ->where('campus.cluster_id', '=', getUserdetails()->cluster_id)
         ->where('loan_applications.not_archived', 1)
-        ->where('users.first_name', 'like', '%' . $search . '%');
+        ->where('member.member_no', 'like', '%' . $search . '%')
+        ->where('users.last_name', 'like', '%' . $search . '%');
 
       ## Add custom filter conditions
       if (!empty($campus)) {
@@ -389,8 +412,11 @@ class LoanappController extends Controller
       }
       //Search Box
       if (!empty($search)) {
-        $records->where('loan_applications.member_no', $search);
+        $records->orWhere('users.first_name', 'like', '%' . $search . '%');
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
+      }
+      if (!empty($searchMember)) {
+        $records->where('loan_applications.member_no', 'like', '%' . $searchMember . '%');
       }
     }
 
@@ -470,14 +496,14 @@ class LoanappController extends Controller
     if (!empty($loan_id) && $loan_id != 0) {
       $records->where('loan_applications.loan_type', $loan_id);
     }
-    if (!empty($app) && $app != 0) {
-      $records->where('loan_applications_peb.type', $app);
-    }
-    if (!empty($stat) && $stat != 0) {
-      $records->where('loan_applications.status', $stat);
-    }
     if (!empty($dt_from) && !empty($dt_to) && $dt_from != 0 && $dt_to != 0) {
       $records->whereBetween(DB::raw('DATE(loan_applications.date_created)'), array($dt_from, $dt_to));
+    }
+    if (!empty($app) && $app != 'noData') {
+      $records->where('loan_applications_peb.type', $app);
+    }
+    if (!empty($stat) && $stat != 'noData') {
+      $records->where('loan_applications.status', $stat);
     }
 
     $loanData = "";

@@ -27,83 +27,95 @@
         </div>
         <div class="row no-gutters mp-mb4">
             <div class="col-12 ">
-                <div class="row" >
+                <div class="row">
                     <div class="col mp-top-button">
-                         <div style="display: flex; flex-direction: row; gap: 10px; justify-content: right">
-                                @if (getUserdetails()->role == 'SUPER_ADMIN')
+                        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: right">
+                            @if (getUserdetails()->role == 'SUPER_ADMIN')
                                 <span>
-                                    <a href="{{ url('/admin/summary') }}" target="_blank" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Generate Summary Report</a>
+                                    <a href="{{ url('/admin/summary') }}" target="_blank"
+                                        class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Generate
+                                        Summary Report</a>
                                 </span>
-                                @endif
-                                <span>
-                                    <a href="#" id="exportMember" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Export Data</a>
-                                    </span>
-                                {{-- <button type="button" class="mp-button mp-button--accent" id="printMember">Print</button> --}}
-                                </div>
+                            @endif
+                            <span>
+                                <a href="#" id="exportMember"
+                                    class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Export
+                                    Data</a>
+                            </span>
+                            {{-- <button type="button" class="mp-button mp-button--accent" id="printMember">Print</button> --}}
+                        </div>
                     </div>
                 </div>
                 <div class="row no-gutters custom_header">
                     <div class="col m-5">
-                            <div class="container bottom-divider top-divider">
-                               
-                                <div class="row">
-                                    <div class="col">
-                                         <label for="" class="filter-text">Filtering Section</label>   
-                                    </div> 
+                        <div class="container bottom-divider top-divider">
+
+                            <div class="row">
+                                <div class="col">
+                                    <label for="" class="filter-text">Filtering Section</label>
                                 </div>
-                                <div class="row items-between" style="margin-left:15px; margin-right:15px;">
-                                    <div class="col-md-12 col-xl-6">
-                                        <div class="row">
-                                           <label for="row">Fields</label>
-                                        </div>
-                                        <div class="row field-filter">
-                                            <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
-                                                id="campuses_select">
-                                                <option value="">Filter By Campus</option>
+                            </div>
+                            <div class="row items-between" style="margin-left:15px; margin-right:15px;">
+                                <div class="col-md-12 col-xl-6">
+                                    <div class="row field-filter">
+                                        <div class="col-md-12">
+                                            <label for="row">Filter By Campus</label>
+                                            <select name="" class="radius-1 outline select-field"
+                                                style="width: 100%; height: 30px" id="campuses_select">
+                                                <option value="">Show All</option>
                                                 @foreach ($campuses as $row)
                                                     <option value="{{ $row->id }}">{{ $row->name }}</option>
                                                 @endforeach
-                                            </select>    
-                                                <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
-                                                id="department_select">
-                                                <option value="">Filter By Department</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="row">Filter By Department</label>
+                                            <select name="" class="radius-1 outline select-field"
+                                                style="width: 100%; height: 30px" id="department_select">
+                                                <option value="">Show All</option>
                                                 @foreach ($department as $row)
                                                     <option value="{{ $row->id }}">{{ $row->description }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-md-12 col-xl-5">
-                                        <div class="row">
-                                           <label for="row">Filter by Membership Date</label>
-                                        </div>
-                                        <div class="row date_range">
-                                            <input type="date" id="from" class="radius-1 border-1 date-input outline" style="height: 30px;">
-                                            <span for="" class="self_center mv-1" style="margin-left:15px; margin-right:15px;">to</span>
-                                            <input type="date" id="to" class="radius-1 border-1 date-input outline" style="height: 30px;">
-                                        </div>
+                                </div>
+                                <div class="col-md-12 col-xl-5">
+                                    <div class="row">
+                                        <label for="row">Filter by Membership Date</label>
+                                    </div>
+                                    <div class="row date_range">
+                                        <input type="date" id="from" class="radius-1 border-1 date-input outline"
+                                            style="height: 30px;">
+                                        <span for="" class="self_center mv-1"
+                                            style="margin-left:15px; margin-right:15px;">to</span>
+                                        <input type="date" id="to" class="radius-1 border-1 date-input outline"
+                                            style="height: 30px;">
                                     </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </div>
                 <div class="row no-gutters">
                     <div class="col ">
                         <div class="mp-ph3 mp-pv4 mp-card ">
-                            
+
                             <div class="">
                                 <div class="row">
                                     <div class="col-4 ">
                                         <label for="" class="mp-text-c-accent mp-text-fs-large">Member List</label>
                                     </div>
                                     <div class="col-8">
-                                       <input type="text" id="search_value" placeholder="Search By Member ID and Last Name">
+                                        <input type="text" id="search_value"
+                                            placeholder="Search By Member ID and Last Name" class="radius-1 border-1 date-input outline search_field ">
                                     </div>
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="col-12 mp-overflow-x">
-                                        <table class="mp-table mp-text-fs-small" id="membersTable" cellspacing="0" width="100%">
+                                        <table class="mp-table mp-text-fs-small" id="membersTable" cellspacing="0"
+                                            width="100%">
                                             <thead>
                                                 <tr>
                                                     <th>Action</th>
@@ -170,29 +182,27 @@
                 tableMember.draw();
             });
             $('#from').on('change', function() {
-                if($('#from').val() > $('#to').val() &&  $('#to').val() != '')
-                {
+                if ($('#from').val() > $('#to').val() && $('#to').val() != '') {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Invalid Date Range,Please Check the date. Thank you!',  
-                        });
+                        text: 'Invalid Date Range,Please Check the date. Thank you!',
+                    });
                     $('#from').val('');
-                }else{
+                } else {
                     tableMember.draw();
                 }
-                
+
             });
             $('#to').on('change', function() {
-                if($('#to').val() < $('#from').val())
-                {
+                if ($('#to').val() < $('#from').val()) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Invalid Date Range,Please Check the date. Thank you!',                       
-                        });
+                        text: 'Invalid Date Range,Please Check the date. Thank you!',
+                    });
                     $('#to').val('');
-                }else{
+                } else {
                     tableMember.draw();
                 }
             });
@@ -230,7 +240,8 @@
                     var dt_to = 0;
                 }
                 // console.log(id);
-                var url = "{{ URL::to('/admin/exportMember') }}" + '/' + camp_id + '/' + dept + '/' + dt_from + '/' + dt_to; //YOUR CHANGES HERE...
+                var url = "{{ URL::to('/admin/exportMember') }}" + '/' + camp_id + '/' + dept + '/' +
+                    dt_from + '/' + dt_to; //YOUR CHANGES HERE...
                 window.open(url, '_blank');
             });
 

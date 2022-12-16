@@ -127,9 +127,13 @@
                                 </span>
                             </div>
                             <div class="flex-right">
+                                <input type="text" id="search_member"
+                                    class="radius-1 border-1 date-input outline search_field "
+                                    placeholder="Search By Member ID">
                                 <input type="text" id="search_value"
                                     class="radius-1 border-1 date-input outline search_field "
                                     placeholder="Search By Last Name and First Name">
+                                
                             </div>
 
                             <div class="mp-overflow-x">
@@ -193,6 +197,7 @@
                         data.dt_from = $('#from').val();
                         data.dt_to = $('#to').val();
                         data.searchValue = $('#search_value').val();
+                        data.searchMember = $('#search_member').val();
                     }
                 },
             });
@@ -200,6 +205,9 @@
                 tableLoans.draw();
             });
             $('#search_value').on('change', function() {
+                tableLoans.draw();
+            });
+            $('#search_member').on('change', function() {
                 tableLoans.draw();
             });
             $('#loan_select').on('change', function() {
@@ -259,14 +267,16 @@
 
                 if ($('#application_select').val() != "") {
                     var app = $('#application_select').val();
+                    console.log(app);
                 } else {
-                    var app = 0;
+                    var app = 'noData';
                 }
 
                 if ($('#status_select').val() != "") {
                     var stat = $('#status_select').val();
+                    console.log(stat);
                 } else {
-                    var stat = 0;
+                    var stat = 'noData';
                 }
 
                 if ($('#from').val() != "" && $('#to').val() != "") {
