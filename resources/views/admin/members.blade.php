@@ -32,7 +32,7 @@
                          <div style="display: flex; flex-direction: row; gap: 10px; justify-content: right">
                                 @if (getUserdetails()->role == 'SUPER_ADMIN')
                                 <span>
-                                    <a href="{{ url('/admin/summary') }}" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Generate Summary Report</a>
+                                    <a href="{{ url('/admin/summary') }}" target="_blank" class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Generate Summary Report</a>
                                 </span>
                                 @endif
                                 <span>
