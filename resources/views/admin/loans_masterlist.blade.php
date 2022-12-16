@@ -76,6 +76,15 @@
                                 </span>
                             </div>
                             <hr>
+                            <div class="flex-right">
+                                {{-- <input type="text" id="search_member"
+                                    class="radius-1 border-1 date-input outline search_field "
+                                    placeholder="Search By Member ID"> --}}
+                                <input type="text" id="search_value"
+                                    class="radius-1 border-1 date-input outline search_field "
+                                    placeholder="Search By Member ID and Last Name">
+                            </div>
+                            
                             <div class="mp-overflow-x">
                                 <table class="mp-table mp-text-fs-small" id="loansTable" cellspacing="0" width="100%">
                                     <thead>
@@ -84,10 +93,10 @@
                                             <th>Loan Type</th>
                                             <th>Member ID</th>
                                             <th>Member Name</th>
-                                            <th class="mp-text-center">Last Transaction Date</th>
-                                            <th class="mp-text-center">Balance</th>
-                                            <th class="mp-text-center">Start Amort Date</th>
-                                            <th class="mp-text-center">End Amort Date</th>
+                                            <th>Last Transaction Date</th>
+                                            <th>Balance</th>
+                                            <th>Start Amort Date</th>
+                                            <th>End Amort Date</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -118,6 +127,7 @@
                     processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br>Loading...',
                 },
                 "ordering": false,
+                "searching": false,
                 "processing": true,
                 "serverSide": true,
                 "ajax": {
@@ -127,10 +137,14 @@
                         data.loan_type = $('#loan_type').val();
                         data.dt_from = $('#from').val();
                         data.dt_to = $('#to').val();
+                        data.searchValue = $('#search_value').val();
                     }
                 },
             });
             $(document).on('change', '#loan_type', function(e) {
+                loansTable.draw();
+            });
+            $(document).on('change', '#search_value', function(e) {
                 loansTable.draw();
             });
             $('#from').on('change', function() {
@@ -164,7 +178,8 @@
                 var id = $(this).attr('id');
                 console.log(id);
                 var url = "{{ URL::to('/admin/member_soa/') }}" + '/' + id; //YOUR CHANGES HERE...
-                window.location.href = url;
+                // window.location.href = url;
+                window.open(url, '_blank');
             });
 
         });
@@ -193,7 +208,8 @@
             var id = $(this).attr('data-id');
             console.log(id);
             var url = "{{ URL::to('/admin/loan-details/') }}" + '/' + id; //YOUR CHANGES HERE...
-            window.location.href = url;
+            // window.location.href = url;
+            window.open(url, '_blank');
         });
        
     </script>
