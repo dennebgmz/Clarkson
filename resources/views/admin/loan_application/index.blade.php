@@ -35,37 +35,10 @@
 
         <div class="row no-gutters mp-mb4">
             <div class="col-12 mp-ph2 mp-pv2">
-                <div class="row no-gutters">
-
-                    <div class="col-6 col-lg-3">
-                        <div class="mp-tab mp-tab--active">
-                            <a class="mp-tab__link" href="{{ url('/member/loan-app') }}">
-                                Loan Applications
-                            </a>
-                        </div>
-                    </div>
-
-
-                    <!--   <div class="col-6 col-lg-3">
-                                          <div class="mp-tab--accent ">
-                                            <a class="mp-tab__link" href="{{ url('/member/coborrower') }}">
-                                             CBL
-                                            </a>
-                                          </div>
-                                        </div> -->
-
-                    <!-- <div class="col-6 col-lg-3">
-                                          <div class="mp-tab--accent ">
-                                            <a class="mp-tab__link" href="{{ url('/member/coborrower') }}">
-                                             BTL
-                                            </a>
-                                          </div>
-                                        </div> -->
-
-                </div>
+                
                 <div class="row no-gutters">
                     <div class="col">
-                        <div class="mp-ph4 mp-pv4 ft-card border-bottom-0 border-top-left-0">
+                        <div class="mp-ph4 mp-pv4 ft-card border-bottom-0">
                             <div class="row mp-pv4">
                                 <label for="" class="mp-text-fs-xlarge mp-text--c-white ">Filtering Section</label>
                             </div>
@@ -145,11 +118,12 @@
                                 @endif
                             </div>
                             <div
-                                style="display: flex; flex-direction: row; gap: 10px; justify-content: right; margin-bottom: 10px">
+                                style="display: flex; flex-direction: row; gap: 10px; justify-content: right; margin-bottom: 15px">
                                 <span>
                                     <a id="export_loanapplication"
-                                        class="mp-ml2 text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">Export
-                                        Data</a>
+                                        class="mp-ml2 text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">
+                                        Export Data
+                                    </a>
                                 </span>
                             </div>
                             <div class="flex-right">
