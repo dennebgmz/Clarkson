@@ -145,11 +145,12 @@
                                 @endif
                             </div>
                             <div
-                                style="display: flex; flex-direction: row; gap: 10px; justify-content: right; margin-bottom: 10px">
+                                style="display: flex; flex-direction: row; gap: 10px; justify-content: right; margin-bottom: 15px">
                                 <span>
                                     <a id="export_loanapplication"
-                                        class="mp-ml2 text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">Export
-                                        Data</a>
+                                        class="mp-ml2 text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">
+                                        Export Data
+                                    </a>
                                 </span>
                             </div>
                             <div class="flex-right">

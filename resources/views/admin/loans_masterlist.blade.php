@@ -72,7 +72,7 @@
                         <div style="display: flex; flex-direction: row; gap: 10px; justify-content: right">
                                 <span>
                                     <a href="#" id="export_loandata" 
-                                    class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small" title="Export Data based on Date range and Loan Type">Export Data</a>
+                                    class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button" title="Export Data based on Date range and Loan Type">Export Data</a>
                                 </span>
                             </div>
                             <hr>
