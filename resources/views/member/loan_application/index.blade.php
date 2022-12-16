@@ -200,6 +200,11 @@ ul.pagination li a {
                 }
             });
         });
- 
+        $(document).on('click', '#member_loandet', function(e) {
+            var id = $(this).attr('data-id');
+            console.log(id);
+            var url = "{{ URL::to('/member/loan-details') }}" + '/' + id; //YOUR CHANGES HERE...
+            window.location.href = url;
+        });
 </script>
 @endsection

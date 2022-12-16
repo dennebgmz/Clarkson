@@ -111,7 +111,7 @@ class LoanappController extends Controller
       foreach ($posts as $r) {
         $start++;
         $row = array();
-        $row[] = '<a data-md-tooltip="View Details" href="#">
+        $row[] = '<a data-md-tooltip="View Details" href="#" id="member_loandet" data-id="'.$r->id.'">
                   <i class="mp-icon md-tooltip icon-book-open mp-text-c-primary mp-text-fs-large"></i>
                   </a>';
         $row[] = date("m/d/Y h:i A", strtotime($r->date_created));
