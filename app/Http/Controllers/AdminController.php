@@ -547,30 +547,29 @@ class AdminController extends Controller
     $loan_type  = $request->get('loan_type');
     $dt_from = $request->get('dt_from');
     $dt_to = $request->get('dt_to');
+    // !empty($loan_type) || 
     
+    // ->where('loan_type.id', $loan_type)
     ## Add custom filter conditions
-    if (!empty($loan_type) || !empty($searchValue)) {
-      $records = LoanTransaction::select('loan.id as id', 'loan_type.name as type', 'member.member_no as memberNo', 'users.first_name as firstname', 'users.middle_name as middlename', 'users.last_name as lastname', DB::raw('MAX(date) as lastTransactionDate'), DB::raw('SUM(amount) AS balance'), DB::raw('MAX(start_amort_date) AS startAmortDate'), DB::raw('MAX(end_amort_date) AS endAmortDate'))
-      ->leftjoin('loan', 'loan_transaction.loan_id', '=', 'loan.id')
-      ->leftjoin('loan_type', 'loan.type_id', '=', 'loan_type.id')
-      ->leftjoin('member', 'loan.member_id', '=', 'member.id')
-      ->leftjoin('users', 'member.user_id', '=', 'users.id')
-      ->where('loan_type.id', $loan_type)
-      ->Where('first_name', 'like', '%' . $searchValue . '%')
-      ->orWhere('last_name', 'like', '%' . $searchValue . '%')
-      ->orWhere('middle_name', 'like', '%' . $searchValue . '%')
-      ->orWhere('member.member_no', 'like', '%' . $searchValue . '%')
-      ->groupBy('loan.id');
-      
-      $totalRecordswithFilter = $records->pluck('loan.id')->count();
-    }else{
-      $records = LoanTransaction::select('loan.id as id', 'loan_type.name as type', 'member.member_no as memberNo', 'users.first_name as firstname', 'users.middle_name as middlename', 'users.last_name as lastname', DB::raw('MAX(date) as lastTransactionDate'), DB::raw('SUM(amount) AS balance'), DB::raw('MAX(start_amort_date) AS startAmortDate'), DB::raw('MAX(end_amort_date) AS endAmortDate'))
+    $records = LoanTransaction::select('loan.id as id', 'loan_type.name as type', 'member.member_no as memberNo', 'users.first_name as firstname', 'users.middle_name as middlename', 'users.last_name as lastname', DB::raw('MAX(date) as lastTransactionDate'), DB::raw('SUM(amount) AS balance'), DB::raw('MAX(start_amort_date) AS startAmortDate'), DB::raw('MAX(end_amort_date) AS endAmortDate'))
         ->leftjoin('loan', 'loan_transaction.loan_id', '=', 'loan.id')
         ->leftjoin('loan_type', 'loan.type_id', '=', 'loan_type.id')
         ->leftjoin('member', 'loan.member_id', '=', 'member.id')
         ->leftjoin('users', 'member.user_id', '=', 'users.id')
         ->groupBy('loan.id');
         $totalRecordswithFilter = $records->pluck('loan.id')->count();
+
+    if (!empty($searchValue)) {
+      $records->Where('first_name', 'like', '%' . $searchValue . '%')
+      ->orWhere('last_name', 'like', '%' . $searchValue . '%')
+      ->orWhere('middle_name', 'like', '%' . $searchValue . '%')
+      ->orWhere('member.member_no', 'like', '%' . $searchValue . '%')
+      ->groupBy('loan.id');
+      $totalRecordswithFilter = $records->pluck('loan.id')->count();
+    }
+    if (!empty($loan_type)) {
+      $records->where('loan_type.id', $loan_type);
+      $totalRecordswithFilter = $records->pluck('loan.id')->count();
     }
     if (!empty($dt_from) && !empty($dt_to)) {
       $records->having(DB::raw('MAX(loan_transaction.date)'), '>=', "$dt_from")->having(DB::raw('MAX(loan_transaction.date)'), '<=', "$dt_to");
