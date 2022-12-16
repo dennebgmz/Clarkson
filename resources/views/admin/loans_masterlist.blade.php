@@ -44,12 +44,12 @@
                             <div class="row items-between mp-pv4">
                                 <div class="col-md-12 col-xl-6">
                                     <div class="row mp-text--c-white">
-                                        <label for="row">Fields</label>
+                                        <label for="row">Filter By Loan Type</label>
                                     </div>
                                     <div class="row field-filter">
                                         <select name="" class="radius-1 outline select-field" style="width: 100%; height: 30px"
                                                 id="loan_type">
-                                                <option value="">Filter By Loan Type</option>
+                                                <option value="">Show All</option>
                                                 @foreach ($loan_type as $row)
                                                     <option value="{{ $row->id }}">{{ $row->name }}</option>
                                                 @endforeach
@@ -58,7 +58,7 @@
                                 </div>
                                 <div class="col-md-12 col-xl-5">
                                     <div class="row mp-text--c-white">
-                                        <label for="row">Date Range based on Last Transaction Date</label>
+                                        <label for="row">Filter By Last Transaction Date</label>
                                     </div>
                                     <div class="row date_range">
                                         <input type="date" id="from" class="radius-1 border-1 date-input outline" style="height: 30px;">

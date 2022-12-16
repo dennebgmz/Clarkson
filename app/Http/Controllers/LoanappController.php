@@ -43,8 +43,13 @@ class LoanappController extends Controller
     $loan_type = DB::table('loan_type')
       ->select('*')
       ->get();
+    $application = DB::table('loan_applications_peb')
+      ->select('type')
+      ->groupBy('loan_applications_peb')
+      ->get();
     $data = array(
       'loan_type' => $loan_type,
+      'application' => $application,
     );
 
     return view('member.loan_application.index')->with($data);
@@ -156,6 +161,8 @@ class LoanappController extends Controller
       // Custom search filter 
       $campus  = $request->get('campus');
       $loanType  = $request->get('loanType');
+      $application  = $request->get('application');
+      $status  = $request->get('status');
       $dt_from  = $request->get('dt_from');
       $dt_to  = $request->get('dt_to');
       $search  = $request->get('searchValue');
@@ -177,8 +184,14 @@ class LoanappController extends Controller
       if (!empty($loanType)) {
         $records->where('loan_applications.loan_type', $loanType);
       }
+      if (!empty($application)) {
+        $records->where('loan_applications_peb.type', $application);
+      }
+      if (!empty($status)) {
+        $records->where('loan_applications.status', $status);
+      }
       if (!empty($search)) {
-        $records->where('loan_applications.member_no', 'like', '%' . $search . '%');
+        $records->where('users.first_name', 'like', '%' . $search . '%');
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
       }
       if (!empty($dt_from) && !empty($dt_to)) {
@@ -204,8 +217,14 @@ class LoanappController extends Controller
       if (!empty($loanType)) {
         $records->where('loan_applications.loan_type', $loanType);
       }
+      if (!empty($application)) {
+        $records->where('loan_applications_peb.type', $application);
+      }
+      if (!empty($status)) {
+        $records->where('loan_applications.status', $status);
+      }
       if (!empty($search)) {
-        $records->where('loan_applications.member_no', 'like', '%' . $search . '%');
+        $records->where('users.first_name', 'like', '%' . $search . '%');
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
       }
       if (!empty($dt_from) && !empty($dt_to)) {
@@ -231,8 +250,14 @@ class LoanappController extends Controller
       if (!empty($loanType)) {
         $records->where('loan_applications.loan_type', $loanType);
       }
+      if (!empty($application)) {
+        $records->where('loan_applications_peb.type', $application);
+      }
+      if (!empty($status)) {
+        $records->where('loan_applications.status', $status);
+      }
       if (!empty($search)) {
-        $records->where('loan_applications.member_no', 'like', '%' . $search . '%');
+        $records->where('users.first_name', 'like', '%' . $search . '%');
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
       }
       if (!empty($dt_from) && !empty($dt_to)) {
@@ -283,12 +308,18 @@ class LoanappController extends Controller
       if (!empty($loanType)) {
         $records->where('loan_applications.loan_type', $loanType);
       }
+      if (!empty($application)) {
+        $records->where('loan_applications_peb.type', $application);
+      }
+      if (!empty($status)) {
+        $records->where('loan_applications.status', $status);
+      }
       if (!empty($dt_from) && !empty($dt_to)) {
         $records->whereBetween(DB::raw('DATE(loan_applications.date_created)'), array($dt_from, $dt_to));
       }
       //Search Box
       if (!empty($search)) {
-        $records->where('loan_applications.member_no', 'like', '%' . $search . '%');
+        $records->where('users.first_name', 'like', '%' . $search . '%');
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
       }
       $totalRecords = $records->count();
@@ -312,12 +343,18 @@ class LoanappController extends Controller
       if (!empty($loanType)) {
         $records->where('loan_applications.loan_type', $loanType);
       }
+      if (!empty($application)) {
+        $records->where('loan_applications_peb.type', $application);
+      }
+      if (!empty($status)) {
+        $records->where('loan_applications.status', $status);
+      }
       if (!empty($dt_from) && !empty($dt_to)) {
         $records->whereBetween(DB::raw('DATE(loan_applications.date_created)'), array($dt_from, $dt_to));
       }
       //Search Box
       if (!empty($search)) {
-        $records->where('loan_applications.member_no', 'like', '%' . $search . '%');
+        $records->where('users.first_name', 'like', '%' . $search . '%');
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
       }
       $totalRecordswithFilter = $records->count();
@@ -341,12 +378,18 @@ class LoanappController extends Controller
       if (!empty($loanType)) {
         $records->where('loan_applications.loan_type', $loanType);
       }
+      if (!empty($application)) {
+        $records->where('loan_applications_peb.type', $application);
+      }
+      if (!empty($status)) {
+        $records->where('loan_applications.status', $status);
+      }
       if (!empty($dt_from) && !empty($dt_to)) {
         $records->whereBetween(DB::raw('DATE(loan_applications.date_created)'), array($dt_from, $dt_to));
       }
       //Search Box
       if (!empty($search)) {
-        $records->where('loan_applications.member_no', 'like', '%' . $search . '%');
+        $records->where('users.first_name', 'like', '%' . $search . '%');
         $records->orWhere('users.last_name', 'like', '%' . $search . '%');
       }
     }
@@ -401,7 +444,7 @@ class LoanappController extends Controller
     echo json_encode($json_data);
   }
 
-  public function export_loanapplication($camp_id,$loan_id,$dt_from,$dt_to)
+  public function export_loanapplication($camp_id,$loan_id,$dt_from,$dt_to,$app,$stat)
   {
     DB::enableQueryLog();
     if(!empty($camp_id) && $camp_id != 0){
@@ -426,6 +469,12 @@ class LoanappController extends Controller
     }
     if (!empty($loan_id) && $loan_id != 0) {
       $records->where('loan_applications.loan_type', $loan_id);
+    }
+    if (!empty($app) && $app != 0) {
+      $records->where('loan_applications_peb.type', $app);
+    }
+    if (!empty($stat) && $stat != 0) {
+      $records->where('loan_applications.status', $stat);
     }
     if (!empty($dt_from) && !empty($dt_to) && $dt_from != 0 && $dt_to != 0) {
       $records->whereBetween(DB::raw('DATE(loan_applications.date_created)'), array($dt_from, $dt_to));
@@ -476,9 +525,20 @@ class LoanappController extends Controller
   {
     $campuses = Campus::all();
     $LoanType = DB::table('loan_type')->get();
+    $application = DB::table('loan_applications_peb')
+      ->select('type')
+      ->groupBy('type')
+      ->get();
+    $status = DB::table('loan_applications')
+      ->select('status')
+      ->groupBy('status')
+      ->get();
+
     $data = array(
       'campuses' => $campuses,
       'LoanType' => $LoanType,
+      'application' => $application,
+      'status' => $status,
     );
     // return view('admin.loan_application.index',array('loans'=>$loans));
     return view('admin.loan_application.index')->with($data);
