@@ -44,8 +44,14 @@
                                 Loan Application
                             </a>
                         </div>
+                        
                     </div>
-
+                    <span style="margin-left: auto">
+                        <a href="#" id="exportLoanApplication" 
+                            class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">Export
+                            Data
+                        </a>
+                    </span>
                     <!--    <div class="col-6 col-lg-3">
               <div class="mp-tab ">
                 <a class="mp-tab__link" href="{{ url('/member/coborrower') }}">
@@ -57,7 +63,49 @@
                 </div>
                 <div class="row no-gutters">
                     <div class="col">
-                        <div class="mp-ph4 mp-pv4 mp-card mp-card--tabbed">
+                    <div class="mp-ph4 mp-pv4 ft-card border-bottom-0 border-top-left-0">
+                            <div class="row mp-pv4">
+                                <label for="" class="mp-text-fs-xlarge mp-text--c-white ">Filtering Section</label>
+                            </div>
+                            <div class="row items-between mp-pv4">
+                                <div class="col-md-12 col-xl-6">
+                                    <div class="row mp-text--c-white">
+                                        <label for="row">Fields</label>
+                                    </div>
+                                    <div class="row field-filter">
+                                        <select name="" class="radius-1 outline select-field"
+                                            style="width: 100%; height: 30px" id="loan_type">
+                                            <option value="">Filter By Loan Type</option>
+                                            @foreach ($loan_type as $row)
+                                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                                            @endforeach
+                                        </select>
+                                        <select name="" class="radius-1 outline select-field"
+                                            style="width: 100%; height: 30px" id="loan_status">
+                                            <option value="">Filter By Status</option>
+                                            <option value="PROCESSING">PROCESSING</option>
+                                            <option value="DONE">DONE</option>
+                                            <option value="CONFIRMED">CONFIRMED</option>
+                                            <option value="CANCELLED">CANCELLED</option>
+
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 col-xl-5">
+                                    <div class="row mp-text--c-white">
+                                        <label for="row">Date Range based on Date Applied Date</label>
+                                    </div>
+                                    <div class="row date_range">
+                                        <input type="date" id="from"
+                                            class="radius-1 border-1 date-input outline" style="height: 30px;">
+                                        <span for="" class="self_center mh-1 mp-text--c-white">to</span>
+                                        <input type="date" id="to"
+                                            class="radius-1 border-1 date-input outline" style="height: 30px;">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mp-ph4 mp-pv4 tb-card border-top-0">
 
                             <div class="mp-text-fs-medium {{ Session::has('error') or (Session::has('success') ? 'mp-mb4' : '') }}"
                                 align="center">
@@ -73,7 +121,7 @@
                             <br>
 
                             <div class="mp-overflow-x">
-                                <div class="mp-ph4 mp-pv4 ft-card border-bottom-0">
+                                <!-- <div class="mp-ph4 mp-pv4 ft-card border-bottom-0">
                                     <div class="row mp-pv4">
                                         <label for="" class="mp-text-fs-xlarge mp-text--c-white ">Filtering
                                             Section</label>
@@ -115,12 +163,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <span>
-                                    <a href="#" id="exportLoanApplication"
-                                        class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small">Export
-                                        Data</a>
-                                </span>
+                                </div> -->
+                           
                                 <table class="mp-table mp-text-fs-small" id="member_loan_table" cellspacing="0"
                                     width="100%">
                                     <thead>
