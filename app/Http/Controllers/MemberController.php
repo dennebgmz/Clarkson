@@ -477,6 +477,7 @@ class MemberController extends Controller
     $amort = '';
     $inte = '';
     $type = '';
+    $data = array();
     if ($posts) {
       foreach ($posts as $key => $value) {
         if ($curdate == $value->date && $value->name == $type && number_format(abs($value->amount), 2) == $amount && number_format(abs($value->amortization), 2) == $amort && number_format(abs($value->interest), 2) == $inte) {
