@@ -4831,6 +4831,13 @@ tfoot {
     gap: 10px;
 }
 
+.input-form-field-2 {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    padding-left: 6%;
+}
+
 .items-between {
     justify-content: space-between;
     gap: 10px;
@@ -4979,15 +4986,98 @@ tfoot {
     align-self: flex-end;
 }
 
+.new-peldiv strong {
+    display: flex;
+    text-align: left;
+    padding-left: 5%;
+}
+
+.new-peldiv strong > span > i {
+    margin-top: 3px;
+    margin-left: 3px;
+}
+
+.flex-form {
+    display: flex;
+    padding-left: 10%;
+    gap: 10px;
+
+}
+
+.flex-form-col-2 {
+    display: flex;
+    padding-left: 0;
+    gap: 10px;
+}
+
+.flex-form input {
+    height: 32px;
+}
+.flex-form label {
+    margin-top: 4px;
+}
+.flex-form-margin {
+    margin-left: 0px;
+}
+
+.flex-form-padding {
+    padding-left: 0px;
+}
+
+.new-peldiv .col-12 {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.new-peldiv {
+    position: relative
+}
+
+.check-form {
+    text-align: left;
+    display: inline-block;
+    padding: 6%;
+}
+
+
+
 @media (max-width:576px) {
+    .flex-form-margin > input{
+        width: 100% !important;
+    }
     .field-filter {
         grid-template-columns: 1fr;
+    }
+    .input-form-field-2 {
+        grid-template-columns: 1fr;
+        padding-left: 0%;
     }
 
     .date_range {
         justify-content: center;
         flex-direction: column;
     }
+
+    .flex-form {
+        padding-left: 10px !important;
+    }
+
+    .flex-form-col-2 {
+        padding-left: 10px !important;
+    }
+
+    .check-form {
+        padding: 0;
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 50px;
+        margin-bottom: 50px;
+    }
+
+    .new-peldiv strong {
+        padding-left: 0;
+    }
+    
 
     .search_field {
         width: 100%;

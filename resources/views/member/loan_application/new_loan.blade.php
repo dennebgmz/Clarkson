@@ -18,7 +18,7 @@
 
 </style>
 
-<div class="container mp-container">
+<div class="container mp-container loan-form">
   <div class="row no-gutters mp-mt4 justify-content-center">
     <div class="col-12 mp-ph2 mp-pv2" style="padding-bottom: 0px!important;">
       <a href="{{url('/member/loan-app')}}" class="mp-link mp-link">
@@ -102,34 +102,49 @@
           <div class="mp-mb3 mp-text-fw-heavy">Max PEL Loanable Amount: &nbsp;&nbsp;&nbsp;&nbsp; PHP {{ number_format($max,2) }}</div>
         </div>
         {{ Form::open(array('url' => '/member/pel-loan-new', 'method' => 'post', 'id'=>'save_pel', 'enctype' => 'multipart/form-data', 'autocomplete'=>'off')) }}
-        <div class="NEW PELDIV">
+        <div class="NEW PELDIV new-peldiv">
           <input type="hidden" value="{{$max}}" name="max">
           <strong style="">Step 1. Please input your desired loan amount. <span data-md-tooltip="The final approved loan amount will depend on your ability to pay the monthly amortization depending on your Net Pay."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span></strong><br>
-          <label for="lname">Amount Requested:</label>
-          <input type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="amount" name="amount" style="width:30%;"  max="{{$max}}" required onkeypress="return isNumber(event)">
+          <div class="flex-form"
+           >
+            <label for="lname">Amount Requested:</label>
+            <input type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="amount" name="amount" style="width:30%;"  max="{{$max}}" required onkeypress="return isNumber(event)">
+          
+          </div>
           <br>
           <br>
           <strong style="">Step 2. Please choose the bank where you want your loan proceeds deposited.</strong><br>
-          <label class="radio-inline"><input type="radio" name="bank"  id="bank"  value="LB" required>Land Bank of the Philippines (LBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <label class="radio-inline"><input type="radio" name="bank"  id="bank" value="PNB"  >Philippine National Bank (PNB)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label class="radio-inline"><input type="radio" name="bank"  id="bank"  value="LB" required> Land Bank of the Philippines (LBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label class="radio-inline"><input type="radio" name="bank"  id="bank" value="PNB"  > Philippine National Bank (PNB)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-          <label class="radio-inline"><input type="radio" name="bank" id="bank"  value="DBP"  >Development Bank of the Philippines (DBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <label class="radio-inline"><input type="radio" name="bank"  id="bank" value="Veterans"  >Philippine Veterans Bank (PVB)</label>
+          <label class="radio-inline"><input type="radio" name="bank" id="bank"  value="DBP"  > Development Bank of the Philippines (DBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label class="radio-inline"><input type="radio" name="bank"  id="bank" value="Veterans"  > Philippine Veterans Bank (PVB)</label>
           <br>
           <br>
           <strong >Step 3. Input the Account Number and Account Name. <span data-md-tooltip="Incorrect account number/account name will be charged P200.00 for re-processing of loan. If Account Name is different from your name or loan proceeds will be deposited to a bank account of another person, please submit a signed Authorization Form and copy of your ID to UP Provident Fund."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span></strong><br>
-          <label for="fname">Account Number:</label>
-          <input type="text" id="acc_num" name="acc_num" onpaste="return false" style="width:30%;"  required onkeypress="return isNumber(event)">&nbsp;&nbsp;
-          <label data-md-tooltip="If Account Name is different from your name or loan proceeds will be deposited to a bank account of another person, please submit a signed Authorization Form and copy of your ID to UP Provident Fund" for="lname">Account Name:</label>
-          <input type="text" id="acc_name" name="acc_name" onpaste="return false" onpaste="return false" onpaste="return false" style="width:30%;"  required><br><br>
+          <div  class="input-form-field-2"  style="margin-bottom: 20px"
+          >
+            <span class="flex-form">
+              <label for="fname">Account Number:</label>
+              <input type="text" id="acc_num" name="acc_num" onpaste="return false" style="width:60%;"  required onkeypress="return isNumber(event)">
+           
+            </span> 
+            <span class="flex-form ">
+              <label data-md-tooltip="If Account Name is different from your name or loan proceeds will be deposited to a bank account of another person, please submit a signed Authorization Form and copy of your ID to UP Provident Fund" for="lname">Account Name:</label>
+            <input type="text" id="acc_name" name="acc_name" onpaste="return false" onpaste="return false" onpaste="return false" style="width:60%;"  required>
 
+            </span>
+          </div>
 
           <div class="form-group col-12">
 
            <strong style="">Step 4. Please attach a soft copy (photo or scanned document) of the following required documents.</strong>     <br>
            <br>
-           <label class="col-6" for="album_cover">I. UP Employee ID or any valid government-issued ID (driver's license, passport, GSIS UMID, Philhealth, etc.)
-           </label>
+           <div class="flex-form">
+            <label for="album_cover">I. UP Employee ID or any valid government-issued ID (driver's license, passport, GSIS UMID, Philhealth, etc.)
+            </label>
+           
+           </div>
            <br>
 
 
@@ -142,10 +157,14 @@
          </div>
          <br>
          <div class="form-group col-12">
-          <label class="col-6" for="album_cover">II. Last 2 months latest payslip
-          </label>
-          <label class="col-6" for="album_cover">Payslip 1:
-          </label>
+          <div class="flex-form">
+            <label  for="album_cover">II. Last 2 months latest payslip
+            </label>
+          </div>
+          <div class="flex-form">
+            <label for="album_cover" style="margin-left: 5%;">Payslip 1:
+            </label>
+          </div>
           <br>
 
 
@@ -158,8 +177,10 @@
         </div>
         <br>
         <div class="form-group col-12">
-          <label class="col-6" for="album_cover">Payslip 2:
-          </label>
+          <div class="flex-form">
+            <label for="album_cover" style="margin-left: 5%;">Payslip 2:
+            </label>
+          </div>
           <br>
 
 
@@ -173,9 +194,11 @@
         <br>
         <br>
         <div class="form-group col-12">
-          <label class="col-6" for="album_cover">III. Passbook / ATM / any document or proof showing bank Account Number where loan proceeds will be deposited.
+          <div class="flex-form">
+            <label for="album_cover">III. Passbook / ATM / any document or proof showing bank Account Number where loan proceeds will be deposited.
 
-          </label>
+            </label>
+          </div>
           <br>
 
 
@@ -190,13 +213,19 @@
         <br>
         <strong style="">Step 5. Please input your active email and contact number. <span data-md-tooltip="Our Account Analyst will contact you through this platforms."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span></strong><br>
         <br>
-        <label for="lname">Active Email:</label>
-        <input type="email" id="email" name="email" style="width:30%;"  value='{{getUserdetails()->email}}' required >
-        <label for="lname">Active Mobile Number: +63</label>
-        <input type="text" value='{{getUserdetails()->contact_no}}' onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10" id="c_number" name="c_number" style="width:30%;"  required onkeypress="return isNumber(event)">
+        <div class="row flex-form flex-form-margin" style="margin-top: 20px;">
+          <label for="lname">Active Email:</label>
+          <input type="email" id="email" name="email" style="width:30%;"  value='{{getUserdetails()->email}}' required >
+       
+        </div>
+        <div class="row flex-form flex-form-margin" style="margin-top: 20px;">
+          <label for="lname">Active Mobile Number: +63</label>
+          <input type="text" value='{{getUserdetails()->contact_no}}' onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10" id="c_number" name="c_number" style="width:30%;"  required onkeypress="return isNumber(event)">
+       
+        </div>
         <br>
-        <input type="checkbox" id="update_profile" name="update_profile">
-        <label for="male">Check this box if you want to replace your existing contact details in the Profile page with this new active email or mobile number.</label><br>
+        
+        <label for="male" class="check-form"><input type="checkbox" id="update_profile" name="update_profile"> Check this box if you want to replace your existing contact details in the Profile page with this new active email or mobile number.</label><br>
 
 
         <div class="mp-pt3 " align="center">
@@ -209,7 +238,7 @@
 
       </div>
       {{ Form::open(array('url' => '/member/pel-loan-renew', 'method' => 'post', 'id'=>'save_pel_renew', 'enctype' => 'multipart/form-data', 'autocomplete'=>'off')) }}
-      <div class="RENEWAL PELDIV">
+      <div class="RENEWAL PELDIV new-peldiv">
         <strong style="">Step 1. Please choose if you want your re-loan amount to be "Full Equity" or "Same Deduction". </strong>     <br>
         <label class="radio-inline"><input  type="radio" name="renewal_option"  value="FULL EQUITY" required>FULL EQUITY <span data-md-tooltip="Re-loan amount may be higher depending on the updated amount of your Member's Equity and net pay
           "><i class="fa fa-info-circle" aria-hidden="true"  ></i></span></label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -217,11 +246,11 @@
           <br>
           <br>
           <strong style="">Step 2. Please choose the bank where you want your loan proceeds deposited.</strong><br>
-          <label class="radio-inline"><input type="radio" name="bank" id="bank" value="LB" required>Land Bank of the Philippines (LBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <label class="radio-inline"><input type="radio" name="bank" id="bank" value="PNB"  >Philippine National Bank (PNB)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label class="radio-inline"><input type="radio" name="bank" id="bank" value="LB" required> Land Bank of the Philippines (LBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label class="radio-inline"><input type="radio" name="bank" id="bank" value="PNB"  > Philippine National Bank (PNB)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-          <label class="radio-inline"><input type="radio" name="bank" id="bank" value="DBP"  >Development Bank of the Philippines (DBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-          <label class="radio-inline"><input type="radio" name="bank" id="bank" value="Veterans"  >Philippine Veterans Bank (PVB)</label>
+          <label class="radio-inline"><input type="radio" name="bank" id="bank" value="DBP"  > Development Bank of the Philippines (DBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <label class="radio-inline"><input type="radio" name="bank" id="bank" value="Veterans"  > Philippine Veterans Bank (PVB)</label>
           <br>
           <br>
           <strong >Step 3. Input the Account Number and Account Name. <span data-md-tooltip="Incorrect account number/account name will be charged P200.00 for re-processing of loan. If Account Name is different from your name or loan proceeds will be deposited to a bank account of another person, please submit a signed Authorization Form and copy of your ID to UP Provident Fund."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span></strong><br>
@@ -235,8 +264,10 @@
 
            <strong style="">Step 4. Please attach a soft copy (photo or scanned document) of the following required documents.</strong>     <br>
            <br>
-           <label class="col-6" for="album_cover">I. UP Employee ID or any valid government-issued ID (driver's license, passport, GSIS UMID, Philhealth, etc.)
-           </label>
+           <div class="flex-form">
+            <label for="album_cover">I. UP Employee ID or any valid government-issued ID (driver's license, passport, GSIS UMID, Philhealth, etc.)
+            </label>
+           </div>
            <br>
 
 
@@ -249,10 +280,14 @@
          </div>
          <br>
          <div class="form-group col-12">
-          <label class="col-6" for="album_cover">II. Last 2 months latest payslip
-          </label>
-          <label class="col-6" for="album_cover">Payslip 1:
-          </label>
+          <div class="flex-form">
+            <label for="album_cover">II. Last 2 months latest payslip
+            </label>
+          </div>
+          <div class="flex-form">
+            <label for="album_cover" style="margin-left: 5%;">Payslip 1:
+            </label>
+          </div>
           <br>
 
 
@@ -265,8 +300,10 @@
         </div>
         <br>
         <div class="form-group col-12">
-          <label class="col-6" for="album_cover">Payslip 2:
-          </label>
+          <div class="flex-form">
+            <label for="album_cover" style="margin-left: 5%;">Payslip 2:
+            </label>
+          </div>
           <br>
 
 
@@ -280,7 +317,7 @@
         <br>
         <br>
         <div class="form-group col-12">
-          <label class="col-6" for="album_cover">III. Passbook / ATM / any document or proof showing bank Account Number where loan proceeds will be deposited. <span data-md-tooltip="Incorrect account number/account name will be charged P200.00 for re-processing of loan. If Account Name is different from your name or loan proceeds will be deposited to a bank account of another person, please submit a signed Authorization Form and copy of your ID to UP Provident Fund."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span>
+          <label for="album_cover">III. Passbook / ATM / any document or proof showing bank Account Number where loan proceeds will be deposited. <span data-md-tooltip="Incorrect account number/account name will be charged P200.00 for re-processing of loan. If Account Name is different from your name or loan proceeds will be deposited to a bank account of another person, please submit a signed Authorization Form and copy of your ID to UP Provident Fund."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span>
 
           </label>
           <br>
@@ -298,13 +335,17 @@
         <br>
         <strong style="">Step 5. Please input your active email and contact number. <span data-md-tooltip="Our Account Analyst will contact you through this platforms."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span></strong><br>
         <br>
-        <label for="lname">Active Email:</label>
-        <input type="email" id="email" name="email" value='{{getUserdetails()->email}}' style="width:30%;"  required >
-        <label for="lname">Active Mobile Number: +63</label>
-        <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10" id="c_number" name="c_number" style="width:30%;"  value='{{getUserdetails()->contact_no}}' required onkeypress="return isNumber(event)">
+        <div class="row flex-form flex-form-margin">
+          <label for="lname">Active Email:</label>
+          <input type="email" id="email" name="email" value='{{getUserdetails()->email}}' style="width:30%;"  required >
+         </div>
+        <div class="row flex-form flex-form-margin" style="margin-top: 20px;">
+          <label for="lname">Active Mobile Number: +63</label>
+          <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10" id="c_number" name="c_number" style="width:30%;"  value='{{getUserdetails()->contact_no}}' required onkeypress="return isNumber(event)">
+        </div>
         <br>
-        <input type="checkbox" id="update_profile" name="update_profile">
-        <label for="male">Check this box if you want to replace your existing contact details in the Profile page with this new active email or mobile number.</label><br>
+        
+        <label for="male" class="check-form"><input type="checkbox" id="update_profile" name="update_profile"> Check this box if you want to replace your existing contact details in the Profile page with this new active email or mobile number.</label><br>
 
         <div class="mp-pt3 " align="center">
           <div class="col col-auto">
@@ -334,36 +375,52 @@
       </select>
     </div> -->
     
-    <div class="EML DIV">
+    <div class="EML DIV new-peldiv">
       {{ Form::open(array('url' => '/member/eml-loan-new', 'method' => 'post', 'id'=>'save_eml', 'enctype' => 'multipart/form-data', 'autocomplete'=>'off')) }}
       <div id="bank_det" align="center">
-
+        <div style="display: inline-block; justify-content: center; margin-bottom: 20px" class="col">
+          <strong style="display: inline-block; margin-bottom: 20px">Maximum loanable amount is P10,000 <span data-md-tooltip="Your loanable amount will depend on your remaining Equity and existing loan balances."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span></strong>
+        
+        </div>
         <strong style="">Step 1. Please input your desired loan amount.</strong><br>
-        <strong style="">Maximum loanable amount is P10,000 <span data-md-tooltip="Your loanable amount will depend on your remaining Equity and existing loan balances."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span></strong>
+        
         <br>        
-        <label for="lname">Amount Requested:</label>
-        <input type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="amount" name="amount" style="width:30%;" max="10000" required onkeypress="return isNumber(event)"><br><br>
+        <div class="flex-form" style="margin-bottom: 40px"
+           > 
+          <label for="lname">Amount Requested:</label>
+          <input type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="amount" name="amount" style="width:30%;" max="10000" required onkeypress="return isNumber(event)"><br><br>
+        
+        </div>
         <strong style="">Step 2. Please choose the bank where you want your loan proceeds deposited.</strong><br>
-        <label class="radio-inline"><input type="radio" name="bank"  value="LB" required>Land Bank of the Philippines (LBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <label class="radio-inline"><input type="radio" name="bank" value="PNB"  >Philippine National Bank (PNB)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label class="radio-inline"><input type="radio" name="bank"  value="LB" required> Land Bank of the Philippines (LBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label class="radio-inline"><input type="radio" name="bank" value="PNB"  > Philippine National Bank (PNB)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-        <label class="radio-inline"><input type="radio" name="bank" value="DBP"  >Development Bank of the Philippines (DBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        <label class="radio-inline"><input type="radio" name="bank" value="Veterans"  >Philippine Veterans Bank (PVB)</label>
+        <label class="radio-inline"><input type="radio" name="bank" value="DBP"  > Development Bank of the Philippines (DBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <label class="radio-inline"><input type="radio" name="bank" value="Veterans"  > Philippine Veterans Bank (PVB)</label>
         <br>
         <br>
         <strong >Step 3. Input the Account Number and Account Name. <span data-md-tooltip="Incorrect account number/account name will be charged P200.00 for re-processing of loan. If Account Name is different from your name or loan proceeds will be deposited to a bank account of another person, please submit a signed Authorization Form and copy of your ID to UP Provident Fund."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span></strong><br>
-        <label for="fname">Account Number:</label>
-        <input type="text" id="acc_num" name="acc_num" onpaste="return false" style="width:30%;"  required onkeypress="return isNumber(event)">&nbsp;&nbsp;
-        <label for="lname">Account Name:</label>
-        <input type="text" id="acc_name" name="acc_name" onpaste="return false" style="width:30%;"  required><br><br>
         
+        <div  class="input-form-field-2"  style="margin-bottom: 20px;"
+          >
+          <span class="flex-form ">
+            <label for="fname">Account Number:</label>
+            <input type="text" id="acc_num" name="acc_num" onpaste="return false" style="width:60%;"  required onkeypress="return isNumber(event)">&nbsp;&nbsp;
+          </span>
+          <span class="flex-form ">
+            <label for="lname">Account Name:</label>
+            <input type="text" id="acc_name" name="acc_name" onpaste="return false" style="width:60%; margin-left:0"  required><br><br>
+          </span>
+        </div>
 
         <div class="form-group col-12">
 
          <strong style="">Step 4. Please attach a soft copy (photo or scanned document) of the following required documents.</strong>     <br>
          <br>
-         <label class="col-6" for="album_cover">I. UP Employee ID or any valid government-issued ID (driver's license, passport, GSIS UMID, Philhealth, etc.)
-         </label>
+         <div class="flex-form">
+          <label for="album_cover">I. UP Employee ID or any valid government-issued ID (driver's license, passport, GSIS UMID, Philhealth, etc.)
+          </label>
+         </div>
          <br>
 
 
@@ -376,10 +433,14 @@
        </div>
        <br>
        <div class="form-group col-12">
-        <label class="col-6" for="album_cover">II. Last 2 months latest payslip
-        </label>
-        <label class="col-6" for="album_cover">Payslip 1:
-        </label>
+        <div class="flex-form">
+          <label for="album_cover">II. Last 2 months latest payslip
+          </label>
+        </div>
+        <div class="flex-form">
+          <label for="album_cover" style="margin-left: 5%">Payslip 1:
+          </label>    
+        </div>
         <br>
 
 
@@ -392,8 +453,10 @@
       </div>
       <br>
       <div class="form-group col-12">
-        <label class="col-6" for="album_cover">Payslip 2:
-        </label>
+        <div class="flex-form">
+          <label for="album_cover" style="margin-left: 5%">Payslip 2:
+          </label>    
+        </div>
         <br>
 
 
@@ -407,9 +470,11 @@
       <br>
       <br>
       <div class="form-group col-12">
-        <label class="col-6" for="album_cover">III. Passbook / ATM / any document or proof showing bank Account Number where loan proceeds will be deposited.
+        <div class="flex-form">
+          <label class="col-6" for="album_cover">III. Passbook / ATM / any document or proof showing bank Account Number where loan proceeds will be deposited.
 
-        </label>
+          </label>
+        </div>
         <br>
 
 
@@ -425,14 +490,20 @@
       <br>
       <strong style="">Step 5. Please input your active email and contact number. <span data-md-tooltip="Our Account Analyst will contact you through this platforms."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span></strong><br>
       <br>
-      <label for="lname">Active Email:</label>
-      <input type="email" id="email" name="email" value='{{getUserdetails()->email}}' style="width:30%;"  required >
-      <label for="lname">Active Mobile Number: +63</label>
-      <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10" id="c_number" name="c_number" style="width:30%;"  value='{{getUserdetails()->contact_no}}' required onkeypress="return isNumber(event)">
-
+      <div class="row flex-form flex-form-margin" style=""> 
+        <label for="lname">Active Email:</label>
+        <input type="email" id="email" name="email" value='{{getUserdetails()->email}}' style="width:30%;"  required >
+     
+      </div>
+      <div class="row flex-form flex-form-margin" style="margin-top: 20px;"> 
+        <label for="lname">Active Mobile Number: +63</label>
+        <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10" id="c_number" name="c_number" style="width:30%;"  value='{{getUserdetails()->contact_no}}' required onkeypress="return isNumber(event)">
+     
+      </div>
+     
       <br>
-      <input type="checkbox" id="update_profile" name="update_profile">
-      <label for="male">Check this box if you want to replace your existing contact details in the Profile page with this new active email or mobile number.</label><br>
+      
+      <label for="male" class="check-form"><input type="checkbox" id="update_profile" name="update_profile"> Check this box if you want to replace your existing contact details in the Profile page with this new active email or mobile number.</label><br>
 
 
 
@@ -461,37 +532,50 @@
             <option value="RENEWAL">LOAN RENEWAL (Re-Loan)</option>
           </select>
         </div> -->
-        <div class="BL DIV">
+        <div class="BL DIV new-peldiv">
           <div id="bank_det" align="center">
             {{ Form::open(array('url' => '/member/bl-loan-new', 'method' => 'post', 'id'=>'save_bl', 'enctype' => 'multipart/form-data', 'autocomplete'=>'off')) }}
-            <strong style="">Please fill-up the necessary informations and upload the required attachments</strong>     <br>
+            <strong style="justify-content: center">Maximum loanable amount is P20,000 <span data-md-tooltip="Your loanable amount will depend on your remaining Equity and existing loan balances."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span></strong>
             <br>
-            <strong style="">Step 1. Please input your desired loan amount.</strong><br>
-            <strong style="">Maximum loanable amount is P20,000 <span data-md-tooltip="Your loanable amount will depend on your remaining Equity and existing loan balances."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span></strong>
-            <br>
-            <label for="lname">Amount Requested:</label>
-            <input type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="amount" name="amount" style="width:30%;" max="20000" required onkeypress="return isNumber(event)"><br><br>
-            <strong style="">Step 2. Please choose the bank where you want your loan proceeds deposited.</strong><br>
-            <label class="radio-inline"><input type="radio" name="bank"  value="LB" required>Land Bank of the Philippines (LBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <label class="radio-inline"><input type="radio" name="bank" value="PNB"  >Philippine National Bank (PNB)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 
-            <label class="radio-inline"><input type="radio" name="bank" value="DBP"  >Development Bank of the Philippines (DBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <label class="radio-inline"><input type="radio" name="bank" value="Veterans"  >Philippine Veterans Bank (PVB)</label>
+            <strong style="">Step 1. Please input your desired loan amount.</strong><br>
+            <div class="flex-form">
+              <label for="lname">Amount Requested:</label>
+              <input type="number" onkeypress="return event.charCode >= 48 && event.charCode <= 57" id="amount" name="amount" style="width:30%;" max="20000" required onkeypress="return isNumber(event)"><br><br>
+            
+            </div>
+            <strong style="">Step 2. Please choose the bank where you want your loan proceeds deposited.</strong><br>
+            <label class="radio-inline"><input type="radio" name="bank"  value="LB" required> Land Bank of the Philippines (LBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <label class="radio-inline"><input type="radio" name="bank" value="PNB"  > Philippine National Bank (PNB)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+            <label class="radio-inline"><input type="radio" name="bank" value="DBP"  > Development Bank of the Philippines (DBP)</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <label class="radio-inline"><input type="radio" name="bank" value="Veterans"  > Philippine Veterans Bank (PVB)</label>
             <br>
             <br>
             <strong >Step 3. Input the Account Number and Account Name. <span data-md-tooltip="Incorrect account number/account name will be charged P200.00 for re-processing of loan. If Account Name is different from your name or loan proceeds will be deposited to a bank account of another person, please submit a signed Authorization Form and copy of your ID to UP Provident Fund."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span></strong><br>
-            <label for="fname">Account Number:</label>
-            <input type="text" id="acc_num" name="acc_num" onpaste="return false" style="width:30%;"  required onkeypress="return isNumber(event)">&nbsp;&nbsp;
-            <label for="lname">Account Name:</label>
-            <input type="text" id="acc_name" name="acc_name" onpaste="return false" style="width:30%;"  required><br><br>
-            
+            <div  class="input-form-field-2"  style="margin-bottom: 20px;"
+              >
+              <span class="flex-form ">
+                <label for="fname">Account Number:</label>
+                <input type="text" id="acc_num" name="acc_num" onpaste="return false" style="width:60%;"  required onkeypress="return isNumber(event)">&nbsp;&nbsp;
+              </span>
+              <span class="flex-form ">
+                <label for="lname">Account Name:</label>
+               <input type="text" id="acc_name" name="acc_name" onpaste="return false" style="width:60%;"  required><br><br>
+              </span>
+            </div>
+
+           
 
             <div class="form-group col-12">
 
              <strong style="">Step 4. Please attach a soft copy (photo or scanned document) of the following required documents.</strong>     <br>
              <br>
-             <label class="col-6" for="album_cover">I. UP Employee ID or any valid government-issued ID (driver's license, passport, GSIS UMID, Philhealth, etc.)
-             </label>
+            <div class="flex-form">
+              <label for="album_cover">I. UP Employee ID or any valid government-issued ID (driver's license, passport, GSIS UMID, Philhealth, etc.)
+              </label>
+
+            </div>
              <br>
 
 
@@ -504,10 +588,15 @@
            </div>
            <br>
            <div class="form-group col-12">
-            <label class="col-6" for="album_cover">II. Last 2 months latest payslip
-            </label>
-            <label class="col-6" for="album_cover">Payslip 1:
-            </label>
+            <div class="flex-form">
+              <label for="album_cover">II. Last 2 months latest payslip
+              </label>
+            </div>
+           <div class="flex-form">
+            <label for="album_cover" style="margin-left: 5%;">Payslip 1:
+              </label>
+           </div>
+           
             <br>
 
 
@@ -520,8 +609,11 @@
           </div>
           <br>
           <div class="form-group col-12">
-            <label class="col-6" for="album_cover">Payslip 2:
-            </label>
+            <div class="flex-form">
+              <label for="album_cover" style="margin-left: 5%;">Payslip 2:
+              </label>
+            </div>
+           
             <br>
 
 
@@ -535,9 +627,11 @@
           <br>
           <br>
           <div class="form-group col-12">
-            <label class="col-6" for="album_cover">III. Passbook / ATM / any document or proof showing bank Account Number where loan proceeds will be deposited.
+            <div class="flex-form">
+              <label for="album_cover">III. Passbook / ATM / any document or proof showing bank Account Number where loan proceeds will be deposited.
 
-            </label>
+              </label>
+            </div>
             <br>
 
 
@@ -553,14 +647,19 @@
           <br>
           <strong style="">Step 5. Please input your active email and contact number. <span data-md-tooltip="Our Account Analyst will contact you through this platforms."><i class="fa fa-info-circle" aria-hidden="true"  ></i></span></strong><br>
           <br>
-          <label for="lname">Active Email:</label>
-          <input type="email" id="email" name="email" value='{{getUserdetails()->email}}' style="width:30%;"  required >
-          <label for="lname">Active Mobile Number: +63</label>
-          <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10" id="c_number" name="c_number" style="width:30%;"  value='{{getUserdetails()->contact_no}}' required onkeypress="return isNumber(event)">
+          <div class="row flex-form flex-form-margin" style=""> 
+            <label for="lname">Active Email:</label>
+            <input type="email" id="email" name="email" value='{{getUserdetails()->email}}' style="width:30%;"  required >
+          
+          </div>
+          <div class="row flex-form flex-form-margin" style="margin-top: 20px;"> 
+            <label for="lname">Active Mobile Number: +63</label>
+            <input type="text" onkeypress="return event.charCode >= 48 && event.charCode <= 57" maxlength="10" id="c_number" name="c_number" style="width:30%;"  value='{{getUserdetails()->contact_no}}' required onkeypress="return isNumber(event)">
 
-          <br>
-          <input type="checkbox" id="update_profile" name="update_profile">
-          <label for="male">Check this box if you want to replace your existing contact details in the Profile page with this new active email or mobile number.</label><br>
+          </div>
+          
+          
+          <label for="male" class="check-form"><input type="checkbox" id="update_profile" name="update_profile"> Check this box if you want to replace your existing contact details in the Profile page with this new active email or mobile number.</label><br>
 
 
           <div class="mp-pt3 " align="center">
@@ -579,9 +678,9 @@
      </div>
 
 
-     <div class="BTL DIV"><strong style=";">COMING SOON</strong> <br>We're working to have the online Balance Transfer Loan application available soon. If you want to avail of a Balance Transfer Loan (BTL) now, we will gladly assist you so please contact our campus cluster offices. Maraming salamat po!</div>
+     <div class="BTL DIV"><strong style="">🚧 UNDER CONSTRUCTION 🚧</strong> <br>We're working to have the online Balance Transfer Loan application available soon. If you want to avail of a Balance Transfer Loan (BTL) now, we will gladly assist you so please contact our campus cluster offices. Maraming salamat po!</div>
 
-     <div class="CBL DIV"><strong style=";">COMING SOON</strong> <br>We're working to have the online Co-Borrower Loan application available soon. If you want to avail of a Co-Borrower Loan (CBL) now, we will gladly assist you so please contact our campus cluster offices. Maraming salamat po!</div>
+     <div class="CBL DIV"><strong style="">🚧 UNDER CONSTRUCTION 🚧</strong> <br>We're working to have the online Co-Borrower Loan application available soon. If you want to avail of a Co-Borrower Loan (CBL) now, we will gladly assist you so please contact our campus cluster offices. Maraming salamat po!</div>
 
      <br>
 
