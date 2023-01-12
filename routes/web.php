@@ -94,6 +94,7 @@ Route::get('/admin/dashboard', 'AdminController@index');
 Route::get('/admin/count', 'AdminController@getTotal');
 Route::get('/admin/count_percampuses', 'AdminController@getTotal_campuses')->name('campuses_id');
 Route::get('/admin/summaryreports/{id}', 'AdminController@generatesummary');
+Route::get('/admin/report_summary', 'AdminController@generatesummaryReport');
 Route::get('/admin/member_soa/{id}', 'AdminController@member_soa');
 Route::get('/admin/members', 'AdminController@members');
 Route::get('/admin/membersData', 'AdminController@memberData')->name('dataProcessing');

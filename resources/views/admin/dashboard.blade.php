@@ -19,6 +19,10 @@
                             class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">
                             Print Report
                         </a>
+                        <a href="#" id="generate_summary_report"
+                            class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">
+                            Generate Report Summary
+                        </a>
                     </div>
                 </div>
             </div>
@@ -393,6 +397,10 @@
                     $('#loading').hide();
                 }
             });
+        });
+        $(document).on('click', '#generate_summary_report', function(e) {
+            var url = "{{ URL::to('/admin/report_summary') }}"; //YOUR CHANGES HERE...
+            window.open(url, '_blank');
         });
         $(document).on('click', '#generate_summary', function(e) {
             var id = campuses_id;
