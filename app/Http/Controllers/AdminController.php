@@ -1372,7 +1372,7 @@ class AdminController extends Controller
     echo ($loanData);
   }
 
-  public function generatesummaryReport()
+  public function generatesummaryReport($id)
   {
     $summaryData = "";
     $endOfMonth = Carbon::now()->endOfMonth();
@@ -1437,8 +1437,8 @@ class AdminController extends Controller
       )
       ->leftJoin('tmp_loan_summary as l', 'm.member_id', '=', 'l.member_id')
       ->leftJoin('tmp_contribution_summary as c', 'm.member_id', '=', 'c.member_id')
-      // ->orderBy('m.campus_id');
-      ->where('m.campus_id', '6');
+      ->orderBy('m.campus_id')
+      ->where('m.campus_id', $id);
 
     $posts = $records->get();
     if (count($posts) > 0) {

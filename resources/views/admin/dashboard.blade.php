@@ -19,8 +19,9 @@
                             class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">
                             Print Report
                         </a>
-                        <a href="#" id="generate_summary_report"
-                            class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">
+                        {{-- id="generate_summary_report" --}}
+                        <a data-target="myPopupReport"
+                            class="toggle mp-ml2 text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">
                             Generate Report Summary
                         </a>
                     </div>
@@ -306,7 +307,41 @@
             </div>
         </div>
         </div>
-        
+    </div>
+
+    <div id="myPopupReport" class="modal_background hide ">
+        <div class="popup">
+            <div class="popup-header modal_title">
+                Report Per Campuses
+            <span class="close toggle" data-target="myPopupReport">close</span>
+             </div>
+        <div class="popup-body">
+            <div class="container">
+                    <div class="row gc_row">
+                        <div class="col-4">
+                             <label>Campus Name</label>
+                        </div>
+                        <div class="col-8">
+                            <select name="select_campus" required class="select_style" id="select_campus">
+                            <option value="">Select Campus</option>
+                            @foreach ($campuses as $row)
+                                <option value="{{ $row->id }}">{{ $row->name }}</option>
+                            @endforeach
+                        </select>
+                        </div>
+                    </div>
+                     
+                    <div class="row">
+                        <div class="col-12 save-button">
+                            <button type="button" class="button_style mp-button" id="generate_summary_report">
+                        Generate Report</button>
+                          
+                        </div>
+                    </div>
+                <hr>
+            </div>
+        </div>
+        </div>
     </div>
 @endsection
 
@@ -399,8 +434,14 @@
             });
         });
         $(document).on('click', '#generate_summary_report', function(e) {
-            var url = "{{ URL::to('/admin/report_summary') }}"; //YOUR CHANGES HERE...
-            window.open(url, '_blank');
+            var id = $('#select_campus').val();
+            var url = "{{ URL::to('/admin/report_summary/') }}" + '/' + id; //YOUR CHANGES HERE...
+
+            if (id != '') {
+                window.open(url, '_blank');
+            } else {
+                alert('Please select campus');
+            }
         });
         $(document).on('click', '#generate_summary', function(e) {
             var id = campuses_id;
