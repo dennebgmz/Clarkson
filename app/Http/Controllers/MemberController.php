@@ -107,6 +107,27 @@ class MemberController extends Controller
     return view('member.dashboard', array('member' => $member, 'recentcontributions' => $recentcontributions, 'recentloans' => $recentloans, 'contributions' => $contributions, 'totalcontributions' => $totalcontributions, 'outstandingloans' => $outstandingloans, 'totalloanbalance' => $totalloanbalance));
   }
 
+  public function dpaAgreement(Request $request)
+  {
+    $message = '';
+    DB::beginTransaction(); // start transaction
+    try {
+        DB::table('users')
+            ->where('id', $request->get('user_id'))
+            ->update(array('dpa_notice' => '1'));
+        DB::commit(); // commit transaction if successful
+        $message = 'Success'; // set success message
+    } catch (\Exception $e) {
+        DB::rollback(); // rollback transaction on error
+        $message = 'Error'; // set error message
+    }
+    $output = array(
+        'message' => $message,
+    );
+    echo json_encode($output);
+
+  }
+
 
   public function equity()
   {
