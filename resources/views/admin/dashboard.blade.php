@@ -11,6 +11,10 @@
             <div class="col-12 mp-text-right" style="display: flex; flex-direction: row; justify-content: right">
                 <div class="row no-gutters">
                     <div class="mp-ph2 mp-pv2">
+                        <a data-target="DPA_list"
+                            class="toggle mp-mr2 text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">
+                            Member DPA
+                        </a>
                         <a data-target="myPopup"
                             class="toggle text_link mp-button mp-button--primary mp-button--ghost mp-button--raised mp-button--mini mp-text-fs-small up-button">
                             Manage Campus
@@ -224,6 +228,7 @@
         </div>
     </div>
 
+ 
 
 
     <div id="myPopup" class="modal_background hide ">
@@ -324,6 +329,7 @@
                         <div class="col-8">
                             <select name="select_campus" required class="select_style" id="select_campus">
                             <option value="">Select Campus</option>
+                            <option value="All">All Campuses</option>
                             @foreach ($campuses as $row)
                                 <option value="{{ $row->id }}">{{ $row->name }}</option>
                             @endforeach
@@ -343,12 +349,42 @@
         </div>
         </div>
     </div>
+
+    <div id="DPA_list" class="modal_background hide ">
+        <div class="popup">
+            <div class="popup-header modal_title" style="font-size:20px;">
+                Member Already Agree on DPA
+            <span class="close toggle" data-target="DPA_list">close</span>
+             </div>
+             <hr>
+        <div class="popup-body">
+            <div class="container">
+                <div class="mp-overflow-x">
+                    <table class="mp-table mp-text-fs-small table_style " id="dpa_table" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Campus</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('scripts')
     <script src="{{ asset('/dist/adminDashboard.js') }}"></script>
 
     <script>
+        
         $(document).ready(function() {
             var tableMember = $('#campusTable').DataTable({
                 language: {
@@ -370,6 +406,22 @@
                 //         className: 'dt-body-right'
                 //     }
                 // ]
+            });
+
+            var tableDPA = $('#dpa_table').DataTable({
+                language: {
+                    search: '',
+                    searchPlaceholder: "Search Here...",
+                    processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><br>Loading...',
+                },
+                "ordering": false,
+                "lengthChange": false,
+                "info": false,
+                "processing": true,
+                "serverSide": true,
+                "ajax": {
+                    "url": "{{ route('dataDPA') }}",
+                },
             });
 
             load_upcontri();
@@ -433,6 +485,7 @@
                 }
             });
         });
+
         $(document).on('click', '#generate_summary_report', function(e) {
             var id = $('#select_campus').val();
             var url = "{{ URL::to('/admin/report_summary/') }}" + '/' + id; //YOUR CHANGES HERE...

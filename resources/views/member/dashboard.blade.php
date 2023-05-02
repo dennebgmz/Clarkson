@@ -321,12 +321,83 @@
             </div>
         </div>
     </div>
+    
+    <div id="myDPA_notice" class="modal_background hide">
+        <div class="popup-dpa">
+            <div class="popup-header-dpa">
+                DATA PRIVACY NOTICE
+             </div>
+        <div class="popup-body-dpa">
+            <div class="container">
+                <div class="popup-content-dpa">
+                    <b class="up">U.P. Provident Fund (UPPFI)</b> upholds the <i><b>Data Privacy Act, </b></i>and is committed to the
+                    protection of the privacy rights of its members, employees, offices, or stakeholders from whom it processes personal
+                    information and sensitive personal information, guided all the time by the principles of legitimacy, transparency,
+                    and proportionality.
+                    <br><br>
+                    <p>Thus, <b>UPPFI</b> has instituted strict measures to safeguard the sanctity and confidentiality of those data/information
+                    . The company strictly adheres to the duties and responsibilites (before, during, and after processing of information), mandated by
+                    <i>Republic Act 10173</i> and allied government regulations.
+                    <br><br>
+                    Kindly sign below to signify your free, prior, and informed consent for UPPFI to proceed with this personal data processing, and to allow UPPFI
+                    to use the information for<br>
+                    (i) the appropriate delivery of its products and services,<br>
+                    (ii) necessary documentation or submission, and/or<br>
+                    (iii) pursuance of transactions expected from its position.
+                    </p>
+                <hr>
+                <button class="accept">I ACCEPT</button>
+                <button class="not_accept">I DO NOT ACCEPT</button>
+                </div>
+                
+            </div>
+        </div>
+        </div>
+    </div>
+    <input type="hidden" id="dpa_notice" value="{{ getUserdetails()->dpa_notice }}">
 @endsection
 
 @section('scripts')
     <script src="{{ asset('/dist/dashboard.js') }}"></script>
 
     <script>
+    var dpa_notice = $('#dpa_notice').val();
+    $(document).ready(function(){
+        setTimeout(() => {
+            if (dpa_notice != 1) {
+                $("#myDPA_notice").removeClass("hide");
+            } else {
+                $("#myDPA_notice").addClass("hide");
+            }
+        }, 1000);
+
+        $(document).on('click', '.not_accept', function(e) {
+            window.location.href = "{{ url('/logout') }}";
+        });
+        
+        $(document).on('click', '.accept', function(e){
+            e.preventDefault();
+            var user_id = "{{getUserdetails()->user_id}}";
+            $.ajax({
+                url: "/member/dpa_agreement",
+                method: "GET",
+                data: {
+                    user_id: user_id
+                },
+                dataType: 'json',
+                success: function(data) {
+                    $("#myDPA_notice").addClass("hide");
+                    setTimeout(() => {
+                        location.reload();
+                    }, 1000);
+                },
+                error: function() {
+                    window.location.href = "{{ url('/logout') }}";
+                }
+            });
+        })
+    });
+
       $(document).on('click', '#agree', function(e) {
           $("#modalBackDrop").addClass("opacity-0")
           setTimeout(function() {

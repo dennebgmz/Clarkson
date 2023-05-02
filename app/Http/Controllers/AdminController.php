@@ -404,6 +404,80 @@ class AdminController extends Controller
   }
 
   //List of Member
+  public function getAllDPA(Request $request)
+  {
+    ## Read value
+    $draw = $request->get('draw');
+    $start = $request->get("start");
+    $rowperpage = $request->get("length"); // Rows display per page
+
+    $columnIndex_arr = $request->get('order');
+    $columnName_arr = $request->get('columns');
+    $order_arr = $request->get('order');
+    $search_arr = $request->get('search');
+
+    $columnIndex = $columnIndex_arr[0]['column']; // Column index
+    // $columnName = $columnName_arr[$columnIndex]['data']; // Column name
+    $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+    $searchValue = $search_arr['value']; // Search value
+
+    // Total records
+    $records = DB::table('users')
+      ->leftjoin('member', 'users.id', 'member.user_id')
+      ->leftjoin('campus', 'member.campus_id', 'campus.id')
+      ->where('users.dpa_notice', 1) // filter by dpa_notice = 1 in campus table
+      ->where(function ($query) use ($searchValue) {
+           $query->where('users.first_name', 'like', '%' . $searchValue . '%')
+                 ->orWhere('users.last_name', 'like', '%' . $searchValue . '%');
+      });
+    $totalRecords = $records->count();
+
+    // Total records with filter
+    $records = DB::table('users')
+      ->leftjoin('member', 'users.id', 'member.user_id')
+      ->leftjoin('campus', 'member.campus_id', 'campus.id')
+      ->where('users.dpa_notice', 1) // filter by dpa_notice = 1 in campus table
+      ->where(function ($query) use ($searchValue) {
+           $query->where('users.first_name', 'like', '%' . $searchValue . '%')
+                 ->orWhere('users.last_name', 'like', '%' . $searchValue . '%');
+    });
+    $totalRecordswithFilter = $records->count();
+
+    //Fetch records
+    $records = DB::table('users')
+      ->leftjoin('member', 'users.id', 'member.user_id')
+      ->leftjoin('campus', 'member.campus_id', 'campus.id')
+      ->where('users.dpa_notice', 1) // filter by dpa_notice = 1 in campus table
+      ->where(function ($query) use ($searchValue) {
+           $query->where('users.first_name', 'like', '%' . $searchValue . '%')
+                 ->orWhere('users.last_name', 'like', '%' . $searchValue . '%');
+      });
+
+    $posts = $records->skip($start)
+      ->take($rowperpage)
+      ->get();
+    $data = array();
+    if ($posts) {
+      foreach ($posts as $r) {
+        $start++;
+        $row = array();
+
+        $row[] = $r->last_name.', '.$r->first_name.' '.$r->middle_name;
+        $row[] = strtoupper($r->name);
+
+        $data[] = $row;
+      }
+    }
+    $json_data = array(
+      "draw" => intval($draw),
+      "recordsTotal" => intval($totalRecords),
+      "recordsFiltered" => intval($totalRecordswithFilter),
+      "data" => $data
+    );
+    echo json_encode($json_data);
+  }
+
+  //List of Member
   public function memberData(Request $request)
   {
     ## Read value
@@ -506,6 +580,8 @@ class AdminController extends Controller
       foreach ($posts as $r) {
         $start++;
         $row = array();
+
+        $row[] = '<input type="checkbox" id="check" value="'.$r->id.'" />';
         $row[] = "<a data-md-tooltip='View Member' class='view_member md-tooltip--right' id='" . $r->id . "' style='cursor: pointer'>
                     <i class='mp-icon md-tooltip--right icon-book-open mp-text-c-primary mp-text-fs-large'></i>
                   </a>";
@@ -1374,121 +1450,242 @@ class AdminController extends Controller
 
   public function generatesummaryReport($id)
   {
-    $summaryData = "";
-    $endOfMonth = Carbon::now()->endOfMonth();
-    DB::statement("CREATE TEMPORARY TABLE tmp_summary_member
-      SELECT member.member_no, member.id as member_id, CONCAT(users.first_name,' ',users.last_name) as 'name', users.first_name, users.middle_name, users.last_name, member.campus_id, campus.campus_key, member.membership_status
-      FROM member
-      INNER JOIN users ON member.user_id = users.id
-      INNER JOIN campus ON member.campus_id = campus.id
-      WHERE member.membership_status = 'ACTIVE'");
+    if ($id == 'All') {
+      $summaryData = "";
+      $endOfMonth = Carbon::now()->endOfMonth();
+      DB::statement("CREATE TEMPORARY TABLE tmp_summary_member
+        SELECT member.member_no, member.id as member_id, CONCAT(users.first_name,' ',users.last_name) as 'name', users.first_name, users.middle_name, users.last_name, member.campus_id, campus.campus_key, member.membership_status
+        FROM member
+        INNER JOIN users ON member.user_id = users.id
+        INNER JOIN campus ON member.campus_id = campus.id
+        WHERE member.membership_status = 'ACTIVE'");
 
-    DB::statement("CREATE TEMPORARY TABLE tmp_lt_month
-      SELECT * FROM loan_transaction
-      WHERE date <= '{$endOfMonth}'");
+      DB::statement("CREATE TEMPORARY TABLE tmp_lt_month
+        SELECT * FROM loan_transaction
+        WHERE date <= '{$endOfMonth}'");
 
-    DB::statement("CREATE TEMPORARY TABLE tmp_loan_summary
-      SELECT loan.member_id,
-          sum(case when loan_type.name = 'BL' then tmp_lt_month.amount else 0 end) as 'BL',
-          sum(case when loan_type.name = 'BTL' then tmp_lt_month.amount else 0 end) as 'BTL',
-          sum(case when loan_type.name = 'CBL' then tmp_lt_month.amount else 0 end) as 'CBL',
-          sum(case when loan_type.name = 'EML' then tmp_lt_month.amount else 0 end) as 'EML',
-          sum(case when loan_type.name = 'PEL' then tmp_lt_month.amount else 0 end) as 'PEL',
-          sum(tmp_lt_month.amount) AS 'total_loans'
-      FROM loan 
-          INNER JOIN tmp_lt_month on loan.id = tmp_lt_month.loan_id
-          INNER JOIN loan_type on loan.type_id = loan_type.id
-      GROUP BY loan.member_id");
+      DB::statement("CREATE TEMPORARY TABLE tmp_loan_summary
+        SELECT loan.member_id,
+            sum(case when loan_type.name = 'BL' then tmp_lt_month.amount else 0 end) as 'BL',
+            sum(case when loan_type.name = 'BTL' then tmp_lt_month.amount else 0 end) as 'BTL',
+            sum(case when loan_type.name = 'CBL' then tmp_lt_month.amount else 0 end) as 'CBL',
+            sum(case when loan_type.name = 'EML' then tmp_lt_month.amount else 0 end) as 'EML',
+            sum(case when loan_type.name = 'PEL' then tmp_lt_month.amount else 0 end) as 'PEL',
+            sum(tmp_lt_month.amount) AS 'total_loans'
+        FROM loan 
+            INNER JOIN tmp_lt_month on loan.id = tmp_lt_month.loan_id
+            INNER JOIN loan_type on loan.type_id = loan_type.id
+        GROUP BY loan.member_id");
 
-    DB::statement("CREATE TEMPORARY TABLE tmp_ct_month
-      SELECT * FROM contribution
-      WHERE date <= '{$endOfMonth}'");
+      DB::statement("CREATE TEMPORARY TABLE tmp_ct_month
+        SELECT * FROM contribution
+        WHERE date <= '{$endOfMonth}'");
 
-    DB::statement("CREATE TEMPORARY TABLE tmp_contribution_summary
-      SELECT 
-          tmp_ct_month.member_id,
-          sum(case when contribution_account.name = 'Member Contribution' then contribution_transaction.amount else 0 end) as 'member_contribution',
-          sum(case when contribution_account.name = 'UP Contribution' then contribution_transaction.amount else 0 end) as 'up_contribution',
-          sum(case when contribution_account.name = 'Earnings on Member Contribution' then contribution_transaction.amount else 0 end) as 'earnings_on_member_contribution',
-          sum(case when contribution_account.name = 'Earnings on UP Contribution' then contribution_transaction.amount else 0 end) as 'earnings_on_up_contribution',
-          sum(contribution_transaction.amount) as 'total_equity'
-      FROM tmp_ct_month
-      INNER JOIN contribution_transaction ON tmp_ct_month.id = contribution_transaction.contribution_id 
-      INNER JOIN contribution_account ON contribution_account.id = contribution_transaction.account_id
-      GROUP BY tmp_ct_month.member_id");
+      DB::statement("CREATE TEMPORARY TABLE tmp_contribution_summary
+        SELECT 
+            tmp_ct_month.member_id,
+            sum(case when contribution_account.name = 'Member Contribution' then contribution_transaction.amount else 0 end) as 'member_contribution',
+            sum(case when contribution_account.name = 'UP Contribution' then contribution_transaction.amount else 0 end) as 'up_contribution',
+            sum(case when contribution_account.name = 'Earnings on Member Contribution' then contribution_transaction.amount else 0 end) as 'earnings_on_member_contribution',
+            sum(case when contribution_account.name = 'Earnings on UP Contribution' then contribution_transaction.amount else 0 end) as 'earnings_on_up_contribution',
+            sum(contribution_transaction.amount) as 'total_equity'
+        FROM tmp_ct_month
+        INNER JOIN contribution_transaction ON tmp_ct_month.id = contribution_transaction.contribution_id 
+        INNER JOIN contribution_account ON contribution_account.id = contribution_transaction.account_id
+        GROUP BY tmp_ct_month.member_id");
 
-    $records = DB::table('tmp_summary_member as m')
-      ->select(
-        'm.member_no',
-        'm.name',
-        'm.campus_key',
-        'm.membership_status',
-        DB::raw("COALESCE (c.member_contribution, 0) as 'member_contribution'"),
-        DB::raw("COALESCE (c.up_contribution, 0) as 'up_contribution'"),
-        DB::raw("COALESCE (c.earnings_on_member_contribution, 0) as 'earnings_on_member_contribution'"),
-        DB::raw("COALESCE (c.earnings_on_up_contribution, 0) as 'earnings_on_up_contribution'"),
-        DB::raw("COALESCE (c.total_equity, 0) as 'total_equity'"),
-        DB::raw("COALESCE (l.BL, 0) as 'BridgeLoan'"),
-        DB::raw("COALESCE (l.BTL, 0) as 'BalanaceTransferLoan'"),
-        DB::raw("COALESCE (l.CBL, 0) as 'Co_BorrowerLoan'"),
-        DB::raw("COALESCE (l.EML, 0) as 'EmergencyLoan'"),
-        DB::raw("COALESCE (l.PEL, 0) as 'PersonalEquityLoan'"),
-        DB::raw("COALESCE (l.total_loans, 0) as 'total_loans'")
-      )
-      ->leftJoin('tmp_loan_summary as l', 'm.member_id', '=', 'l.member_id')
-      ->leftJoin('tmp_contribution_summary as c', 'm.member_id', '=', 'c.member_id')
-      ->orderBy('m.campus_id')
-      ->where('m.campus_id', $id);
+      $records = DB::table('tmp_summary_member as m')
+        ->select(
+          'm.member_no',
+          'm.name',
+          'm.campus_key',
+          'm.membership_status',
+          DB::raw("COALESCE (c.member_contribution, 0) as 'member_contribution'"),
+          DB::raw("COALESCE (c.up_contribution, 0) as 'up_contribution'"),
+          DB::raw("COALESCE (c.earnings_on_member_contribution, 0) as 'earnings_on_member_contribution'"),
+          DB::raw("COALESCE (c.earnings_on_up_contribution, 0) as 'earnings_on_up_contribution'"),
+          DB::raw("COALESCE (c.total_equity, 0) as 'total_equity'"),
+          DB::raw("COALESCE (l.BL, 0) as 'BridgeLoan'"),
+          DB::raw("COALESCE (l.BTL, 0) as 'BalanaceTransferLoan'"),
+          DB::raw("COALESCE (l.CBL, 0) as 'Co_BorrowerLoan'"),
+          DB::raw("COALESCE (l.EML, 0) as 'EmergencyLoan'"),
+          DB::raw("COALESCE (l.PEL, 0) as 'PersonalEquityLoan'"),
+          DB::raw("COALESCE (l.total_loans, 0) as 'total_loans'")
+        )
+        ->leftJoin('tmp_loan_summary as l', 'm.member_id', '=', 'l.member_id')
+        ->leftJoin('tmp_contribution_summary as c', 'm.member_id', '=', 'c.member_id')
+        ->orderBy('m.campus_id');
 
-    $posts = $records->get();
-    if (count($posts) > 0) {
-      $summaryData .= '
-      <table>
-        <tr>
-          <th>Member No</th>
-          <th>Name</th>
-          <th>Campus Key</th>
-          <th>Membership Status</th>
-          <th>Membership Contribution</th>
-          <th>UP Contribution</th>
-          <th>Earnings on Member Contribution</th>
-          <th>Earnings on UP Contribution</th>
-          <th>Total Equity</th>
-          <th>Bridge Loan</th>
-          <th>Balanace Transfer Loan</th>
-          <th>Co-Borrower Loan</th>
-          <th>Emergency Loan</th>
-          <th>Personal Equity Loan</th>
-          <th>Total Loans</th>
-        </tr>
-      ';
-      foreach ($posts as $loan) {
+      $posts = $records->get();
+      if (count($posts) > 0) {
         $summaryData .= '
-        <tr>
-          <td>' . $loan->member_no . '</td>
-          <td>' . $loan->name . '</td>
-          <td>' . $loan->campus_key . '</td>
-          <td>' . $loan->membership_status . '</td>
-          <td>' . $loan->member_contribution . '</td>
-          <td>' . $loan->up_contribution . '</td>
-          <td>' . $loan->earnings_on_member_contribution . '</td>
-          <td>' . $loan->earnings_on_up_contribution . '</td>
-          <td>' . $loan->total_equity . '</td>
-          <td>' . $loan->BridgeLoan . '</td>
-          <td>' . $loan->BalanaceTransferLoan . '</td>
-          <td>' . $loan->Co_BorrowerLoan . '</td>
-          <td>' . $loan->EmergencyLoan . '</td>
-          <td>' . $loan->PersonalEquityLoan . '</td>
-          <td>' . $loan->total_loans . '</td>
-        </tr>
+        <table>
+          <tr>
+            <th>Member No</th>
+            <th>Name</th>
+            <th>Campus Key</th>
+            <th>Membership Status</th>
+            <th>Membership Contribution</th>
+            <th>UP Contribution</th>
+            <th>Earnings on Member Contribution</th>
+            <th>Earnings on UP Contribution</th>
+            <th>Total Equity</th>
+            <th>Bridge Loan</th>
+            <th>Balanace Transfer Loan</th>
+            <th>Co-Borrower Loan</th>
+            <th>Emergency Loan</th>
+            <th>Personal Equity Loan</th>
+            <th>Total Loans</th>
+          </tr>
         ';
+        foreach ($posts as $loan) {
+          $summaryData .= '
+          <tr>
+            <td>' . $loan->member_no . '</td>
+            <td>' . $loan->name . '</td>
+            <td>' . $loan->campus_key . '</td>
+            <td>' . $loan->membership_status . '</td>
+            <td>' . $loan->member_contribution . '</td>
+            <td>' . $loan->up_contribution . '</td>
+            <td>' . $loan->earnings_on_member_contribution . '</td>
+            <td>' . $loan->earnings_on_up_contribution . '</td>
+            <td>' . $loan->total_equity . '</td>
+            <td>' . $loan->BridgeLoan . '</td>
+            <td>' . $loan->BalanaceTransferLoan . '</td>
+            <td>' . $loan->Co_BorrowerLoan . '</td>
+            <td>' . $loan->EmergencyLoan . '</td>
+            <td>' . $loan->PersonalEquityLoan . '</td>
+            <td>' . $loan->total_loans . '</td>
+          </tr>
+          ';
+        }
       }
+      header('Content-Disposition: attachment; filename=Summary Report.xls');
+      header('Content-Type: application/xls');
+      header('Content-Transfer-Encoding: binary');
+      header('Cache-Control: must-revalidate');
+      echo ($summaryData);
+
+    } else {
+
+      $summaryData = "";
+      $endOfMonth = Carbon::now()->endOfMonth();
+      DB::statement("CREATE TEMPORARY TABLE tmp_summary_member
+        SELECT member.member_no, member.id as member_id, CONCAT(users.first_name,' ',users.last_name) as 'name', users.first_name, users.middle_name, users.last_name, member.campus_id, campus.campus_key, member.membership_status
+        FROM member
+        INNER JOIN users ON member.user_id = users.id
+        INNER JOIN campus ON member.campus_id = campus.id
+        WHERE member.membership_status = 'ACTIVE'");
+
+      DB::statement("CREATE TEMPORARY TABLE tmp_lt_month
+        SELECT * FROM loan_transaction
+        WHERE date <= '{$endOfMonth}'");
+
+      DB::statement("CREATE TEMPORARY TABLE tmp_loan_summary
+        SELECT loan.member_id,
+            sum(case when loan_type.name = 'BL' then tmp_lt_month.amount else 0 end) as 'BL',
+            sum(case when loan_type.name = 'BTL' then tmp_lt_month.amount else 0 end) as 'BTL',
+            sum(case when loan_type.name = 'CBL' then tmp_lt_month.amount else 0 end) as 'CBL',
+            sum(case when loan_type.name = 'EML' then tmp_lt_month.amount else 0 end) as 'EML',
+            sum(case when loan_type.name = 'PEL' then tmp_lt_month.amount else 0 end) as 'PEL',
+            sum(tmp_lt_month.amount) AS 'total_loans'
+        FROM loan 
+            INNER JOIN tmp_lt_month on loan.id = tmp_lt_month.loan_id
+            INNER JOIN loan_type on loan.type_id = loan_type.id
+        GROUP BY loan.member_id");
+
+      DB::statement("CREATE TEMPORARY TABLE tmp_ct_month
+        SELECT * FROM contribution
+        WHERE date <= '{$endOfMonth}'");
+
+      DB::statement("CREATE TEMPORARY TABLE tmp_contribution_summary
+        SELECT 
+            tmp_ct_month.member_id,
+            sum(case when contribution_account.name = 'Member Contribution' then contribution_transaction.amount else 0 end) as 'member_contribution',
+            sum(case when contribution_account.name = 'UP Contribution' then contribution_transaction.amount else 0 end) as 'up_contribution',
+            sum(case when contribution_account.name = 'Earnings on Member Contribution' then contribution_transaction.amount else 0 end) as 'earnings_on_member_contribution',
+            sum(case when contribution_account.name = 'Earnings on UP Contribution' then contribution_transaction.amount else 0 end) as 'earnings_on_up_contribution',
+            sum(contribution_transaction.amount) as 'total_equity'
+        FROM tmp_ct_month
+        INNER JOIN contribution_transaction ON tmp_ct_month.id = contribution_transaction.contribution_id 
+        INNER JOIN contribution_account ON contribution_account.id = contribution_transaction.account_id
+        GROUP BY tmp_ct_month.member_id");
+
+      $records = DB::table('tmp_summary_member as m')
+        ->select(
+          'm.member_no',
+          'm.name',
+          'm.campus_key',
+          'm.membership_status',
+          DB::raw("COALESCE (c.member_contribution, 0) as 'member_contribution'"),
+          DB::raw("COALESCE (c.up_contribution, 0) as 'up_contribution'"),
+          DB::raw("COALESCE (c.earnings_on_member_contribution, 0) as 'earnings_on_member_contribution'"),
+          DB::raw("COALESCE (c.earnings_on_up_contribution, 0) as 'earnings_on_up_contribution'"),
+          DB::raw("COALESCE (c.total_equity, 0) as 'total_equity'"),
+          DB::raw("COALESCE (l.BL, 0) as 'BridgeLoan'"),
+          DB::raw("COALESCE (l.BTL, 0) as 'BalanaceTransferLoan'"),
+          DB::raw("COALESCE (l.CBL, 0) as 'Co_BorrowerLoan'"),
+          DB::raw("COALESCE (l.EML, 0) as 'EmergencyLoan'"),
+          DB::raw("COALESCE (l.PEL, 0) as 'PersonalEquityLoan'"),
+          DB::raw("COALESCE (l.total_loans, 0) as 'total_loans'")
+        )
+        ->leftJoin('tmp_loan_summary as l', 'm.member_id', '=', 'l.member_id')
+        ->leftJoin('tmp_contribution_summary as c', 'm.member_id', '=', 'c.member_id')
+        ->orderBy('m.campus_id')
+        ->where('m.campus_id', $id);
+
+      $posts = $records->get();
+      if (count($posts) > 0) {
+        $summaryData .= '
+        <table>
+          <tr>
+            <th>Member No</th>
+            <th>Name</th>
+            <th>Campus Key</th>
+            <th>Membership Status</th>
+            <th>Membership Contribution</th>
+            <th>UP Contribution</th>
+            <th>Earnings on Member Contribution</th>
+            <th>Earnings on UP Contribution</th>
+            <th>Total Equity</th>
+            <th>Bridge Loan</th>
+            <th>Balanace Transfer Loan</th>
+            <th>Co-Borrower Loan</th>
+            <th>Emergency Loan</th>
+            <th>Personal Equity Loan</th>
+            <th>Total Loans</th>
+          </tr>
+        ';
+        foreach ($posts as $loan) {
+          $summaryData .= '
+          <tr>
+            <td>' . $loan->member_no . '</td>
+            <td>' . $loan->name . '</td>
+            <td>' . $loan->campus_key . '</td>
+            <td>' . $loan->membership_status . '</td>
+            <td>' . $loan->member_contribution . '</td>
+            <td>' . $loan->up_contribution . '</td>
+            <td>' . $loan->earnings_on_member_contribution . '</td>
+            <td>' . $loan->earnings_on_up_contribution . '</td>
+            <td>' . $loan->total_equity . '</td>
+            <td>' . $loan->BridgeLoan . '</td>
+            <td>' . $loan->BalanaceTransferLoan . '</td>
+            <td>' . $loan->Co_BorrowerLoan . '</td>
+            <td>' . $loan->EmergencyLoan . '</td>
+            <td>' . $loan->PersonalEquityLoan . '</td>
+            <td>' . $loan->total_loans . '</td>
+          </tr>
+          ';
+        }
+      }
+      header('Content-Disposition: attachment; filename=Summary Report.xls');
+      header('Content-Type: application/xls');
+      header('Content-Transfer-Encoding: binary');
+      header('Cache-Control: must-revalidate');
+      echo ($summaryData);
+
     }
-    header('Content-Disposition: attachment; filename=Summary Report.xls');
-    header('Content-Type: application/xls');
-    header('Content-Transfer-Encoding: binary');
-    header('Cache-Control: must-revalidate');
-    echo ($summaryData);
+
   }
 
 

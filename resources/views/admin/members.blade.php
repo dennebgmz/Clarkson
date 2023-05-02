@@ -118,6 +118,7 @@
                                             width="100%">
                                             <thead>
                                                 <tr>
+                                                    <th></th>
                                                     <th>Action</th>
                                                     <th>Member ID</th>
                                                     <th>Member Name</th>
@@ -134,6 +135,8 @@
                                         </table>
                                     </div>
                                 </div>
+                                <hr>
+                                <button class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised up-button" id="view_records">View Records</button>
                             </div>
                         </div>
                     </div>
@@ -204,6 +207,19 @@
                     $('#to').val('');
                 } else {
                     tableMember.draw();
+                }
+            });
+
+            $(document).on('click', '#view_records', function(e) {
+                var checkbox = $('#check:checked');
+                var members = new Array();
+                if (checkbox.length > 0) {
+                    $(checkbox).each(function(){
+                        members.push($(this).val());
+                    });
+                    console.log(members);
+                } else {
+                    alert('No selected records.');
                 }
             });
 
