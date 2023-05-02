@@ -338,7 +338,6 @@
                     <p>Thus, <b>UPPFI</b> has instituted strict measures to safeguard the sanctity and confidentiality of those data/information
                     . The company strictly adheres to the duties and responsibilites (before, during, and after processing of information), mandated by
                     <i>Republic Act 10173</i> and allied government regulations.
-
                     <br><br>
                     Kindly sign below to signify your free, prior, and informed consent for UPPFI to proceed with this personal data processing, and to allow UPPFI
                     to use the information for<br>
