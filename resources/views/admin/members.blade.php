@@ -136,7 +136,7 @@
                                     </div>
                                 </div>
                                 <hr>
-                                <button class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised up-button" id="view_records">View Records</button>
+                                <!-- <button class="mp-ml2 mp-button mp-button--primary mp-button--ghost mp-button--raised up-button" id="view_records">View Records</button> -->
                             </div>
                         </div>
                     </div>
@@ -211,16 +211,27 @@
             });
 
             $(document).on('click', '#view_records', function(e) {
-                var checkbox = $('#check:checked');
-                var members = new Array();
-                if (checkbox.length > 0) {
-                    $(checkbox).each(function(){
-                        members.push($(this).val());
-                    });
-                    console.log(members);
-                } else {
-                    alert('No selected records.');
-                }
+                var members = $(this).data('id');
+                var url = "{{ URL::to('/admin/members_ledger/') }}" + '/' + members; //CHANGE HERE
+                window.open(url, '_blank');
+                
+                // var checkbox = $('#check:checked');
+                // var members = new Array();
+                // if (checkbox.length > 0) {
+                //     $(checkbox).each(function(){
+                //         members.push($(this).val());
+                //     });
+                //     var url = "{{ URL::to('/admin/members_ledger/') }}" + '/' + members.join(); //CHANGE HERE
+                //     window.open(url, '_blank');
+                //     // Disable other checkboxes
+                //     $('#check:not(:checked)').prop('disabled', true);
+                // } else {
+                //     Swal.fire({
+                //         icon: 'warning',
+                //         title: 'Oops...',
+                //         text: 'No Selected Record!',
+                //     });
+                // }
             });
 
             $(document).on('click', '.view_member', function(e) {
@@ -260,6 +271,24 @@
                     dt_from + '/' + dt_to; //YOUR CHANGES HERE...
                 window.open(url, '_blank');
             });
+
+            // $(document).on('click', '#view_records', function() {
+            //     var checkbox = $('#check:checked');
+            //     if (checkbox.length > 0)
+            //     {
+            //         var val = [];
+            //         $('#check:checked').each(function(i){
+            //             val[i] = $(this).val();
+            //         });
+            //         console.log(val);
+            //     } else {
+            //         Swal.fire({
+            //             icon: 'warning',
+            //             title: 'Oops...',
+            //             text: 'No Selected Record!',
+            //         });
+            //     }
+            // });
 
         });
     </script>

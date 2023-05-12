@@ -107,6 +107,8 @@ Route::get('/admin/printMember', 'AdminController@printMemberData');
 Route::get('/admin/onboarding', 'AdminController@onboarding');
 Route::post('/admin/onboarding', 'AdminController@saveonboarding');
 
+Route::get('/admin/members_ledger/{id}', 'AdminController@member_ledger');
+
 //Campus management
 Route::post('/admin/addCampus', 'AdminController@addCampus');
 Route::get('/admin/deleteCampus', 'AdminController@deleteCampus');
